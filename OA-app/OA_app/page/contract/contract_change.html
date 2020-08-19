@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/contract_apply.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/change_constrat.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<style type="text/css">
+			*{
+				box-sizing: border-box;
+			}
+			body,.this_company{
+				background: #F2F2F2;
+			}
+			
+			.add_change .mui-content {
+				height: 90%;
+			}
+			.add_change .get_time .start_time {
+				float: right;
+				display: inline-block;
+				height: 100%;
+				line-height: 48px;
+			}
+			.add_change input {
+				padding-right: 0 !important;
+			}
+			.add_change .company_info>p input {
+				right: 20px;
+			}
+			
+			.add_change .first_no {
+				position: absolute;
+				top: 15px;
+				right: calc(55% + 22px);
+			}
+			
+			.add_change .choose_box p{
+				height: 30px;
+				line-height: 30px;
+				margin: 0;
+			}
+			
+			.add_change .choose_box input {
+				vertical-align: middle;
+			}
+			.add_change .input_show {
+				color: #999999;
+				display: none;
+			}
+			.add_change .input_show input {
+				width: 50%;
+				margin-top: 10px;
+				margin-left: 20px;
+				padding: 5px;
+				height: 30px;
+				line-height: 30px;
+				color: #666666;
+				font-size: 14px;
+			}
+			
+			.li_item a {
+				float: right;
+			}
+			
+			.update_item {
+				margin-right: 10px;
+			}
+			
+			.li_item a.delete_item {
+				color: #FF6060;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">变更查看</h1>
+		</header>
+		<div class="mui-content">
+			<div class="company_info this_company">
+				<h5>合同基本信息</h5>
+					
+				<div class="info_item">
+					<span class="class_name">项目名称</span>
+					<p class="project_name">建筑公司</p>
+				</div>
+				<div class="info_item">
+					<span class="class_name">合同编号</span>
+					<p class="contract_num">建筑公司</p>
+				</div>
+				<div class="info_item">
+					<span class="class_name">合同类型</span>
+					<p class="contract_type">建筑公司</p>
+				</div>
+				<div class="info_item">
+					<span class="class_name">对方单位</span>
+					<p class="contract_company">建筑公司</p>
+				</div>
+				<div class="info_item">
+					<span class="class_name">合同金额</span>
+					<p class="contract_price">123123</p>
+				</div>
+				<div class="info_item">
+					<span class="class_name">原合同文件</span>
+					<p class="contract_file"><a>123123</a></p>
+				</div>
+				<h5>合同基本信息</h5>
+				<div class="info_item">
+					<span class="class_name">变更时间<b>*</b></span>
+					<p class="choose company_types checktime"><input type="text" name="" id="" placeholder="请填写" class="change_time"/><span class="up_btn"></span></p>
+				</div>
+				
+				<div class="info_item">
+					<span class="class_name">变更原因<b>*</b></span>
+					<p><input type="text" name="" id="" placeholder="请填写" class="change_reszon"/></p>
+				</div>
+				<div class="info_item change_lists">
+					<span class="class_name">变更事项<b>*</b></span>
+					<div class="change_list">
+						
+						<ul class="change_list_ul">
+							<li>
+								<div class="li_item">
+									<span>变更事项：</span><p>手机端咖啡豆是 <a class="delete_item">删除</a><a class="update_item">修改</a></p>
+								</div>
+								<div class="li_item">
+									<span>变更前：</span><p>手机端咖啡上岛咖啡卡萨丁行高上岛咖啡老师的分手快乐大概端开发老地方豆是</p>
+								</div>
+								<div class="li_item">
+									<span>变更后：</span><p>手机端咖啡豆是</p>
+								</div>
+							</li>
+						</ul>
+						<div class="add_list">
+							添加
+						</div>
+					</div>
+				</div>
+				
+			
+				<div class="plan_time file_upload" style="overflow: hidden;">
+					<span>变更附件</span>
+					<input type="file" name="" id="add_file" value="" multiple/><label for="add_file" class="btn_add choose_img">添加</label>
+				</div>
+				<ul class="file_tendering_list add_file_list">
+					
+				</ul>
+				
+				<h5>审批流程</h5>
+				<div class="list_box_content">
+					<div class="task_time">
+						<p class="get_manager approval_process"><a>选择流程</a><span class="choose_img"></span></p>
+					</div>
+					<ul class="list_content_procedure">
+				
+					</ul>
+				</div>
+			</div>
+			
+		</div>
+		
+	<div class="add_change">
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加变更事项</h1>
+		</header>
+		<div class="mui-content">
+			<div class="company_info this_company">
+				<h5>变更事项<b>*</b></h5>
+				<div class="task_time">
+					<p class="choose change_type get_manager"><input type="text" name="" id="" placeholder="请选择" class="company_type"/><span class="up_btn"></span></p>
+					<p class="pay_type_other">
+						<input type="text" placeholder="请填写" class="type_other_name" />
+					</p>
+				</div>
+				<h5>变更前<b>*</b></h5>
+				<div class="task_name">
+					<textarea rows="" cols="" class="abolish_reson abolish_before" placeholder="请填写" readonly></textarea>
+				</div>
+				<h5>变更后<b>*</b></h5>
+				
+				<div class="task_name area_show">
+					<textarea rows="" cols="" class="abolish_reson abolish_after" placeholder="请填写"></textarea>
+				</div>
+				
+				<div class="task_name input_show">
+					<input type="number" name="" id="" value="" style="" class="price_input"/>元
+				</div>
+				
+				<div class="task_name choose_box" style="display: none;background: white;">
+					<p style="padding-left: 20px;"><input type="radio" name="choose_time" id="has_time" value="0" /> 有固定的期限</p>
+					<p class="contract_work" style="display: none;"><span class="cont_time start_time">开始时间</span>-<span class="cont_time end_time">结束时间</span></p>
+					<p style="padding-left: 20px;"><input type="radio" name="choose_time" id="no_time" value="1" /> 无固定的期限</p>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</div>
+		
+	<div class="footer_submit">
+		<span class="btn_save">保存</span><span class="btn_submit">提交</span>
+	</div>
+		
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	var id = common.getQueryUrl('id') || '';
+	var changeId = common.getQueryUrl('changeid') || '';
+	var isSee = common.getQueryUrl('is_see');
+	var newChangeList = [];
+	console.log(newChangeList)
+	
+	var changeTime;
+	var fileList = [];
+	
+	var changeNewId;//更新id
+	
+	if(isSee) {
+		$('.up_btn').hide();
+		$('.choose_img').hide();
+		$('.this_company b').hide();
+		// $('.add_list').hide();
+		$('.footer_submit').hide();
+	}else {
+		$('.change_list_ul').hide();
+	}
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	
+	var processList = [];
+	var processId;
+	
+	
+	var selectList = [];
+	var selectTypeId;
+	var selectName;
+	var startTime,endTime;
+	var beforeStartTime,beforeEndTime;
+	var timeText;
+	var operationNum = 1;
+	var recordChangeId;
+	
+	//添加变更
+	mui('.change_list').on('tap','.add_list',function() {
+		$('.add_change').show();
+	})
+	
+	//修改变更
+	mui('.change_list').on('tap','.update_item',function() {
+		$('.add_change').show();
+		selectTypeId = $(this).attr('type_id');
+		selectName = common.getKeyValue(selectList,selectTypeId);
+		if(selectName == '其他') {
+			$('.pay_type_other').show();
+			$('.input_show').hide();
+			$('.choose_box').hide();
+			$('.area_show').show();
+		}else if(selectName == '合同工期') {
+			$('.choose_box').show();
+			$('.area_show').hide();
+			$('.input_show').hide();
+			$('.pay_type_other').hide();
+		}else if(selectName == '合同金额') {
+			$('.input_show').show();
+			$('.area_show').hide();
+			$('.choose_box').hide();
+			$('.pay_type_other').hide();
+		}else {
+			$('.input_show').hide();
+			$('.area_show').show();
+			$('.pay_type_other').hide();
+			$('.choose_box').hide();
+		}
+		getDetail(selectTypeId,true)
+	})
+	
+	//修改变更
+	mui('.change_list').on('tap','.update_item',function() {
+		$('.add_change').show();
+		selectTypeId = $(this).attr('type_id');
+		
+	})
+	
+	//关闭
+	mui('.add_change').on('tap','.mui-pull-left',function() {
+		$('.add_change').hide();
+	})
+	
+	$('input[type=radio][name=choose_time]').change(function () {
+	   
+	    var myvalue = $(this).val();
+			console.log(myvalue)
+			if(myvalue == 0) {
+				$('.contract_work').show()
+				timeText = '有固定的工期'
+			}else {
+				$('.contract_work').hide()
+				timeText = '无固定工期'
+			}
+	});
+	
+	function getChangeSelect() {
+		var url = '/api/ContractManage/AlterationTypeSelect';
+		return request.post(url).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					selectList.push({
+						text: res.data[i].SUB_NM,
+						value: res.data[i].SUB_ID
+					})
+				}
+				return;
+			}
+		})
+	}
+	
+	function getDetail(type,flag) {
+		var url = '/api/ContractManage/AddAlterationRecord';
+		return request.post(url,{ContractId: id,AlterationRecordId: recordChangeId || '',AlterationType: type}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				$('.abolish_before').val(res.data.AlterationBefore || '无');
+				if(type == 1) {
+					$('.abolish_before').val(res.data.BeforeBeginTime + ' - ' + res.data.BeforeEndTime);
+					beforeStartTime = res.data.BeforeBeginTime;
+					beforeEndTime = res.data.BeforeEndTime;
+				}
+			}
+			
+		})
+	}
+	
+	mui('.footer_submit_one').on('tap','span',function() {
+		if(!selectTypeId) {
+			mui.toast('请选择变更事项！');
+			return;
+		} 
+		var postData = {};
+		postData.AlterationType = selectTypeId;
+		postData.typeText = selectName;
+		
+		if(selectName == '合同工期' ) {
+			if(!timeText) {
+				mui.toast('请选择合同工期！');
+				return;
+			} 
+			if(timeText == '有固定的工期') {
+				if(!startTime || !endTime) {
+					mui.toast('请选择工期时间！');
+					return;
+				}
+			}
+			postData.BeginTime = startTime;
+			postData.EndTime = endTime;
+			postData.BeforeBeginTime = beforeStartTime;
+			postData.BeforeEndTime = beforeEndTime;
+		}else if(selectName == '合同金额' ) {
+			if(!$('.price_input').val()) {
+					mui.toast('请输入金额！');
+					return;
+			}
+			postData.AlterationBefore = $('.abolish_before').val();
+			postData.AlterationLater = $('.price_input').val();
+		}else if(selectName == '其他' ) {
+			postData.Rests = $('.type_other_name').val();
+			if(!$('.type_other_name').val()) {
+					mui.toast('请输入其他内容！');
+					return;
+			}
+			postData.AlterationBefore = $('.abolish_before').val();
+			if(!$('.abolish_after').val()) {
+					mui.toast('请输入变更后内容！');
+					return;
+			}
+			postData.AlterationLater = $('.abolish_after').val();
+		}else {
+			if(!$('.abolish_after').val()) {
+				
+					mui.toast('请输入变更后内容！');
+					return;
+			}
+			postData.AlterationBefore = $('.abolish_before').val();
+			postData.AlterationLater = $('.abolish_after').val();
+		}
+		postData.operate = operationNum;
+		newChangeList.push(postData);
+		
+		var html =  '';
+		if(newChangeList.length> 0) {
+			for(var i=0;i<newChangeList.length;i++) {
+				var list = newChangeList[i];
+				console.log(list)
+				var befores = list.AlterationBefore;
+				var afters = list.AlterationLater;
+				if(list.typeText == '合同工期') {
+					befores = list.BeforeBeginTime + ' - ' + list.BeforeEndTime;
+					afters = list.BeginTime + ' - ' + list.EndTime;
+				}
+				html+= '<li><div class="li_item">'+
+							'<span>变更事项：</span><p>'+ (list.typeText == '其他' ? '其他-'+ Rests : list.typeText)  +'<a class="delete_item" type_id="'+selectTypeId+'">删除</a><a class="update_item"type_id="'+selectTypeId+'">修改</a></p>'+
+							'</div><div class="li_item">'+
+							'<span>变更前：</span><p>'+ befores +'</p>'+
+							'</div><div class="li_item">'+
+							'<span>变更后：</span><p>'+ afters +'</p>'+
+							'</div></li>';
+			}
+		}
+		
+		if(html != '' ) {
+				$('.change_list_ul').show();
+		}
+		
+		$('.change_list_ul').html(html);
+		$('.add_change').hide();
+	});
+	
+	//文件上传
+	$("#add_file").on('change', function(e) {
+		console.log(1231123)
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for (var i = 0; i < files.length; i++) {
+			var formData = new FormData();
+			formData.append("file", files[i]);
+			arr.push(upload(formData, files[i].lastModified, true))
+			names += '<li item=' + files[i].lastModified + '><span class="file_list_name spans_back" item=' +
+				files[i].lastModified + '>' + files[i].name +
+				'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if (files.length > 0) {
+			$('.add_file_list').append(names);
+		}
+	});
+	//文件删除
+	mui('.add_file_list').on('tap', '.file_list_delete', function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if (id) {
+			for (var i = 0; i < fileList.length; i++) {
+				if (fileList[i].Id == id) {
+					fileList.splice(i, 1);
+				}
+			}
+		}
+		if (item) {
+			for (var i = 0; i < fileList.length; i++) {
+				if (fileList[i].tid == item) {
+					fileList.splice(i, 1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	//文件预览
+	mui('.add_file_list').on('tap', '.file_list_name', function() {
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		mui.showLoading('加载中...');
+		if (path) {
+			openFile(baseUrl + path)
+		}
+		if (item) {
+			for (var i = 0; i < fileList.length; i++) {
+				if (item == fileList[i].tid) {
+					openFile(baseUrl + fileList[i].FilePath)
+				}
+			}
+		}
+	})
+	
+	function upload(formData, flag, type) {
+		var url = '/api/BusinessManage/UploadFile?Type=ScanFile';
+		return request.upload(url, formData).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": "合同管理_合同变更/AlterationFile",
+					"tid": flag
+				}
+				fileList.push(data);
+				console.log(fileList)
+				return;
+			}
+		})
+	}
+	
+	
+	function getInfo() {
+		var url = '/api/ContractManage/AddOrUpdateAlteration';
+		var postData = {
+			AlterationId: changeId,
+			ContractId: id
+		}
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				var info = res.data.modelPc;
+				$('.project_name').html(info.ProjectName);
+				$('.contract_num').html(info.Number);
+				$('.contract_type').html(res.data.TypeName);
+				$('.contract_company').html(info.ConstructionUnit);
+				$('.contract_price').html(info.Price);
+				
+				if(isSee) {
+					$('.change_time').val(res.data.modelCai.AlterationTime);
+					$('.change_reszon').val(res.data.modelCai.AlterationReason);
+					changeNewId = res.data.modelCai.ID;
+					var names = '';
+					for(var i=0;i<res.data.LstFile.length;i++) {
+						var lists = res.data.LstFile[i];
+						// if(isCheck || onlysee) {
+							names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+							+ lists.FilePath +'>'+ lists.Name + lists.FileFormat +
+							'</span><span class="file_list_delete">删除</span></li>';
+						// }
+						var obj = {
+							"Id": lists.Id,
+							"Name": lists.FileName,
+							"FileFormat": lists.Extension,
+							"FilePath": lists.FilePath,
+							"Type": "合同管理-合同变更/AlterationFile",
+						};
+						fileList.push(obj);
+					}
+					$('.add_file_list').html(names);
+				
+				}
+			
+			}
+		})
+	}
+	
+	function getChangeList() {
+		
+		var url = '/api/ContractManage/AlterationRecordQuery';
+		var postData = {
+			AlterationId: changeId
+		}
+		
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					for(var j=0;j<item.AlterationRecords.length;j++) {
+						var list = item.AlterationRecords[j];
+						var typeId = common.getValueToKey(selectList,list.AlterationType);
+						html+= '<li><div class="li_item">'+
+									'<span>变更事项：</span><p>'+ list.AlterationType +
+									'<a class="delete_item" type_id="'+ typeId +
+									'">删除</a><a class="update_item" type_id="'+ typeId +
+									'">修改</a></p>'+
+									'</div><div class="li_item">'+
+									'<span>变更前：</span><p>'+ list.AlterationBefore +'</p>'+
+									'</div><div class="li_item">'+
+									'<span>变更后：</span><p>'+ list.AlterationLater +'</p>'+
+									'</div></li>';
+					}
+					
+				}
+				
+				$('.change_list_ul').html(html);
+			}
+		})
+	}
+	
+	function submit(flag) {
+		if(!changeTime) {
+			mui.toast('请选择变更时间！！！');
+			return;
+		}
+		if(!$('.change_reszon').val()) {
+			mui.toast('请输入变更原因！！！');
+			return;
+		}
+		if(newChangeList.length == 0) {
+			mui.toast('请添加变更事项！！！');
+			return;
+		}
+		if(!processId) {
+			mui.toast('请选择审批流程！！！');
+			return;
+		}
+		
+		var postData = {};
+		if(changeId) postData.ID = changeId;
+		postData.ExtensionId = id;
+		postData.AlterationTime = changeTime;
+		postData.AlterationReason = $('.change_reszon').val();
+		postData.isSubmit = flag;
+		postData.Template = processId;
+		
+		postData.lstFile = fileList;
+		
+		postData.AlterationRecord = newChangeList;
+		
+		console.log(postData)
+		var url = '/api/ContractManage/SaveAlterationInfo';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				
+			}else {
+				mui.toast('保存失败。' + res.msg)
+			}
+		})
+		
+	}
+	
+	//点击保存
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(false);
+	});
+	
+	//点击提交
+	mui('.footer_submit').on('tap', '.btn_submit', function() {
+		submit(true);
+	});
+	
+	mui.showLoading()
+	common.promise()
+	.then(() => {
+		return getChangeSelect();
+	})
+	.then(function() {
+		return getInfo();
+	})
+	.then(function() {
+		return getChangeList();
+	})
+	.then(function(res) {
+		// if (id) {
+		// 	// return getDetail()
+		// }else {
+			return '合同管理'
+		// }
+	}).then(function(names) {
+		return approvalProcess(names);
+	}).then(res => {
+		processList = res;
+		mui.hideLoading()
+	});
+
+
+	(function(mui) {
+		//时间选择
+		var btnss = mui('.checktime');
+		btnss.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				console.log(123)
+				input.blur();
+				textarea.blur();
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('input').val(rs.text);
+						changeTime = rs.text;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					options.type = 'date';
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('input').val(rs.text);
+						changeTime = rs.text;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//时间选择
+		var btns = mui('.cont_time');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				// if(isUpdate) return;
+				$('input').blur()
+				$('textarea').blur()
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						if ($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if ($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						$(_self).html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					if ($(_self).hasClass('end_time') && startTime) {
+						options.beginDate = new Date(startTime);
+					}
+					if ($(_self).hasClass('start_time') && endTime) {
+						options.endDate = new Date(endTime);
+					}
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if ($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if ($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						$(_self).html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					console.log(22232)
+					input.blur();
+					textarea.blur();
+					// if(isUpdate) {
+					// 	return;
+					// }
+					var _this = this;
+					if ($(this).hasClass('approval_process')) {
+						userPicker.setData(processList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							processId = items[0].value;
+							getProcessDetail(processId);
+						});
+					}
+					if ($(this).hasClass('change_type')) {
+						console.log(234234)
+						userPicker.setData(selectList);
+						console.log(selectList)
+						userPicker.show(function(items) {
+							$(_this).find('input').val(items[0].text);
+							selectTypeId = items[0].value;
+							selectName = items[0].text;
+							if(items[0].text == '其他') {
+								$('.pay_type_other').show();
+								$('.input_show').hide();
+								$('.choose_box').hide();
+								$('.area_show').show();
+							}else if(items[0].text == '合同工期') {
+								$('.choose_box').show();
+								$('.area_show').hide();
+								$('.input_show').hide();
+								$('.pay_type_other').hide();
+							}else if(items[0].text == '合同金额') {
+								$('.input_show').show();
+								$('.area_show').hide();
+								$('.choose_box').hide();
+								$('.pay_type_other').hide();
+							}else {
+								$('.input_show').hide();
+								$('.area_show').show();
+								$('.pay_type_other').hide();
+								$('.choose_box').hide();
+							}
+							getDetail(selectTypeId);
+						});
+					}
+				}, false);
+			});
+		});
+	})(mui);
+</script>

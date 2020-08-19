@@ -1,0 +1,174 @@
+/** 
+ * 作者： 孙尊路
+ * 创建时间：2017/06/16 14:47:28
+ * 版本： [1.0, 2017/6/16]
+ * 版权： 江苏国泰新点软件有限公司
+ * 描述： 我的日程 
+**/
+
+
+/*全局格式化样式*/
+
+body,
+.mui-content {
+	background-color: #F5F5F5;
+}
+
+
+/*日历*/
+
+#calendar,#newcalendar {
+	height: 28vw;
+	overflow: hidden;
+}
+
+.em-calendar {
+	border-bottom: 1px solid #e0e0e0;
+}
+
+
+/*左右切换*/
+
+.em-journal-title {
+	width: 100%;
+	display: block;
+	height: 50px;
+	line-height: 50px;
+	background: white;
+	padding: 0 2%;
+}
+
+.em-per-block {
+	float: left;
+	width: 33%;
+	color: #BCBCBC !important;
+	font-size: 18px;
+}
+
+.em-per-block.pre {
+	text-align: left;
+	font-size: 15px;
+}
+
+.em-per-block.next:active,
+.em-per-block.pre:active {
+	/* background-color: #3a79d8; */
+	border-radius: 15px;
+	font-weight: 800;
+}
+
+.em-per-block.mid {
+	text-align: center;
+	font-size: 18px;
+	color: #3B9CFF !important;
+}
+
+.em-per-block.next {
+	text-align: right;
+	font-size: 15px;
+}
+
+.backToday {
+	background: #3c80e6;
+	color: #fff;
+	height: 44px;
+	line-height: 44px;
+	text-align: center;
+}
+
+.em-week {
+	padding-bottom: 10px;
+}
+
+.em-calendar-container{
+	padding: 0 5%;
+}
+
+.em-calendar-content .isforbid1.em-calendar-item {
+	text-align: center;
+}
+
+.em-calendar-content .lunar {
+	width: 6px;
+	height: 6px;
+	background: #C2C7CB;
+	border-radius: 3px;
+	overflow: hidden;
+	color: transparent;
+	position: relative;
+	left: 45%;
+	top: 15%;
+}
+
+.em-calendar-content .em-calendar-active .lunar {
+	background: #3B9CFF;
+}
+
+.em-calendar-content .em-calendar-item {
+	width: 12.8vw;
+	height: 12vw;
+	
+}
+.em-calendar-content .em-calendar-item.em-calendar-active {
+	background: #C2C7CB;
+}
+.em-calendar-content.week {
+	height: 28vw;
+	padding: 0 5%;
+	background: white;
+}
+
+.em-calendar-content.week li {
+	float: left;
+	height: 100%;
+	width: 12.8vw;
+}
+
+.em-calendar-content.week li span {
+	display: inline-block;
+	width: 100%;
+	text-align: center;
+	height: 12.8vw;
+	line-height: 10vw;
+	position: relative;
+}
+
+.mui-navigate-right:after, .mui-push-right:after {
+	display: none;
+}
+
+.em-calendar-content.week li span.week {
+	height: 10vw;
+	line-height: 10vw;
+	color: #666666;
+}
+
+.em-calendar-content.week li.em-active span.day {
+	background: #C2C7CB;
+	border-radius: 50%;
+	color: #414141;
+}
+
+.em-calendar-content.week li span.sumday {
+	color: #C2C7CB;
+}
+.em-calendar-content.week li.em-active span.day i{
+	background: #3B9CFF;
+}
+
+.em-calendar-content.week li span.day i.red{
+	background: #DD524D;
+}
+
+
+.em-calendar-content.week li span i {
+	/* padding: 2px; */
+	background: #C2C7CB;
+	height: 6px;
+	width: 6px;
+	display: inline-block;
+	border-radius: 3px;
+	position: absolute;
+	top: 65%;
+	left: 45%;
+}

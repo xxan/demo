@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/project_css.css" />
+		<script src="../../js/mui.min.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<!-- 主界面不动、菜单移动 -->
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right" id="offCanvasSide">
+				<h5>筛选</h5>
+				<div class="search_content">
+					<p>项目名称</p>
+					<p class="choose_project"><a>请选择</a><span></span></p>
+					<p>任务状态</p>
+					<div class="choose_task_status">
+
+					</div>
+					<p>任务等级</p>
+					<div class="choose_task_class">
+
+					</div>
+					<p>计划起始时间</p>
+					<div class="plan_time">
+						<span class="choose_time start_time plan_times">开始时间</span> — <span class="choose_time end_time plan_times">结束时间</span>
+					</div>
+					<p>实际起始时间</p>
+					<div class="plan_time">
+						<span class="choose_time start_time">开始时间</span> — <span class="choose_time end_time">结束时间</span>
+					</div>
+				</div>
+				<div class="footer_btn spans">
+					<span class="btn_reset spans">重置</span><span class="btn_submit spans">确定</span>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">项目任务</h1>
+					<img src="../../img/shaixuan.png" class="mui-nav-more">
+				</header>
+				<div class="mui-content">
+					<div class="message_title">
+						<div class="search_box">
+							<div class="mui-input-row mui-search">
+								<input id="search_input" type="text" class="" placeholder="搜索任务名称、人员">
+								<span class="photo_search" index='item1'></span>
+							</div>
+						</div>
+					</div>
+					<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+						<p class="up_fress data-loading-icon">
+							<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+						</p>
+						<div class="mui-scroll">
+							<div class="message_content">
+								<ul class="revene_all">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<p class="down_fress data-loading-icon">
+						<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+					</p>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript" charset="utf-8">
+	mui.init();
+	clickInit();
+	var page = 1;
+	var searchText = '';
+	var projectArr = [];
+	var planStartTime = '';
+	var planEndTime = '';
+	var nowStartTime = '';
+	var nowEndTime = '';
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios ? 0.003 : 0.0009
+	});
+	var isfresh = false;
+	document.querySelector('#pullrefresh').addEventListener('scroll', function(e) {
+		if (isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('opacity', '1');
+				$('#search_input').val('');
+				page = 1;
+				getList(true, searchText).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -80) {
+			var liLength = $('.revene_all li').length;
+			if (liLength % 10 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt(liLength / 10) + 1;
+			getList(false, searchText).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+
+	function clickInit() {
+		var input =document.getElementById("search_input");
+		input.blur();
+		
+		mui('.header_box').on('tap', '.mui-nav-more', function() {
+			input.blur();
+			mui('.mui-off-canvas-wrap').offCanvas().show();
+		})
+
+		mui('.search_box').on('tap', '.photo_search', function() {
+			page = 1;
+			searchText = $('#search_input').val();
+			console.log(searchText)
+			getList(true, searchText).then(function() {
+				mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 500);
+			})
+		})
+		mui('.choose_task_status').on('tap', 'span', function() {
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+
+		mui('.choose_task_class').on('tap', 'span', function() {
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+
+		mui('.footer_btn').on('tap', 'span', function() {
+			if ($(this).hasClass('btn_reset')) {
+				planStartTime = '';
+				planEndTime = '';
+				nowStartTime = '';
+				nowEndTime = '';
+				$('.search_content').find('span').removeClass('active');
+				$('.start_time').html('开始时间');
+				$('.end_time').html('结束时间');
+				$('.choose_project a').html('请选择');
+			} else {
+				var obj = {};
+				if ($('.choose_project a').html() != '请选择') {
+					obj.taskName = $('.choose_project a').attr('id');
+				}
+				if ($('.choose_task_status').find('.active').length > 0) {
+					obj.status = Number($('.choose_task_status').find('.active').attr('id'));
+				}
+				if ($('.choose_task_class').find('.active').length > 0) {
+					obj.level = Number($('.choose_task_class').find('.active').attr('id'));
+				}
+				if (planStartTime && planEndTime) {
+					obj.startTime = planStartTime;
+					obj.endTime = planEndTime;
+				}
+				if (nowStartTime && nowEndTime) {
+					obj.hstartTime = nowStartTime;
+					obj.hendTime = nowEndTime;
+				}
+				getList(true, searchText, obj);
+				mui('.mui-off-canvas-wrap').offCanvas().close();
+			}
+		})
+
+		mui('.revene_all').on('tap', 'li', function() {
+			var id = $(this).attr('id');
+			var projectId = $(this).attr('projectid');
+			if (!id) {
+				return;
+			}
+			window.location.href = './tesk_detail.html?id=' + id + '&projectid=' + projectId;
+		})
+
+	}
+
+	common.promise().then(function() {
+			mui.showLoading('加载中...');
+			return;
+		})
+		.then(function() {
+			return getProjectName();
+		})
+		.then(function(res) {
+			if (res.code == 200) {
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].Value,
+						text: res.data[i].Text
+					}
+					projectArr.push(obj);
+				}
+			}
+			return;
+		})
+		.then(function() {
+			return getState();
+		})
+		.then(function(res) {
+			if (res.code == 200) {
+				var html = '';
+				var num = 0;
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					num++;
+					if (num == 2) {
+						html += '<span id=' + item.SUB_ID + ' class="middle_status">' + item.SUB_NM + '</span>';
+					} else {
+						html += '<span id=' + item.SUB_ID + '>' + item.SUB_NM + '</span>';
+					}
+					if (num == 3) {
+						num = 0;
+					}
+				}
+				$('.choose_task_status').html(html);
+			}
+			return;
+		})
+		.then(function() {
+			return getLevel();
+		})
+		.then(function(res) {
+			if (res.code == 200) {
+				var html = '';
+				var num = 0;
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					num++;
+					if (num == 2) {
+						html += '<span id=' + item.SUB_ID + ' class="middle_status">' + item.SUB_NM + '</span>';
+					} else {
+						html += '<span id=' + item.SUB_ID + '>' + item.SUB_NM + '</span>';
+					}
+					if (num == 3) {
+						num = 0;
+					}
+				}
+				$('.choose_task_class').html(html);
+			}
+			return;
+		})
+		.then(function() {
+			return getList();
+		})
+
+	//获取列表
+	function getList(flag, inputText, screenObj) {
+		var postData = {
+			page: page,
+			limit: 10
+		}
+		if (inputText) {
+			postData.name = inputText;
+		}
+		if (screenObj) {
+			if (screenObj.taskName) {
+				postData.projectId = screenObj.taskName;
+			}
+			if (screenObj.status) {
+				postData.Status = screenObj.status;
+			}
+			if (screenObj.level) {
+				postData.level = screenObj.level;
+			}
+			if (screenObj.startTime) {
+				postData.startTime = screenObj.startTime;
+				postData.endTime = screenObj.endTime;
+			}
+			if (screenObj.hstartTime) {
+				postData.hstartTime = screenObj.hstartTime;
+				postData.hendTime = screenObj.hendTime;
+			}
+		}
+
+		console.log(postData)
+		var url = '/api/CostConsult/ScheduleListQueryNew';
+		return request.post(url, postData).then(function(res) {
+			console.log(res)
+			mui.hideLoading();
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					var status = '';
+					var color = '';
+					var img = '';
+					var classColor = '';
+					switch (item.Status) {
+						case '未开始':
+							status = '未开始';
+							color = 'not_start';
+							break;
+						case '已确认':
+							status = '已确认';
+							color = 'status_sure';
+							break;
+						case '进行中':
+							status = '进行中';
+							color = 'status_ing';
+							break;
+						case '已完成':
+							status = '已完成';
+							color = 'status_end';
+							break;
+						default:
+							status = '未知';
+							break;
+					}
+					switch (item.Level) {
+						case '紧急':
+							img =
+								'<img src="../../img/ele_red.png" ><img src="../../img/ele_red.png" ><img src="../../img/ele_red.png" ><img src="../../img/ele_red.png" >';
+							classColor = 'class_color_red';
+							break;
+						case '高':
+							img = '<img src="../../img/ele_org.png" ><img src="../../img/ele_org.png" ><img src="../../img/ele_org.png" >';
+							classColor = 'class_color_org';
+							break;
+						case '中':
+							img = '<img src="../../img/ele_green.png" ><img src="../../img/ele_green.png" >';
+							classColor = 'class_color_green';
+							break;
+						case '低':
+							img = '<img src="../../img/ele_red.png" >';
+							classColor = 'class_color_blue';
+							break;
+						default:
+							break;
+					}
+					html += '<li id=' + item.ID + ' projectid=' + item.ProjectId + '>' +
+						'<p><img src="../../img/projectblue.png" >' +
+						' <span class="company_name">' + item.ProjectName + '</span></p>' +
+						'<div class="task_info">' +
+						'<p>' +
+						'<span>创建人员：</span>' + item.CreateUser +
+						'<span class="reciver">接收人员：</span>' + item.StaffName +
+						'</p>' +
+						'<p><span>计划时间：</span>' + item.StartTime + ' <span> 至 </span>' + item.EndTime + '</p>' +
+						'<p><span>实际时间：</span>' + item.HistoryStartTime + '<span> 至 </span>' + item.HistoryEndTime + '</p>' +
+						'<p><span>任务描述：</span> ' + item.Remark + '</p>' +
+						'</div>' +
+						'<div class="task_status">' +
+						'<p>' +
+						'任务状态：<span class="status_box ' + color + '">' + status + '</span>&nbsp;&nbsp;&nbsp;' +
+						// '任务等级：' + img + ' <span class="' + classColor + '">' + item.Level + '</span>' +
+						'</p></div></li>';
+				}
+
+
+				if (flag) {
+					$('.revene_all').html(html);
+				} else {
+					$('.revene_all').append(html);
+				}
+				if ($('.revene_all li').length == 0) {
+					html = '<li class="is_node_data"><div class="detail_info detail_info_no_data bid_no_data">' +
+						'<img src="../../img/no_data.png" ><p>还未有数据！</p></div></li>';
+					$('.revene_all').html(html);
+				}
+			} else {
+				mui.toast('获取失败!');
+			}
+			return;
+		})
+	}
+
+	//获取任务状态
+	function getState() {
+		var url = '/api/MyTask/StatusSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			return res;
+		})
+	}
+	//获取优先级
+	function getLevel() {
+		var url = '/api/MyTask/LevelsSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			return res;
+		})
+	}
+
+	//项目名称
+	function getProjectName() {
+		var url = '/api/MyTask/ProjectsSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			return res;
+		})
+	}
+
+
+	//选择器
+	(function(mui) {
+		//时间选择
+		var btns = mui('.choose_time');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+						if ($(_self).hasClass('plan_times')) {
+							if ($(_self).hasClass('start_time')) {
+								planStartTime = rs.text;
+							}
+							if ($(_self).hasClass('end_time')) {
+								planEndTime = rs.text;
+							}
+						} else {
+							if ($(_self).hasClass('start_time')) {
+								nowStartTime = rs.text;
+							}
+							if ($(_self).hasClass('end_time')) {
+								nowEndTime = rs.text;
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					if ($(_self).hasClass('plan_times')) {
+						if ($(_self).hasClass('end_time') && planStartTime) {
+							options.beginDate = new Date(planStartTime);
+						}
+						if ($(_self).hasClass('start_time') && planEndTime) {
+							options.endDate = new Date(planEndTime);
+						}
+					} else {
+						if ($(_self).hasClass('end_time') && nowStartTime) {
+							options.beginDate = new Date(nowStartTime);
+						}
+						if ($(_self).hasClass('start_time') && nowEndTime) {
+							options.endDate = new Date(nowEndTime);
+						}
+					}
+					_self.picker = new mui.DtPicker(options);
+
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+						if ($(_self).hasClass('plan_times')) {
+							if ($(_self).hasClass('start_time')) {
+								planStartTime = rs.text;
+							}
+							if ($(_self).hasClass('end_time')) {
+								planEndTime = rs.text;
+							}
+						} else {
+							if ($(_self).hasClass('start_time')) {
+								nowStartTime = rs.text;
+							}
+							if ($(_self).hasClass('end_time')) {
+								nowEndTime = rs.text;
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.choose_project');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					var _this = this;
+					userPicker.setData(projectArr);
+					userPicker.show(function(items) {
+						$('.choose_project').find('a').html(items[0].text);
+						$('.choose_project').find('a').attr('id', items[0].value)
+					});
+				}, false);
+			});
+		});
+	})(mui);
+</script>

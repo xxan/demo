@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/jygl_chengguowenjian.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style type="text/css">
+			.procedure {
+				margin-bottom: 0px;
+			}
+			.list_content_procedure {
+				margin: 0;
+			}
+			.list_box_content {
+				padding-bottom: 70px;
+			}
+			.choose_other {
+				display: none;
+			}
+			.choose_other input {
+				font-size: 14px;
+				color: #999999;
+			}
+			.file_upload span{
+				width: 70%;
+			}
+			.plan_time{
+				position: relative;
+			}
+			.file_upload input {
+				right: 20px;
+			}
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">成果文件</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>成果文件名称</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="result_file_name"></textarea>
+			</div>
+			<h5>成果文件类型</h5>
+			<div class="task_time">
+				<p class="get_manager file_types"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="plan_time choose_other">
+				<input class="task_plan_time other_type"  type="text" name="" id="" value="" placeholder="请输入其他类型"/>
+			</div>
+			<h5>文件编制日期</h5>
+			<div class="task_time">
+				<p class="checktime"><a class="make_date">请选择</a><span class="choose_img"></span></p>
+			</div>
+			<h5>成果文件上传</h5>
+			<div class="plan_time file_upload">
+				<span class="file_name_de">选择文件<b></b></span>
+				<input type="file" name="" id="add_file" value="" multiple/><label for="add_file" class="choose_img">添加</label>
+			</div>
+			<ul class="file_tendering_list">
+				
+			</ul>
+			<h5>备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="remarks"></textarea>
+			</div>
+			<h5>选择审批流程<span>＊</span></h5>
+			<div class="list_box_content">
+				<div class="task_time procedure">
+					<p  class="get_manager process_choose"><a>选择流程</a><span class="choose_img"></span></p>
+				</div>
+				<ul class="list_content_procedure">
+				</ul>
+			</div>
+		</div>
+		<div class="footer_submit_three">
+			<span class="btn_cancel">取消</span><span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	var processArr = [];
+	var chooseProccessId;
+	var fileTypes = [];
+	var shooseFileType;
+	var chooseTimeFlag = false;
+	var oldPath;
+	var oldFileName;
+	var fileList = [];
+	var isDisabled = false;
+	
+	var projectName = common.getQueryUrl('projectName');
+	var projectId = common.getQueryUrl('projectId');
+	var Id = common.getQueryUrl('id');
+	var isCheck = common.getQueryUrl('check');
+	
+	$('.point_title').html(projectName);
+	
+	//点击文件上传按钮
+	$("#add_file").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(uploads(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	});
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		preview(this,fileList)
+	})
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		console.log(newFile)
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					console.log(fileList[i].Id,id)
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parents('li').remove();
+	})
+	
+	//文件上传
+	var this_obj = {}
+	function uploads(formData,flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=Outcome';
+		return request.upload(url, formData).then(function(res) {
+			if (res && res.code == 200) {
+					// this_obj.OutcomeFilePath = res.data.FilePath;
+					// this_obj.OutcomeFileName = res.data.FileName + res.data.Extension;
+					var data = {
+					  "FileName": res.data.FileName,
+			      "Extension": res.data.Extension,
+			      "FilePath": res.data.FilePath,
+			      "Type": "资格预审--资格预审文件审批",
+						"tid": flag
+					}
+					if(fileList.length > 0) {
+						console.log(fileList,data)
+						for(var i=0;i<fileList.length;i++) {
+							if(fileList[i].FileName == data.FileName && fileList[i].Extension == data.Extension){
+								fileList.splice(i,1); 
+							}
+						}
+					}
+					fileList.push(data)
+					return;
+				}
+		})
+	}
+	
+	//获取文件类型
+	function getFileType() {
+		var url = '/api/CostConsult/OutcomeYWLXSelect';
+		return request.post(url,{projectId: projectId}).then(function(res) {
+			console.log(res)
+			return res;
+		})
+	}
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/CostConsult/GetOutcomeDoc';
+		return request.post(url,{ID: Id}).then(function(res) {
+			console.log('详情',res)
+			if(res.code == 200) {
+				$('.result_file_name').val(res.data.Name);
+				$('.file_types').find('a').html(common.getKeyValue(fileTypes,res.data.SUB_ID));
+				if(common.getKeyValue(fileTypes,res.data.SUB_ID) == '其他') {
+					$('.choose_other').show();
+					$('.other_type').val(res.data.OutcomeYWLXText);
+				}
+				shooseFileType = res.data.SUB_ID;
+				
+				if(res.data.MakeDate) {
+					chooseTimeFlag = res.data.MakeDate;
+					$('.make_date').html(res.data.MakeDate);
+				}
+				$('.remarks').val(res.data.Remarks);
+				
+				if(res.data.OutcomeFileName) {
+					// $('.file_name_de').html(res.data.OutcomeFileName);
+					oldFileName = res.data.OutcomeFileName;
+				}
+				oldPath = res.data.OutcomeFilePath;
+				if ( res.data.Template > 0) {
+					chooseProccessId = res.data.Template;
+					// $('.process_choose').find('a').html(common.getKeyValue(processArr,res.data.Template))
+					processDetail(chooseProccessId);
+					if( res.data.State >= 0) {
+						isDisabled = true;
+						$(":input").attr("disabled", "disabled"); 
+						$('.footer_submit_three').css('display','none');
+						$('.choose_img').hide();
+					}
+				}
+				if(isCheck) {
+					isDisabled = true;
+					$(":input").attr("disabled", "disabled"); 
+					$('.footer_submit_three').css('display','none');
+				}
+				
+				var names = '';
+				var filearr = [];
+				for(var i=0;i<res.data.lstFile.length;i++) {
+					var lists = res.data.lstFile[i];
+					lists.Type = '资格预审--资格预审文件审批';
+					var data = {
+						"FileName": lists.Name,
+						"Extension": lists.FileFormat,
+						"FilePath": lists.FilePath,
+						"Type": lists.Type,
+						"Id": lists.Id
+					}
+					filearr.push(data);
+					var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+					var deStr = '删除';
+					if(isDisabled) {
+						deStr = '';
+					}
+					names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.Name + doc +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+					
+				}
+				fileList = filearr;
+				$('.file_tendering_list').html(names); 
+			}
+		})
+	}
+	
+	
+	//提交数据
+	function submit(flag) {
+		if(!$('.result_file_name').val()) {
+			mui.toast('请输入成果文件名称！');
+			return;
+		}
+		if(!chooseTimeFlag) {
+			mui.toast('请选择日期！');
+			return;
+		}
+		var postData = {};
+		var obj = {}
+		if(Id) {
+			obj.OutcomeId = Id;
+		}
+		
+		obj.ProjectId = projectId;
+		obj.Name = $('.result_file_name').val();
+		obj.OutcomeYWLX = shooseFileType;
+		if(common.getKeyValue(fileTypes,shooseFileType) == '其他') {
+			obj.OutcomeYWLXText = $('.other_type').val();
+		}
+		obj.MakeDate = $('.make_date').html();
+		obj.Remarks = $('.remarks').val();
+		if(chooseProccessId) {
+			postData.Template = chooseProccessId;
+		}
+		
+		postData.isSubmit = flag;
+		common.promise().then(function() {
+			// if ($("#add_file")[0].files.length > 0) {
+			// 	var files = $("#add_file")[0].files;
+			// 	var arr = []
+			// 	for(var i=0;i<files.length;i++) {
+			// 		var formData = new FormData();
+			// 		formData.append("file", files[i]);
+			// 		arr.push(uploads(formData));
+			// 	}
+			// 	return Promise.all(arr).then(function() {
+			// 		obj.OutcomeFilePath = this_obj.OutcomeFilePath;
+			// 		obj.OutcomeFileName = this_obj.OutcomeFileName;
+			// 	})
+			// } else {
+				if(this_obj) {
+					obj.OutcomeFilePath = this_obj.OutcomeFilePath;
+					obj.OutcomeFileName = this_obj.OutcomeFileName;
+				}else {
+					obj.OutcomeFilePath = oldPath;
+					obj.OutcomeFileName = oldFileName;
+				}
+				
+				return;
+			// }
+		}).then(function(res) {
+			postData.LstFile = fileList;
+			var url = '/api/CostConsult/SaveOutcomeDoc';
+			postData.model = obj;
+			console.log(postData)
+			return request.post(url,postData)
+			
+		}).then(function(res) {
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('提交失败！' + res.msg);
+			}
+		})
+		
+	}
+	
+	
+	(function(mui,doc) {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				if(isDisabled) return;
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('a').html(rs.text);
+						chooseTimeFlag = true;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					options.type = 'date';
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('a').html(rs.text);
+						chooseTimeFlag = true;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					if(isDisabled) return;
+					var _this = this;
+					if($(this).hasClass('process_choose')) {
+						if(JSON.stringify(processArr).indexOf('不审核') == -1) {
+							processArr.push({value: -1,text: '不审核'});
+						}
+						userPicker.setData(processArr);
+						userPicker.show(function(items) {
+							console.log(items[0].text)
+							chooseProccessId = items[0].value;
+							$(_this).find('a').html(items[0].text);
+							getProcessDetail(chooseProccessId)
+						});
+					}else if($(this).hasClass('file_types')) {
+						userPicker.setData(fileTypes);
+						userPicker.show(function(items) {
+							console.log(items[0].text)
+							shooseFileType = items[0].value;
+							$(_this).find('a').html(items[0].text);
+							if(items[0].text == '其他') {
+								$('.choose_other').show();
+							}else {
+								$('.choose_other').hide();
+							}
+						});
+					}
+					
+				}, false);
+			});
+			
+			
+		});
+	})(mui,document);
+	
+	
+	mui.showLoading('加载中...');
+	common.promise()
+	.then(function() {
+		return approvalProcess('项目管理');
+	})
+	.then(function(data) {
+		console.log(data);
+		processArr = data;
+		return getFileType();
+	})
+	.then(function(res) {
+		if(res.code == 200) {
+			for(var i=0;i<res.data.length;i++) {
+				var item = res.data[i];
+				var obj = {
+					value: item.SUB_ID,
+					text: item.SUB_NM
+				}
+				fileTypes.push(obj);
+			}
+		}
+		if(Id) {
+			return getDetail();
+		}
+	}).then(function() {
+		mui.hideLoading();
+	})
+	
+	//点击保存
+	mui('.footer_submit_three').on('tap','.btn_save',function() {
+		submit(false);
+	})
+	//点击提交
+	mui('.footer_submit_three').on('tap','.btn_submit',function() {
+		submit(true);
+	})
+	
+</script>
+
+
+

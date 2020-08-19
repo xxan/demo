@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">投标结果备案</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>是否中标<span>＊</span></h5>
+			<div class="task_time">
+				<p class="get_manager"><a class="is_bid">请选择</a><span></span></p>
+			</div>
+			<h5>中标价格<span>＊</span></h5>
+			<div class="task_time task_price">
+				<p><input type="number" name="" id=""  class="bid_price"/><span>万元</span></p>
+			</div>
+			<h5>备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="remark" placeholder="请填写"></textarea>
+			</div>
+			
+			<div class="content_bottom">
+				
+			</div>
+		</div>
+		<div class="footer_submit_three ">
+			<span class="btn_cancel">取消</span><span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	mui.init();
+	var isFlag = false;
+	var chooseId;
+	var setData = [{
+				value: '0',
+				text: '未中标'
+			}, {
+				value: '1',
+				text: '中标'
+			}];
+	
+	var projectName = common.getQueryUrl('name');
+	var projectId = common.getQueryUrl('id');
+	var isDetail = common.getQueryUrl('detail');
+	$('.point_title').html(projectName);
+	
+	//获取详情
+	if(isDetail) {
+		getDetailBid();
+	}
+	function getDetailBid() {
+		var url = '/api/BusinessManage/XMTBJGDetail';
+		request.post(url,{ProjectId: projectId}).then(function(res) {
+			if(res.code == 200) {
+				console.log(res)
+				$('.is_bid').html(common.getKeyValue(setData,res.data.IsWin));
+				$('.bid_price').val(res.data.WinPrice);
+				$('.remark').val(res.data.Remark);
+				if(res.data.State == 1) {
+					$(":input").attr("disabled", "disabled"); 
+					isFlag = true;
+					$('.footer_submit_three').css('display','none');
+				}
+			}
+		})
+	}
+	
+	
+	//数据准备
+	function submit(flag) {
+		if(!chooseId && chooseId !=0) {
+			mui.toast('请选择是否中标!');
+			return;
+		}
+		
+		var postData = {};
+		postData.ProjectId = projectId;
+		postData.IsSubmit = flag;
+		postData.IsWin = common.getObjValue(setData,$('.is_bid').html()).value;
+		if(postData.IsWin == 1) {
+			if(!$('.bid_price').val()) {
+				mui.toast('请输入价格!');
+				return;
+			}
+		}
+		postData.WinPrice = $('.bid_price').val();
+		postData.Remark = $('.remark').val();
+		console.log(postData)
+		var url = '/api/BusinessManage/SaveXMTBJG';
+		request.post(url,postData).then(function(res) {
+			if(res.code == 200) {
+				mui.back();
+			}
+		})
+	}
+	
+	(function(mui) {
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			userPicker.setData(setData);
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					if(isFlag) return;
+					var _this = this;
+					userPicker.show(function(items) {
+						chooseId = items[0].value;
+						$(_this).find('a').html(items[0].text)
+					});
+				}, false);
+			});
+		});
+	})(mui);
+	
+	//保存数据
+	mui('.footer_submit_three').on('tap','.btn_save',function() {
+		submit(false);
+	})
+	//提交数据
+	mui('.footer_submit_three').on('tap','.btn_submit',function() {
+		submit(true);
+	})
+</script>
+
+
+

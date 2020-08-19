@@ -1,0 +1,430 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/project_css.css"/>
+	</head>
+
+	<body>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">编辑详情</h1>
+		</header>
+		
+		<div class="mui-content detail_content">
+			
+			<div class="project_detail">
+				<p>项目名称： <span class="project_name"></span></p>
+				<p>创建人员： <span class="create_name"></span></p>
+				<p>创建时间： <span class="create_time"</span></p>
+			</div>
+			
+			<div class="task_details">
+				<h5>任务概况</h5>
+				<p><span>任务描述</span> <input type="text" disabled class="task_intro" /></p>
+			<!-- 	<p><span>任务级别</span> <input type="text" disabled class="task_class" /></p> -->
+				<p class="choose_select"><span>任务状态</span> <input type="text" class="task_status" /></p>
+				<p><span>接收人员</span> <input type="text" class="task_recive" disabled/></p>
+				<p class="not_bottom"><span>任务备注</span> <input class="task_remark" type="text" /></p>
+				<h5 class="hide">附件</h5>
+				<p class="inpt_button">
+					<span>添加附件</span>
+					<input type="file" name="" id="add_file" multiple /><label for="add_file" class="btn_add_title">添加</label>
+				</p>
+				<ul class="file_list">
+					
+				</ul>
+				<h5>任务用时</h5>
+				<p class="not_bottom"><span>计划开始时间</span> <input type="text" disabled class="plan_start_time" /></p>
+				<p class="not_bottom"><span>计划完成时间</span> <input type="text" disabled class="plan_end_time" /></p>
+				<p><span>预计工时</span> <input type="text" class="plan_work_time" disabled/></p>
+				<p class="not_bottom"><span>实际开始时间</span> <input type="text" class="choose_time now_start_time" /></p>
+				<p class="not_bottom"><span>实际完成时间</span> <input type="text" class="choose_time now_end_time" /></p>
+				<p><span>实际工时</span> <input type="text" class="now_work_time" /></p>
+			</div>
+			
+		</div>
+		
+		<div class="footer_submit">
+			<span class="btn_cancel">取消</span><span class="btn_save">保存</span>
+		</div>
+	</body>
+
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	var id = common.getQueryUrl('id');
+	var projectId = common.getQueryUrl('projectid');
+	var stateArr = [];
+	var levelArr = [];
+	var nowStartTime,nowEndTime;
+	var newFile = [];
+	var detailInfo = {};
+	var state;
+	
+	common.promise()
+	.then(function() {
+		mui.showLoading('加载中...');
+		return;
+	})
+	.then(function() {
+		return getState();
+	})
+	.then(function(res) {
+		if(res.code == 200) {
+			for(var i=0;i<res.data.length;i++) {
+				stateArr.push({
+					value: res.data[i].SUB_ID,
+					text: res.data[i].SUB_NM
+				})
+			}
+		}
+		return;
+	})
+	.then(function() {
+		return getLevel();
+	})
+	.then(function(res) {
+		if(res.code == 200) {
+			for(var i=0;i<res.data.length;i++) {
+				levelArr.push({
+					value: res.data[i].SUB_ID,
+					text: res.data[i].SUB_NM
+				})
+			}
+		}
+		return;
+	})
+	.then(function() {
+		return getDetail();
+	}).then(function(res) {
+		if(res.code == 200) {
+			common.arrObjTrimAndNull(res.data);
+			detailInfo = res.data;
+			$('.project_name').html(res.data.ProjectName);
+			$('.create_name').html(res.data.RealName);
+			$('.create_time').html(res.data.CreatedTime);
+			$('.task_intro').val(res.data.Name);
+			// $('.task_class').val(res.data.ScheduleLevelName);
+			$('.task_status').val(res.data.StatusNmae);
+			$('.task_recive').val(res.data.StaffName);
+			$('.task_remark').val(res.data.Remark);
+			var html = '';
+			for(var i=0;i<res.data.lstFile.length;i++) {
+				var item = res.data.lstFile[i];
+				html +='<li id='+ item.Id +' path='+ item.FilePath +
+				'><a class="file_list_name spans_back" >'+ item.Name + item.FileFormat +
+				'</a><span class="file_list_delete">删除</span></li>';
+				var obj = {
+					Id: item.Id,
+					FileName: item.Name,
+					Extension: item.FileFormat,
+					FilePath: item.FilePath,
+					Type: '项目管理--任务分配'
+				}
+				newFile.push(obj)
+			}
+			$('.file_list').html(html);
+			if(html== '') {
+				// $('.hide').hide();
+			}
+			
+			$('.plan_start_time').val(res.data.StartTime);
+			$('.plan_end_time').val(res.data.EndTime);
+			$('.plan_work_time').val(res.data.UsingDays);
+			
+			$('.now_start_time').val(res.data.HistoryStartTime);
+			$('.now_end_time').val(res.data.HistoryEndTime);
+			$('.now_work_time').val(res.data.HisoryUsingDays);
+		}else {
+			mui.toast('获取失败');
+		}
+		mui.hideLoading()
+	})
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/CostConsult/FillScheduleNew';
+		var postData = {
+			Id: id,
+			projectId: projectId,
+			isSee: true
+		}
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			return res;
+		})
+	}
+	
+	//获取任务状态
+	function getState() {
+		var url = '/api/MyTask/StatusSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			return res;
+		})
+	}
+	//获取优先级
+	function getLevel() {
+		var url = '/api/MyTask/LevelsSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			return res;
+		})
+	}
+	//文件上传
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=Assets';
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": '项目管理--任务分配',
+					"tid": flag
+				}
+				// fileList = [];
+				newFile.push(data)
+				return;
+			}
+		})
+	}
+	
+	//点击文件上传按钮
+	$("#add_file").on('change', function(e) {
+		
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><a class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</a><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		
+		$('.file_list').append(names)
+		
+	})
+	
+	mui('.file_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<newFile.length;i++) {
+				if(newFile[i].Id == id) {
+					newFile.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(newFile[i].tid == item) {
+					newFile.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	
+	//预览
+	mui('.file_list').on('tap','.file_list_name',function() {
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	});
+	
+	//保存
+	function submit() {
+		var postData = {};
+		postData.ID = detailInfo.ID;
+		postData.Name = detailInfo.Name;
+		postData.ScheduleLevel = detailInfo.ScheduleLevel;
+		postData.ProjectId = detailInfo.ProjectId;
+		postData.Remark = $('.task_remark').val() || '';
+		postData.Status = detailInfo.Status;
+		if(state) {
+			postData.Status = state;
+		}
+		postData.ParticipantId = detailInfo.ParticipantId
+		postData.StartTime = detailInfo.StartTime;
+		postData.EndTime = detailInfo.EndTime;
+		postData.UsingDays = detailInfo.UsingDays;
+		postData.HistoryStartTime = $('.now_start_time').val();
+		postData.HistoryEndTime = $('.now_end_time').val();
+		postData.HisoryUsingDays = $('.now_work_time').val();
+		postData.lstFile = newFile;
+		
+		console.log(postData);
+		var url = '/api/CostConsult/SaveScheduleNew';
+		request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('修改失败！')
+			}
+		})
+	}
+	
+	mui('.footer_submit').on('tap','.btn_save',function() {
+		submit();
+	});
+	
+	//选择器
+	(function(mui) {
+		//时间选择
+		var btns = mui('.choose_time');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						$(_self).val(rs.text);
+						
+						if($(_self).hasClass('now_start_time')) {
+							nowStartTime = rs.text;
+							if(nowEndTime) {
+								var hours = DateDifference(nowStartTime,nowEndTime);
+								$('.now_work_time').val(hours);
+							}
+						}
+						if($(_self).hasClass('now_end_time')) {
+							nowEndTime  = rs.text;
+							if(nowStartTime) {
+								var hours = DateDifference(nowStartTime,nowEndTime);
+								$('.now_work_time').val(hours);
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'datetime';
+					
+					if($(_self).hasClass('now_end_time') && nowStartTime) {
+						options.beginDate = new Date(nowStartTime);
+					}
+					if($(_self).hasClass('now_start_time') && nowEndTime) {
+						options.endDate = new Date(nowEndTime);
+					}
+					_self.picker = new mui.DtPicker(options);
+					
+					_self.picker.show(function(rs) { 
+						$(_self).val(rs.text);
+						
+						if($(_self).hasClass('now_start_time')) {
+							nowStartTime = rs.text;
+							if(nowEndTime) {
+								var hours = DateDifference(nowStartTime,nowEndTime);
+								$('.now_work_time').val(hours);
+							}
+						}
+						if($(_self).hasClass('now_end_time')) {
+							nowEndTime  = rs.text;
+							if(nowStartTime) {
+								var hours = DateDifference(nowStartTime,nowEndTime);
+								$('.now_work_time').val(hours);
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.choose_select');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					var _this = this;
+					console.log(this)
+					if($(this).find('.task_class').length > 0) {
+						userPicker.setData(levelArr);
+						userPicker.show(function(items) {
+							$(_this).find('.task_class').val(items[0].text);
+						});
+					}
+					if($(this).find('.task_status').length > 0) {
+						userPicker.setData(stateArr);
+						userPicker.show(function(items) {
+							$(_this).find('.task_status').val(items[0].text);
+							state = Number(items[0].value)
+						});
+					}
+				}, false);
+			});
+		});
+	})(mui);
+
+	function DateDifference(faultDate,completeTime){
+	      // let d1 = new Date(faultDate);
+	      // let d2 = new Date(completeTime);
+	      var stime =new Date(faultDate).getTime();
+	      var etime = new Date(completeTime).getTime();
+	      var usedTime = etime - stime;  //两个时间戳相差的毫秒数
+	      var days=Math.floor(usedTime/(24*3600*1000));
+	      //计算出小时数
+	      var leave1=usedTime%(24*3600*1000);    //计算天数后剩余的毫秒数
+	      var hours=Math.floor(leave1/(3600*1000));
+	      //计算相差分钟数
+	      var leave2=leave1%(3600*1000);        //计算小时数后剩余的毫秒数
+	      var minutes=Math.floor(leave2/(60*1000));
+	      var time = days + "天"+hours+"时"+minutes+"分";
+	      // var time = days;
+				var miHour = 0;
+				if(minutes > 0 && minutes <= 30) {
+					miHour = 0.5;
+				}else if(minutes > 30 && minutes < 60){
+					miHour = 1;
+				}
+				var hour = 0;
+				hour += days * 24;
+				hour += hours;
+				hour += miHour;
+	      return hour;
+	    }
+</script>

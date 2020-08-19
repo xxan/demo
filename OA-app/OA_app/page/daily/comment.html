@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/jiedian.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/xmgl.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/swiper.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/calendar_base.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/showcase.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/calendar_base_week.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/index.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/manager_daily.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<style type="text/css">
+			.mui-scroll {
+				padding-bottom: 10px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- 主界面不动、菜单移动 -->
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-slide-in">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right" id="offCanvasSide">
+				<div class="mui-scroll-wrapper canvas_wrap">
+					<div class="mui-scroll">
+						<!-- 菜单具体展示内容 -->
+						<div class="screen_box">
+							<h5 class="silder_titles">交叉点评</h5>
+							<div class="comment_other worker_other">
+								<ul class="other_comment_list">
+									<li>
+										<pre>123123黑色的开放时间看到阿斯顿发了卡士大夫爱斯达克理发师记得告诉</pre>
+										<p><span>张三</span> 2020-09-03</p>
+									</li>
+								</ul>
+								<div class="input_box">
+									<textarea rows="" cols="" placeholder="输入点评内容"></textarea>
+								</div>
+							</div>
+							<div class="comment_other department_manager">
+								<div class="input_box">
+									<textarea rows="" cols="" placeholder="输入点评内容"></textarea>
+								</div>
+							</div>
+							<div class="comment_other general_manager">
+								<div class="input_box">
+									<textarea rows="" cols="" placeholder="输入点评内容"></textarea>
+								</div>
+							</div>
+							<div class="silder_footer_submit_one">
+								<span class="sure">提交</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">日报管理</h1>
+				</header>
+				<div class="mui-content">
+					<div class="canlender">
+						<div class="em-journal-title">
+							<div class="em-per-block pre">
+								<span class="mui-icon mui-icon-arrowleft"></span>
+							</div>
+							<div class="em-per-block mid">
+								<span>...</span>
+							</div>
+							<div class="em-per-block next">
+								<span class="mui-icon mui-icon-arrowright"></span>
+							</div>
+						</div>
+						<div id="calendar" class="em-journal-pad">
+
+						</div>
+					</div>
+					<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+						<div class="mui-scroll">
+							<div class="user_choose">
+								<span class="prev"><</span>
+								<p class="this_name">张三</p>
+								<span class="next">></span>
+							</div>
+							<div class="my_daily_tilte">
+								<p class="active">日报(<span>0</span>)</p>
+								<p>点评(<span>0</span>)</spapn>
+							</div>
+							<div class="project_daily my_daily" id="date_list">
+
+								<ul class="day_lists day_list">
+									<li class="today">
+										<p class="date_title"><span class="date_point"><img src="../../img/gou.png"></span>今天 星期日</p>
+										<div class="date_list_right">
+											<div class="daily_info">
+												<p>工作类别：<span class="">自爆</span></p>
+												<p>工作内容：<span class="work_content">加快递费asldkf胜多负少吉利丁粉水电费好看大数据东方</span></p>
+												<p>工作时间：<span>09: 00 - 12:00</span></p>
+												<p>所用工时：<span>12</span></p>
+											</div>
+										</div>
+									</li>
+									<li class="today">
+										<p class="date_title"><span class="date_point"><img src="../../img/gou.png"></span>今天 星期日</p>
+										<div class="date_list_right">
+											<div class="daily_info">
+												<p>工作类别：<span class="">自爆</span></p>
+												<p>工作内容：<span class="work_content">加快递费asldkf胜多负少吉利丁粉水电费好看大数据东方</span></p>
+												<p>工作时间：<span>09: 00 - 12:00</span></p>
+												<p>所用工时：<span>12</span></p>
+											</div>
+										</div>
+									</li>
+								</ul>
+								<ul class="my_comment">
+									<li>
+										<p><span></span>交叉点评</p>
+										<div class="comment_list">
+											<div class="comment_item">
+												<p>
+													<span class="comment_name">张三</span>
+													<span class="comment_time">20191232</span>
+												</p>
+												<pre>的看法见多识广爱上对方可垃圾收快递费施蒂利克公司大幅埃里克剑荡四方</pre>
+												<div class="other_comment">
+													<div class="other_item">
+														<p><span>李四</span>回复<span>张三</span> 2020</p>
+														<pre>的看法见多识广爱上对方可垃圾收快递费施蒂利克公司大幅埃里克剑荡四方</pre>
+													</div>
+												</div>
+											</div>
+										</div>
+									</li>
+									<li>
+										<p><span></span>管理点评</p>
+										<div class="comment_list">
+											<div class="comment_item">
+												<p>
+													<span class="comment_name">张三</span>
+													<span class="comment_time">20191232</span>
+												</p>
+												<pre>的看法见多识广爱上对方可垃圾收快递费施蒂利克公司大幅埃里克剑荡四方</pre>
+											</div>
+										</div>
+									</li>
+								</ul>
+								
+							</div>
+						</div>
+					</div>
+					<div class="footer_submit_one">
+						<span>点评</span>
+					</div>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mustache.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/calendar_base_week.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<!--当前日期模板-->
+<script type="text/template" id="template">
+	<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+<script type="text/template" id="template_red">
+	<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+<script type="text/template" id="template1">
+	<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}</span>
+		</li>
+	</script>
+<!--大于当前日期模板-->
+<!-- 无日历 -->
+<script type="text/template" id="template2">
+	<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}</span>
+		</li>
+	</script>
+<!-- 有日历 -->
+<script type="text/template" id="template22">
+	<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+<script type="text/template" id="template22_red">
+	<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+<!--小于当前日期模板-->
+<!-- 有日历 -->
+<script type="text/template" id="template3">
+	<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+<script type="text/template" id="template3_red">
+	<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+<!-- 无日历 -->
+<script type="text/template" id="template4">
+	<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}</span>
+		</li>
+	</script>
+<script type="text/javascript">
+	var userId = common.getQueryUrl('userid');
+	// mui(".mui-scroll-wrapper").scroll();
+	var username = common.getQueryUrl('username');
+	var departmentId = common.getQueryUrl('depart') ? common.getQueryUrl('depart') : '';
+	var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+	var prvUser,nextUser;
+	var commentIndex = 0;
+	var day = getTime('year');
+	var hasPrev = false;
+	var hasNext = false;
+	$('.this_name').html(username);
+	$('.my_comment').hide();
+	$('.day_list').show();
+	quest();
+	clickInit();
+	function clickInit() {
+		mui('.my_daily_tilte').on('tap', 'p', function() {
+			$(this).addClass('active').siblings().removeClass('active');
+			var pindex = $('.my_daily_tilte').find('.active').index();
+			if (pindex == 1) {
+				$('.my_comment').show();
+				$('.day_list').hide();
+				$('.footer_submit_one').hide();
+			} else {
+				$('.my_comment').hide();
+				$('.day_list').show();
+				$('.footer_submit_one').show();
+			}
+		})
+		// mui('.mui-off-canvas-wrap').offCanvas('show');
+		mui('.footer_submit_one').on('tap', 'span', function() {
+			if(commentIndex == 0) {
+				$('.silder_titles').html('交叉点评');
+				$('.worker_other').show();
+				$('.department_manager').hide();
+				$('.general_manager').hide();
+			}else if(commentIndex == 1) {
+				$('.silder_titles').html('部门经理点评');
+				$('.worker_other').hide();
+				$('.department_manager').show();
+				$('.general_manager').hide();
+			}else {
+				$('.silder_titles').html('总经理点评');
+				$('.worker_other').hide();
+				$('.department_manager').hide();
+				$('.general_manager').show();
+			}
+			mui('.mui-off-canvas-wrap').offCanvas('show');
+			getComment(userId).then(res => {
+				console.log(res)
+				if(res.code == 200) {
+					var html = '';
+					var html1 = '';
+					var html2 = '';
+					for(var i=0;i<res.data.length;i++) {
+						if(res.data[i].Type == '部门经理点评') {
+							$('.department_manager').find('textarea').val(res.data[i].Comment);
+						}else if(res.data[i].Type == '点评总经理') {
+							$('.general_manager').find('textarea').val(res.data[i].Comment);
+						}else {
+							html += '<li>'+
+											'<pre>'+ res.data[i].Comment +'</pre>'+
+											'<p><span>'+ res.data[i].UserName +'</span> '+ res.data[i].CreateTime +'</p></li>';
+						}
+					}
+					$('.other_comment_list').html(html);
+				}else {
+					mui.toast('获取失败！'+res.msg);
+				}
+			})
+		})
+		//提交评论 
+		mui('.silder_footer_submit_one').on('tap','span',function() {
+			var valText = $('.comment_other').eq(commentIndex).find('textarea').val();
+			console.log(valText)
+			var postData = {};
+			postData.DailyUserId = userId;
+			postData.DailyDate = day;
+			postData.Type = commentIndex;
+			if(commentIndex == 0) {
+				postData.comment_0 = valText;
+			}else if(commentIndex == 1) {
+				postData.comment_1 = valText;
+			}else {
+				postData.comment_2 = valText;
+			}
+			
+			var url = '/api/Daily/SaveComment';
+			return request.post(url,postData).then(res => {
+				console.log(res)
+				if(res.code == 200) {
+					mui('.mui-off-canvas-wrap').offCanvas().close();
+					quest();
+				}else {
+					mui.toast('评论失败！'+ res.msg);
+				}
+			})
+		})
+		//预览
+		mui('.day_list').on('tap','.file_color',function() {
+				var path = $(this).attr('path');
+				mui.showLoading('加载中...');
+				if(path) {
+					openFile(baseUrl + path)
+				}
+		})
+		//上一个
+		mui('.user_choose').on('tap','.prev',function() {
+			if(!hasPrev) return;
+			
+			$('.this_name').html(prvUser.RealName);
+			userId = prvUser.CreateUser;
+			quest();
+		})
+		//下一个
+		mui('.user_choose').on('tap','.next',function() {
+			if(!hasNext) return;
+			$('.this_name').html(nextUser.RealName);
+			userId = nextUser.CreateUser;
+			quest();
+		})
+	}
+	
+	function quest() {
+		hasPrev = false;
+		hasNext = false;
+		common.promise().then(() => {
+			mui.showLoading('加载中...');
+			return;
+		}).then(() => {
+			return getList(userId,day)
+		}).then(() => {
+			return getPrevNext();
+		}).then(() => {
+			return getAuthority();
+		})
+	}
+	
+	
+	//获取个人
+	function getList(id,day) {
+		var url = '/api/Daily/GetDailyDatabyDate';
+		var postData = {
+			DailyDate: day,
+			UserId: id
+		}
+		if(departmentId) {
+			postData.departmentID = departmentId;
+		}
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			if (res.code == 200) {
+				$('.my_daily_tilte span').eq(0).html(res.data.length);
+				var html = '';
+				var html1 =
+					'<li class="today"><p class="date_title"><span class="date_point"><img src="../../img/gou.png"></span>上午&nbsp;开始时间为00:00 - 11:50的工作</p><div class="date_list_right">';
+				var html2 =
+					'<li class="today"><p class="date_title"><span class="date_point"><img src="../../img/gou.png"></span>下午&nbsp;开始时间为12:00 - 23:50的工作</p><div class="date_list_right">';
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					var workstate = item.Type == 0 ? '自报' : '生成';
+					var str = '';
+					if(item.lstFile) {
+						for(var j=0;j<item.lstFile.length;j++) {
+							str += '<p class="file_color" path='+ item.lstFile[j].FilePath +'>'+ item.lstFile[j].Name + item.lstFile[j].FileFormat +'</p>'
+						}
+					}
+					if (item.MeridiemName == '上午') {
+						html1 += '<div class="daily_info" listid=' + item.Id + '>' +
+							'<p>工作类别：<span class="">' + workstate + '</span></p>' +
+							'<p>工作内容：<span class="work_content">' + item.WorkContent + '</span></p>' +
+							'<p>工作时间：<span>' + item.DailyTime + '</span></p>' +
+							'<p>所用工时：<span>' + item.WorkHours + '</span></p>' +
+							'<div class="file_box"><p>附件：</p>'+
+							str+
+							'</div>'+
+							'</div>';
+					} else {
+						html2 += '<div class="daily_info" listid=' + item.Id + '>' +
+							'<p>工作类别：<span class="">' + workstate + '</span></p>' +
+							'<p>工作内容：<span class="work_content">' + item.WorkContent + '</span></p>' +
+							'<p>工作时间：<span>' + item.DailyTime + '</span></p>' +
+							'<p>所用工时：<span>' + item.WorkHours + '</span></p>' +
+							'<div class="file_box"><p>附件：</p>'+
+							str+
+							'</div>'+
+							'</div>';
+					}
+				}
+				if (res.data.length == 0) {
+					html1 += '<div class="detail_info detail_info_no_data bid_no_data">' +
+						'<img src="../../img/no_data.png" ><p>未有数据</p></div>';
+					html2 += '<div class="detail_info detail_info_no_data bid_no_data">' +
+							'<img src="../../img/no_data.png" ><p>未有数据</p></div>';
+				}
+				html1 += '</div></li>';
+				html2 += '</div></li>';
+				html += html1 + html2;
+				$('.day_list').html(html);
+
+				if (userId) {
+					getComment(userId)
+				}
+				mui('.projuct_manager').scroll().scrollTo(0, 0, 100);
+				mui.hideLoading()
+				changeHeight()
+			}
+		})
+	}
+	
+	function getComment(userId) {
+		var url = '/api/Daily/GetDailyComment';
+		var post = {
+			dailyUserId: userId,
+			dailyDate: day
+		}
+		return request.post(url, post).then(res => {
+			console.log(res)
+			if (res.code == 200) {
+				$('.my_daily_tilte span').eq(1).html(res.Count);
+				var html1 = '<li><p><span></span>交叉点评</p><div class="comment_list">';
+				var html2 = '<li><p><span></span>管理点评</p><div class="comment_list">';
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					if (item.Type == '部门经理点评' || item.Type == '总经理点评') {
+						html2 += '<div class="comment_item"><p>' +
+							'<span class="comment_name">' + item.UserName + '</span>' +
+							'<span class="comment_time">' + item.CreateTime + '</span>' +
+							'</p>' +
+							'<pre>' + item.Comment + '</pre>' +
+							'</div>';
+	
+					} else {
+						html1 += '<div class="comment_item"><p>' +
+							'<span class="comment_name">' + item.UserName + '</span>' +
+							'<span class="comment_time">' + item.CreateTime + '</span>' +
+							'</p>' +
+							'<pre>' + item.Comment + '</pre>' +
+							'</div>';
+					}
+				}
+				html1 += '</div></li>';
+				html2 += '</div></li>';
+				html1 += html2;
+				if (res.data.length == 0) {
+					html1 = '<div class="detail_info detail_info_no_data bid_no_data">' +
+						'<img src="../../img/no_data.png" ><p>未有数据</p></div>';
+				}
+				$('.my_comment').html(html1)
+			}
+			return res;
+		})
+	}
+
+	//获取 当前人 上一个 下一个
+	function getPrevNext() {
+		var url = '/api/Daily/GetTaskUserPrevNext';
+		var postData = {
+			DailyDate: day,
+			UserId: userId,
+			sDepartmentId: departmentId ? departmentId : null
+		}
+		return request.post(url,postData).then(res => {
+			console.log(res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					if(res.data[i].Attr == 'next') {
+						nextUser = res.data[i];
+						hasNext = true;
+					}
+					if(res.data[i].Attr == 'prev') {
+						hasPrev = true;
+						prvUser = res.data[i];
+					}
+				}
+				if(!hasNext) {
+					$('.next').addClass('not_data');
+				}else {
+					$('.next').removeClass('not_data');
+				}
+				if(!hasPrev) {
+					$('.prev').addClass('not_data');
+				}else {
+					$('.prev').removeClass('not_data');
+				}
+			}
+		})
+	}
+	
+	//获取当前的权限
+	function getAuthority() {
+		var url = '/api/Daily/IsManager';
+		return request.post(url,{dailyUserId: userInfo.Id}).then(res => {
+			console.log(res);
+			if(res.code == 200) {
+				if(res.data.IsManager_0 == 1) {
+					commentIndex = 0;
+				}
+				if(res.data.IsManager_1 == 1) {
+					commentIndex = 1;
+				}
+				if(res.data.IsManager_2 == 1) {
+					commentIndex = 2;
+				}
+			}
+		})
+	}
+</script>
+
+<script type="text/javascript">
+	var customBiz = {
+		initWeek: function() {
+			var titleNode = document.querySelector('.mid span');
+
+			function setTitle(date) {
+				// console.log(date)
+				titleNode.innerText = date.substr(0, 4) + '-' + date.substr(5, 2)
+			}
+
+			function getAllList(startTime, endTime) {
+				var url = '/api/Daily/GetDailyData';
+				var postData = {
+					page: page,
+					limit: 1000,
+					Type: 0,
+					DailyDateBegin: startTime,
+					DailyDateEnd: endTime
+				}
+				return request.post(url, postData).then(function(res) {
+					console.log('所有', res);
+					if (res.code == 200) {
+						return res.data;
+					}
+				})
+			}
+			var allData = [];
+			var weekcalendar = new CalendarWeek({
+				// 默认周历组件容器
+				container: "#calendar",
+				// 上一月节点
+				pre: ".pre",
+				minDate: new Date(),
+				// 下一月节点
+				next: ".next",
+				template: function(value, currdate, key) {
+					// setTitle(currdate);
+					value.week_frame = value.week_frame.substr(2);
+					var template;
+					var this_data = [];
+					for (var i = 0; i < allData.length; i++) {
+						if (allData[i].DailyDate == value.date_frame) {
+							this_data.push(allData[i]);
+						}
+					}
+					var submitNum = 0;
+					for (var i = 0; i < this_data.length; i++) {
+						if (this_data[i].State == 0) {
+							submitNum++;
+						}
+					}
+					// console.log(this_data)
+					// console.log(value, currdate)
+
+					if (this_data.length > 0) {
+						if (this_data[0].DailyDate == currdate) {
+							if (submitNum > 0) {
+								template = document.getElementById("template_red").innerHTML.trim();
+							} else {
+								template = document.getElementById("template").innerHTML.trim();
+							}
+						} else {
+							if (submitNum > 0) {
+								template = document.getElementById("template22_red").innerHTML.trim();
+							} else {
+								template = document.getElementById("template22").innerHTML.trim();
+							}
+						}
+					} else {
+						if (value.date_frame == currdate) {
+							template = document.getElementById("template1").innerHTML.trim();
+						} else {
+							template = document.getElementById("template4").innerHTML.trim();
+						}
+
+					}
+					return template;
+				},
+				// 业务数据改变
+				dataRequest: function(callback, _this, range) {
+					var from = range.from; //开始时间
+					var to = range.to; //结束时间
+					console.log("切换日期区间：" + JSON.stringify(range) + "用于刷新业务接口", _this);
+					// 一次请求7条数据，对应7天日期
+					thisMonths = from.substr(0, 7);
+					nextMonths = to.substr(0, 7);
+					var data = [
+						// 	{
+						// 	"title": "1",
+						// 	"date1": "2019-12-02",
+						// },
+					];
+					
+					// if(showIndex == 1) {
+					// 	getAllList(from, to).then(function(res) {
+					// 		allData = res;
+					// 		callback(data || []);
+					// 	})
+					// }else {
+					// 	// getTeamList().then(function(res) {
+					// 	// 	allData = res;
+					// 	// 	callback(data || []);
+					// 	// })
+					// }
+					callback(data || []);
+					// console.log(data)
+
+				},
+				"preEvent": function(month) {
+					// console.log("上周：" + month);
+					setTitle(month);
+				},
+				"nextEvent": function(month) {
+					// console.log("下周：" + month);
+					setTitle(month);
+
+				},
+				// 点击日期事件
+				"onItemClick": function(item) {
+					// getDay(year,day)
+					console.log(item)
+					day = item.date;
+					quest()
+					setTitle(item.date);
+				},
+				"success": function(date, range) {
+					// console.log(range)
+					document.querySelector('.mid span').innerText = date.substr(0, 4) + '-' + date.substr(5, 2);
+
+				},
+				isDebug: false
+			});
+		}
+	}
+	customBiz.initWeek();
+	changeHeight();
+
+	function changeHeight() {
+		var this_height;
+		if ($('.canlender').css('display') == 'block') {
+			this_height = $('.canlender').height();
+		}
+		if ($('.search_box').css('display') == 'block') {
+			this_height = $('.search_box').height();
+		}
+		$('#pullrefresh').css('top', 44 + this_height + 'px')
+	}
+</script>

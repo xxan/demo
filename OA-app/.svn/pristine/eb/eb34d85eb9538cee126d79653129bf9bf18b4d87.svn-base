@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style type="text/css">
+			.new_daily p {
+				height: 100%;
+				display: inline-block;
+				width: 47% !important;
+				border-bottom: 0;
+				text-align: center;
+			}
+			.top_border {
+				border-top: solid 1px #E6E6E6;
+				margin: 0;
+				height: 40px !important;
+				line-height: 40px !important;
+			}
+			.new_daily p span {
+				right: 10%;
+			}
+			.new_daily {
+				height: 50px;
+			}
+			
+			.upload_file p{
+				height: 50px;
+				line-height: 50px;
+				background: white;
+				position: relative;
+				padding-left: 20px;
+			}
+			
+			.upload_file input {
+				opacity: 0;
+				width: 80px;
+				height: 30px;
+				float: right;
+				position: absolute;
+				top: 10px;
+				right: 20px;
+				z-index: 998;
+			}
+			.upload_file label {
+				width: 80px;
+				height: 30px;
+				background: #3B9CFF;
+				color: white;
+				position: absolute;
+				top: 10px;
+				right: 20px;
+				text-align: center;
+				line-height: 30px;
+				border-radius: 15px;
+			}
+			.file_tendering_list {
+				padding-bottom: 50px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加日报</h1>
+		</header>
+		<div class="mui-content">
+			<h5>选择日期</h5>
+			<div class="task_time">
+				<p class="checktime choose_date"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="task_time">
+				<p class="select choose_slot"><a>上午</a><span class="choose_img"></span></p>
+			</div>
+			<h5>选择时间</h5>
+			<div class="task_time new_daily">
+				<p class="checktime start_time"><a>请选择开始时间</a><span class="choose_img"></span></p>--<p class="checktime end_time"><a>请选择结束时间</a><span class="choose_img"></span></p>
+			</div>
+			<h5 class="top_border">所用工时</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="work_time" value="12"/></p>
+			</div>
+			<h5>工作内容</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="content_work"></textarea>
+			</div>
+			<h5>工作附件</h5>
+			<div class="task_name upload_file">
+				<p>上传附件<input type="file" id="add_file" /> <label for="add_file">添加</label></p>
+			</div>
+			<ul class="file_tendering_list">
+				
+			</ul>
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	var afternoon = common.getQueryUrl('afternoon');
+	var submitFlag = common.getQueryUrl('submit');
+	var day = common.getQueryUrl('day')
+	var date = getTime('year');
+	var fileList = [];
+	if(day) {
+		date = day;
+	}
+	var startTime = '00:00',endTime = '11:50';
+	var slot = 0;
+	if(afternoon) {
+		startTime = '12:00';
+		endTime = '23:50';
+		$('.choose_slot').find('a').html('下午');
+		slot = 1;
+	}
+	$('.choose_date').find('a').html(date);
+	$('.start_time').find('a').html(startTime);
+	$('.end_time').find('a').html(endTime);
+	
+	
+	var isOperation = false;
+	if(id) {
+		$('.mui-title').html('查看日报');
+		$('.choose_img').hide()
+	}
+	if(submitFlag) {
+		$('.mui-title').html('提交日报');
+	}
+	
+	function getDetail() {
+		var url = '/api/Daily/GetDailyDetail';
+		return request.post(url,{Id:id}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				$('.choose_date').find('a').html(res.data.DailyDate);
+				date = res.data.DailyDate;
+				$('.start_time').find('a').html(res.data.DailyTime.split('-')[0]);
+				startTime = res.data.DailyTime.split('-')[0].trim();
+				$('.end_time').find('a').html(res.data.DailyTime.split('-')[1]);
+				endTime = res.data.DailyTime.split('-')[1].trim();
+				$('.work_time').val(res.data.WorkHours);
+				$('.content_work').val(res.data.WorkContent);
+				$('.content_work').css('height',$('.content_work')[0].scrollHeight + 'px');
+				var names='';
+				for(var i=0;i<res.data.lstFile.length;i++) {
+					var item = res.data.lstFile[i]
+					names += '<li id='+ item.Id +'><span class="file_list_name spans_back">'+ item.Name +item.FileFormat +
+					'</span><span class="file_list_delete">删除</span></li>';
+					var data = {
+						"FileName": item.Name,
+			      "Extension": item.FileFormat,
+			      "FilePath": item.FilePath,
+						"Id": item.Id,
+					}
+					fileList.push(data)
+				}
+				$('.file_tendering_list').append(names);
+				if(res.data.State == 1) {
+					isOperation = true;
+					$('.work_time').attr('disabled','disabled');
+					$('.content_work').attr('disabled','disabled');
+					$('.footer_submit').hide();
+					$('.file_list_delete').hide();
+				}
+			}
+		})
+	}
+	if(id) {
+		getDetail()
+	}
+	
+	function uploads(formData,flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=Daily';
+		return request.upload(url, formData).then(function(res) {
+			if (res && res.code == 200) {
+					var data = {
+					  "FileName": res.data.FileName,
+			      "Extension": res.data.Extension,
+			      "FilePath": res.data.FilePath,
+			      "Type": "日报附件",
+						"tid": flag
+					}
+
+					fileList.push(data)
+					return;
+				}
+		})
+	}
+	//点击文件上传按钮
+	$("#add_file").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(uploads(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	});
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		preview(this,fileList)
+	})
+	
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		console.log(newFile)
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					console.log(fileList[i].Id,id)
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parents('li').remove();
+	})
+	
+	function submit(flag) {
+		var postData = {};
+		postData.Id = id ? id : '';
+		postData.DailyDate = date;
+		postData.DailyTime = startTime + '-' + endTime;
+		postData.WorkHours = $('.work_time').val();
+		postData.WorkContent = $('.content_work').val();
+		postData.State = flag ? 1 : 0;
+		postData.lstFile = fileList;
+		console.log(postData)
+		var url = '/api/Daily/SaveDaily';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('添加失败！'+ res.msg)
+			}
+		})
+	}
+	
+	mui('.footer_submit_one').on('tap','.btn_save',function() {
+		submit(false);
+	});
+	mui('.footer_submit').on('tap','.btn_submit',function() {
+		submit(true);
+	});
+
+
+	(function(mui,doc) {
+		mui('.mui-content').on('tap','.choose_slot',function() {
+			var userPicker = new mui.PopPicker();
+			if(isOperation) return;
+			if($(".mui-poppicker").hasClass("mui-active")){
+				return;
+			}
+			var _this = this;
+			userPicker.setData([{value: 0,text: '上午'},{value: 1,text: '下午'}]);
+			userPicker.show(function(items) {
+				$(_this).find('a').html(items[0].text);
+				if(items[0].text == '下午') {
+					slot = 1;
+					startTime = '12:00',endTime = '23:50'
+				}else {
+					slot = 0;
+					startTime = '00:00',endTime = '11:50'
+				}
+				$('.start_time').find('a').html(startTime);
+				$('.end_time').find('a').html(endTime);
+				userPicker.dispose()
+			});
+		})
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				if(isOperation) return;
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('a').html(rs.text);
+						var subData = '';
+						if($(_self).hasClass('choose_date')) {
+							date = rs.text;
+						}
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+							if(endTime) {
+								subData = getSubtime(startTime,endTime);
+								$('.work_time').val(subData);
+							}
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+							if(startTime) {
+								subData = getSubtime(startTime,endTime);
+								$('.work_time').val(subData);
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					if($(_self).hasClass('choose_date')) {
+						options.type = 'date';
+						var yearMonth = getTime('year').split('-');
+						console.log(yearMonth)
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}else {
+						options.type = 'time';
+						var yearMonth = date.split('-');
+						if(slot == 0) {
+							options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],0,0);
+							options.endDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],11,50)
+						}else {
+							options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],12,0);
+							options.endDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],23,50)
+						}
+						if($(_self).hasClass('start_time')) {
+							if(endTime) {
+								options.endDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],endTime.split(':')[0],endTime.split(':')[1])
+							}
+						}
+						if($(_self).hasClass('end_time')) {
+							if(startTime) {
+								options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],startTime.split(':')[0],startTime.split(':')[1])
+							}
+						}
+						
+					}
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('a').html(rs.text);
+						var subData = '';
+						if($(_self).hasClass('choose_date')) {
+							date = rs.text;
+						}
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+							if(endTime) {
+								subData = getSubtime(startTime,endTime);
+								$('.work_time').val(subData);
+							}
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+							if(startTime) {
+								subData = getSubtime(startTime,endTime);
+								$('.work_time').val(subData);
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+	})(mui,document);
+	
+	
+	function getSubtime(start,end) {
+		var end = endTime.split(':')[0]*60 + parseInt(endTime.split(':')[1]); 
+		var start = startTime.split(':')[0] * 60 +  parseInt(startTime.split(':')[1]); 
+		var all = end - start;
+		var hours = parseInt(all / 60);
+		var minutes =  parseInt(all % 60)
+		return hours + Number((minutes/60).toFixed(1));
+	}
+
+	
+</script>
+
+
+

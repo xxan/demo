@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css"/>
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js">
+
+		</script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加收款</h1>
+		</header>
+		<div class="mui-content">
+			
+			<h5>合同名称</h5>
+			<div class="task_time project_num">
+				<p class="contract_num">合同名称</p>
+			</div>
+			<h5>收入金额</h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="get_price"/></p>
+			</div>
+			<h5>收入日期</h5>
+			<div class="task_time">
+				<p class="checktime start_time"><a>请填写</a><span></span></p>
+			</div>
+			<h5>是否最后一次收入</h5>
+			<div class="task_time">
+				<p class="get_manager get_last"><a>否</a><span></span></p>
+			</div>
+			<h5>附件</h5>
+			<div class="plan_time file_upload">
+				<span>添加附件</span>
+				<input type="file" name="" id="add_file_tendering" value="" multiple /><label for="add_file_tendering" class="btn_add choose_img">添加</label>
+			</div>
+			<ul class="file_tendering_list file_mess">
+				<!-- <li><span class="file_list_name"></span><span class="file_list_delete">删除</span></li> -->
+			</ul>
+			<h5>备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="remark" placeholder="请填写"></textarea>
+			</div>
+			
+			<div class="content_bottom">
+				
+			</div>
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	mui.init();
+	var projectId = common.getQueryUrl('projectId');
+	var id = common.getQueryUrl('id');
+	var name = common.getQueryUrl('name');
+	var ischeck = common.getQueryUrl('check');
+	var isDisable = false;
+	var fileList = [];
+	$('.contract_num').html(name);
+	var input = $('input');
+	var textarea = $('textarea');
+	if(id) {
+		getDetail();
+		$('.footer_submit_one').hide();
+		$('.mui-title').html('收款详情');
+		common.disbledForm();
+		isDisable = true;
+		$('.choose_img').hide();
+	}
+	function getDetail() {
+		var url = '/api/Finance/ReceivableDetail';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				$('.get_price').val(res.data.Amount);
+				$('.start_time').find('a').html(res.data.ReceiveTime);
+				if(res.data.IsLast) {
+					$('.get_last').find('a').html('是');
+				}else {
+					$('.get_last').find('a').html('否');
+				}
+				$('.remark').val(res.data.Remark);
+				var names = '';
+				for(var i=0;i<res.data.LstFile.length;i++) {
+					var lists = res.data.LstFile[i];
+					var deStr = '删除';
+					if(isDisable) {
+						deStr = '';
+					}
+					names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+					+ lists.FilePath +'>'
+					+ lists.FileName + lists.FileFormat +
+					'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+				}
+				// fileList = fileList.concat(res.data.lstFile);
+				$('.file_tendering_list').html(names);
+			}
+		})
+	}
+
+	
+	function submit() {
+		var postData = {};
+		postData.ProjectCId = projectId;
+		postData.Amount  = $('.get_price').val();
+		postData.ReceiveTime = $('.start_time').find('a').html();
+		postData.IsLast = $('.get_last').find('a').html() == '否' ? false : true;
+		postData.Remark = $('.remark').val();
+		postData.LstFile = fileList;
+		var url = '/api/Finance/SaveReceivable';
+		console.log(postData)
+		request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.toast('提交成功！');
+				mui.back();
+			}else {
+				mui.toast(res.msg);
+			}
+		})
+	}
+	
+	//点击文件上传按钮
+	$("#add_file_tendering").on('change', function(e) {
+		
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,false,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name" '+
+			'item='+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function(res) {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_mess').append(names);
+		}
+	})
+	
+	mui('.file_mess').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		console.log(fileList)
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	
+	mui('.footer_submit_one').on('tap','.btn_save',function() {
+		submit();
+	});
+	
+	function upload(formData, flag, index) {
+		var url = '/api/BusinessManage/UploadFile?Type=Receivable';
+		console.log(formData)
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": "收入管理(财务管理)--造价咨询",
+					"tid": index
+				}
+				if (fileList.length > 0) {
+					console.log(fileList, data)
+					for (var i = 0; i < fileList.length; i++) {
+						if (fileList[i].FileName == data.FileName && fileList[i].Extension == data.Extension) {
+							fileList.splice(i, 1);
+						}
+					}
+				}
+				fileList.push(data)
+				return;
+			}
+		})
+	}
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		mui.showLoading('加载中...');
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			console.log(newFile)
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	});
+	
+
+	
+	(function(mui) {
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				if(isDisable) return;
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					if(isDisable) return;
+					var _this = this;
+					if($(this).hasClass('get_last')) {
+						userPicker.setData([{value: 0,text: '否'},{value: 1,text: '是'}]);
+						userPicker.show(function(items) {
+							$('.get_last').find('a').html(items[0].text);
+						});
+					}
+				}, false);
+			});
+		});	
+	})(mui);
+</script>
+
+
+

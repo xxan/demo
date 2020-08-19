@@ -1,0 +1,374 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/konw.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig:{
+				   tap: true, //默认为true
+				   doubletap: true, //默认为false
+				   longtap: true, //默认为false
+				   swipe: true, //默认为true
+				   drag: true, //默认为true
+				   hold:false,//默认为false，不监听
+				   release:false//默认为false，不监听
+				  }
+			})
+		</script>
+		<style type="text/css">
+			#pullrefresh{
+				top: 88px;
+			}
+			
+			.mui-scroll {
+				padding-bottom: 30px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">项目档案</h1>
+		</header>
+		
+		<div class="mui-content">
+			<h5 class="project_name">什么项目工地项目</h5>
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<p class="up_fress data-loading-icon">
+					<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+				</p>
+				<div class="mui-scroll">
+					<h5>原型</h5>
+					<ul class="list_box prototype_list">
+					</ul>
+
+					<div class="add_btn">
+						<input type="file" name="" id="add_file" value=""/><label for="add_file" class="prototype_btn">添加资料</label>
+					</div>
+					<h5>UI设计</h5>
+					<ul class="list_box ui_list">
+					</ul>
+					
+					<div class="add_btn">
+						<input type="file" name="" id="add_file_ui" value=""/><label for="add_file_ui" class="ui_btn">添加资料</label>
+					</div>
+					<h5>前端</h5>
+					<ul class="list_box web_list">
+					</ul>
+
+					<div class="add_btn">
+						<input type="file" name="" id="add_file_web" value=""/><label for="add_file_web" class="web_btn">添加资料</label>
+					</div>
+					<h5>开发相关</h5>
+					<ul class="list_box open_list">
+					</ul>
+					<div class="add_btn">
+						<input type="file" name="" id="add_file_open" value=""/><label for="add_file_open" class="open_btn">添加资料</label>
+					</div>
+					<h5>其他</h5>
+					<ul class="list_box other_list">
+						
+					</ul>
+					<div class="add_btn">
+						<input type="file" name="" id="add_file_other" value=""/><label for="add_file_other" class="other_btn">添加资料</label>
+					</div>
+				</div>
+			</div>
+			<p class="down_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+			</p>
+			
+		</div>
+	</body>
+
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	var id = common.getQueryUrl('id');
+	var name = common.getQueryUrl('name');
+	$('.project_name').html(name);
+	var page = 1;
+	mui('.mui-scroll-wrapper').scroll();
+	clickInit();
+	
+	var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+	console.log(userInfo)
+	
+	var projectId = '';
+	
+	common.promise().then(function() {
+		mui.showLoading('加载中...');
+		return;
+	}).then(function() {
+		return getList();
+	}).then(function() {
+		mui.hideLoading();
+	})
+	
+	function clickInit() {
+		//左滑
+		mui('.list_box').on('swipeleft', 'li', function() {
+			$(this).find('.list_info').animate({left: '-60px'},500).find('span').css('textAlign','center');
+			$(this).siblings().find('.list_info').animate({left: '0px'},500).find('span').css('textAlign','left');
+		});
+		//右滑
+		mui('.list_box').on('swiperight', 'li', function() {
+			$(this).find('.list_info').animate({left: '0px'},500).find('span').css('textAlign','left');
+		});
+		
+		//列表点击修改
+		mui('.list_box').on('tap','.list_btn_edit',function() {
+			var editId = $(this).parents('li').attr('id');
+			window.location.href = 'add_file.html?edit=true&id="'+ editId +'"';
+		})
+		//列表删除
+		mui('.list_box').on('tap','.list_btn_del',function() {
+			var id = $(this).parents('li').attr('id');
+			var url = '/api/DataManage/DelFile';
+			var _this = this;
+			request.post(url,{Id: id}).then(function(res) {
+				console.log(res);
+				if(res.code == 200) {
+					$(_this).parents('li').remove();
+				}else {
+					mui.toast('删除失败！');
+				}
+			})
+		})
+		
+		//预览
+		mui('.prototype_list').on('tap','li',function(e) {
+			console.log($(e.target))
+			if($(e.target).hasClass('list_btn_del')) {
+				return;
+			}
+			mui.showLoading('加载中...');
+			var path = $(this).attr('path');
+			openFile(baseUrl + path);
+		})
+		mui('.ui_list').on('tap','li',function(e) {
+			console.log($(e.target))
+			if($(e.target).hasClass('list_btn_del')) {
+				return;
+			}
+			mui.showLoading('加载中...');
+			var path = $(this).attr('path');
+			openFile(baseUrl + path);
+		})
+		mui('.web_list').on('tap','li',function(e) {
+			console.log($(e.target))
+			if($(e.target).hasClass('list_btn_del')) {
+				return;
+			}
+			mui.showLoading('加载中...');
+			var path = $(this).attr('path');
+			openFile(baseUrl + path);
+		})
+		mui('.open_list').on('tap','li',function(e) {
+			console.log($(e.target))
+			if($(e.target).hasClass('list_btn_del')) {
+				return;
+			}
+			mui.showLoading('加载中...');
+			var path = $(this).attr('path');
+			openFile(baseUrl + path);
+		})
+		mui('.other_list').on('tap','li',function(e) {
+			console.log($(e.target))
+			if($(e.target).hasClass('list_btn_del')) {
+				console.log(123)
+				return;
+			}
+			mui.showLoading('加载中...');
+			var path = $(this).attr('path');
+			openFile(baseUrl + path);
+		})
+		
+		
+		//点击文件上传按钮
+		$("#add_file").on('change', function(e) {
+			var _this = this;
+			fileUpload(_this,'原型')
+		})
+		$("#add_file_ui").on('change', function(e) {
+			var _this = this;
+			fileUpload(_this,'UI设计')
+		})
+		$("#add_file_web").on('change', function(e) {
+			var _this = this;
+			fileUpload(_this,'前端')
+		})
+		$("#add_file_open").on('change', function(e) {
+			var _this = this;
+			fileUpload(_this,'开发相关')
+		})
+		$("#add_file_other").on('change', function(e) {
+			var _this = this;
+			fileUpload(_this,'其他')
+		})
+		
+	}
+	
+	function fileUpload(_this,type) {
+		var configId = $(_this).parent().attr('id');
+		var files = $(_this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,configId,type))
+		}
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		console.log(files)
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	}
+	
+	function getList() {
+		var postData = {
+			projectId: id,
+			type: 2
+		};
+		
+		var url = '/api/DataManage/GetArchiveData';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					projectId = item.ProjectId;
+					if(item.Name == '原型') {
+						$('.prototype_btn').parent().attr('id',item.Id);
+						setHtml(item,'.prototype_list')
+					}
+					if(item.Name == 'UI设计') {
+						$('.ui_btn').parent().attr('id',item.Id)
+						setHtml(item,'.ui_list')
+					}
+					if(item.Name == '前端') {
+						$('.web_btn').parent().attr('id',item.Id)
+						setHtml(item,'.web_list')
+					}
+					if(item.Name == '开发相关') {
+						$('.open_btn').parent().attr('id',item.Id)
+						setHtml(item,'.open_list')
+					}
+					if(item.Name == '其他') {
+						$('.other_btn').parent().attr('id',item.Id)
+						setHtml(item,'.other_list')
+					}
+				}
+				
+				// $('.list_box').html(html);
+			}
+		})
+	}
+	
+	
+	function setHtml(item,element,flag) {
+		var htmls = '';
+		for(var i=0;i<item.Material.length;i++) {
+			var lists = item.Material[i];
+			lists.FileFormat.toLowerCase();
+			var styles = '';
+			if(lists.FileFormat.indexOf('.doc') != -1) {
+				src = '../../img/WORD.png'
+			}else if(lists.FileFormat.indexOf('.xlsx') != -1) {
+				src = '../../img/Excel(1).png'
+			}else if(lists.FileFormat.indexOf('.pdf') != -1) {
+				src = '../../img/pdf.png'
+			}else if(lists.FileFormat.indexOf('.ppt') != -1) {
+				src = '../../img/PPT.png'
+			}else if(lists.FileFormat.indexOf('.txt') != -1) {
+				src = '../../img/txt.png'
+				styles = 'top: 10px;';
+			}else if(lists.FileFormat.indexOf('.zip') != -1) {
+				src = '../../img/ZIP.png'
+			}else {
+				src = '../../img/IMG.png'
+			}
+			 htmls+= '<li id='+ lists.Id +'>'+
+							'<div class="list_info"><div class="img_box">'+
+							'<img style="'+ styles +'" src="'+ src +'" ></div>'+
+							'<div class="text_box"><p>'+ lists.Name +'</p>'+
+							'<p>'+ lists.UserName +' &nbsp; '+ lists.CreateTime +' </p>'+
+							'</div></div><div class="list_btn">'+
+							'<span class="list_btn_edit"></span><span class="list_btn_del"></span></div></li>';
+		}
+		$(element).html(htmls);
+	}
+
+	function upload(formData,configId,type) {
+		console.log(type)
+		var url = '/api/DataManage/UploadFile?projectId='+ projectId + '&configId='+ 
+		configId +'&folderName=' + type;
+		return request.upload(url, formData).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				var lists = res.data;
+				lists.FileFormat.toLowerCase();
+				var styles = '';
+				if(lists.FileFormat.indexOf('.doc') != -1) {
+					src = '../../img/WORD.png'
+				}else if(lists.FileFormat.indexOf('.xlsx') != -1) {
+					src = '../../img/Excel(1).png'
+				}else if(lists.FileFormat.indexOf('.pdf') != -1) {
+					src = '../../img/pdf.png'
+				}else if(lists.FileFormat.indexOf('.ppt') != -1) {
+					src = '../../img/PPT.png'
+				}else if(lists.FileFormat.indexOf('.txt') != -1) {
+					src = '../../img/txt.png'
+					styles = 'top: 10px;';
+				}else if(lists.FileFormat.indexOf('.zip') != -1) {
+					src = '../../img/ZIP.png'
+				}else {
+					src = '../../img/IMG.png'
+				}
+				var html = '<li id='+ lists.Id +' path='+ lists.FilePath +'>'+
+								'<div class="list_info"><div class="img_box">'+
+								'<img style="'+ styles +'" src="'+ src +'" ></div>'+
+								'<div class="text_box"><p>'+ lists.FileName +'</p>'+
+								'<p>'+ userInfo.RealName +' &nbsp; '+ getTime('year') +' </p>'+
+								'</div></div><div class="list_btn">'+
+								'<span class="list_btn_edit"></span><span class="list_btn_del"></span></div></li>';
+				if(type == '原型') {
+					$('.prototype_list').append(html);
+				}else if(type == 'UI设计') {
+					$('.ui_list').append(html);
+				}else if(type == '前端') {
+					$('.web_list').append(html);
+				}else if(type == '开发相关') {
+					$('.open_list').append(html);
+				}else if(type == '其他'){
+					console.log(html)
+					$('.other_list').append(html);
+				}
+				return;
+			}
+		})
+	}
+	
+	
+	
+</script>
+

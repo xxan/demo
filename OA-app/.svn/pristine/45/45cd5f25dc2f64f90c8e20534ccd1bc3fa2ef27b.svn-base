@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/> -->
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/message.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">通知公告</h1>
+		</header>
+		<div class="mui-content">
+			<div class="message_title">
+				<p>标题：<span class="title">海淀区智慧工地项目</span></p>
+				<p>副标题：<span class="sub_title"></span></p>
+				<p>公告类型：<span class="title_type"></span></p>
+			</div>
+			<div class="mesage_detail">
+				<p>发起人：<span class="create_user"></span></p>
+				<p>发起时间：<span class="create_time"></span></p>
+				<p>接收人：<span class="recive_user"></span></p>
+			</div>
+			<div class="message_content">
+				<p>公告内容</p>
+				<pre class="content"></pre>
+			</div>
+			<div class="file_list">
+				<p>附件</p>
+				<ul class="file_lists">
+					<li><a>附件</a></li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	var id = common.getQueryUrl('id');
+	
+	var url = '/api/Home/NoticeDetails';
+	request.post(url,{ID: id}).then(function(res) {
+		console.log(res)
+		if(res.code == 200) {
+			$('.title').html(res.data.Headline);
+			$('.sub_title').html(res.data.Title || '无');
+			$('.title_type').html(res.data.AnnouncementType);
+			$('.create_user').html(res.data.CreateBy);
+			$('.create_time').html(res.data.CreateTime);
+			$('.recive_user').html(res.data.ReceivedBy);
+			$('.content').html(res.data.Content);
+			var names = '';
+			for(var i=0;i<res.data.lstFile.length;i++) {
+				var lists = res.data.lstFile[i];
+				names += '<li id='+ lists.Id +'><a class="file_list_name spans_back" path='
+				+ lists.FilePath +'>'+ lists.Name + lists.FileFormat
+				'</a></li>';
+			}
+			$('.file_lists').html(names)
+		}else {
+			mui.toast('获取信息失败');
+		}
+	})
+	
+	mui('.file_lists').on('tap', 'a', function(e) {
+		var path = $(this).attr('path');
+
+		mui.showLoading('加载中...');
+		console.log(baseUrl + path)
+		openFile(baseUrl + path)
+	});
+	
+	
+</script>
+
+
+

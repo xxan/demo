@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/staff.css"/>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		</header>
+		<div class="mui-content">
+			<div class="staff_title">
+				<img src="../../img/avatar_de.png" >
+				<p class="user_name">某某</p>
+			</div>
+			<h5>员工信息</h5>
+			<div class="content_list">
+				<p>公司：<span class="company_name">总公司</span></p>
+				<p>部门：<span class="company_class">标准定额事业部</span></p>
+				<p>岗位：<span class="company_post">部门经理</span></p>
+			</div>
+			<h5>联系方式</h5>
+			<div class="content_list">
+				<p>办公电话：<span class="this_tel">8000</span></p>
+				<p>手机号：<span class="this_phone">111111111</span> <i class="phone_img"></i></p>
+			</div>
+			
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var userId = common.getQueryUrl('id');
+	var userName,tel,phone;
+	//信息获取
+	function getDetail() {
+		var url = '/api/AddressList/GetUserInfo';
+		console.log(userId)
+		return request.post(url,{UserId: userId}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				var data = res.data;
+				userName = data.RealName;
+				tel = data.Tel;
+				phone = data.Phone;
+				$('.user_name').html(data.RealName);
+				$('.company_name').html(data.CompanyName);
+				$('.company_class').html(data.DepartmentName);
+				$('.company_post').html(data.PostionName);
+				$('.this_tel').html(data.Tel);
+				$('.this_phone').html(data.Phone);
+			}
+		})
+	}
+	getDetail();
+	
+	//保存拨打电话信息
+	function saveCall() {
+		var url = '/api/AddressList/SaveNearestContact';
+		var postData = {};
+		postData.NUserId = userId;
+		postData.NCname = userName;
+		postData.NCphone = phone;
+		postData.NCTel = tel;
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+		})
+	}
+	
+	mui.plusReady(function () {
+		mui('.mui-content').on('tap','.tel_img',function() {
+			saveCall();
+			plus.device.dial($('.this_tel').html(), false); 
+		})
+		mui('.mui-content').on('tap','.phone_img',function() {
+			plus.device.dial($('.this_phone').html(), false); 
+		})
+	})
+	
+	
+	
+</script>
+
+
+

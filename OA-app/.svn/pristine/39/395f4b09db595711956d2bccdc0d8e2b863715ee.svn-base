@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<style type="text/css">
+			.task_other{
+				display: none;
+			}
+			h5 b {
+				color: red;
+			}
+			.slide_title {
+				height: 44px;
+				line-height: 44px;
+				text-align: center;
+				color: #333333;
+			}
+			
+			#offCanvasSide #slide_people li {
+				width: 30%;
+				height: 30px;
+				line-height: 30px;
+				float: left;
+				margin-right: 2%;
+			}
+			
+			.get_people a{
+				display: inline-block;
+				height: auto;
+				line-height: 30px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right" id="offCanvasSide">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<h5 class="slide_title">主要人员选择</h5>
+						<ul id="slide_people">
+							<li class="active">asdkfj</li>
+							<li>asdkfj</li>
+							<li>asdkfj</li>
+							<li>asdkfj</li>
+							<li>asdkfj</li>
+						</ul>
+					</div>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">新建项目</h1>
+				</header>
+					<div class="mui-content mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<h5>项目名称<b>*</b></h5>
+							<div class="task_name textarea_padding">
+								<textarea rows="1" cols="" class="project_names list_area" placeholder="请填写" maxlength="40"></textarea>
+							</div>
+							<h5>项目工期<b>*</b></h5>
+							<div class="task_time">
+								<p class="checktime start"><input type="text" name="" id="" placeholder="开始时间" class="start_time"/><span></span></p>
+								<p class="checktime end"><input type="text" name="" id="" placeholder="结束时间" class="end_time"/><span></span></p>
+							</div>
+							<h5>项目详情</h5>
+							<div class="task_name textarea_padding">
+								<textarea rows="1" cols="" class="project_require list_area" placeholder="请填写"></textarea>
+							</div>
+							<h5>客户名称<b>*</b></h5>
+							<div class="task_time">
+								<p><input type="text" name="" id="" placeholder="请填写" class="contacts_name"/></p>
+							</div>
+							<h5>联系人</h5>
+							<div class="task_time">
+								<p><input type="text" name="" id="" placeholder="请填写" class="contacts_peo"/></p>
+							</div>
+							<h5>联系电话</h5>
+							<div class="task_time">
+								<p><input type="number" name="" id="" placeholder="请填写" class="contacts_phone" maxlength="11"/></p>
+							</div>
+							<h5>项目经理</h5>
+							<div class="task_time">
+								<p class="get_manager get_project"><a>请选择</a><span></span></p>
+							</div>
+							<h5>产品经理</h5>
+							<div class="task_time">
+								<p class="get_manager get_product"><a>请选择</a><span></span></p>
+							</div>
+							<h5>主要人员</h5>
+							<div class="task_time">
+								<p class="get_people"><a>请选择</a><span></span></p>
+							</div>
+							
+							
+							<div class="content_bottom">
+								
+							</div>
+						</div>
+					</div>
+				<div class="footer_submit_one">
+					<span class="class_save">保存</span>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+				
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/request.js"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	mui.init();
+	mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005
+	});
+	document.getElementsByClassName('mui-inner-wrap')[0].addEventListener('drag', function(event) {
+	　　event.stopPropagation();
+	});
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+	var people = [];
+	var peopleId = [];
+	var peopleName = [];
+	var managerId;//项目经理
+	var productManagerId;//产品经理
+	var startTime,endTime;
+	
+	var projectId = common.getQueryUrl('projectid');
+	if(projectId) {
+		$('.mui-title').html('项目修改');
+	}
+	
+	clickInit()
+	function clickInit() {
+		mui('.mui-content').on('tap','.get_people',function() {
+			mui('.mui-off-canvas-wrap').offCanvas().show();
+			var lis = $('#slide_people li').length;
+			input.blur();
+			textarea.blur();
+			for(var i=0;i<lis;i++) {
+				var this_id = $('#slide_people li').eq(i).attr('id');
+				if(peopleId.indexOf(this_id) != -1) {
+					$('#slide_people li').eq(i).addClass('active');
+				}
+			}
+		})
+		
+		mui('#slide_people').on('tap','li',function() {
+			var this_id = $(this).attr('id');
+			if($(this).hasClass('active')) {
+				$(this).removeClass('active');
+				peopleId.splice(peopleId.indexOf(this_id),1)
+				peopleName.splice(peopleName.indexOf($(this).html()),1)
+			}else {
+				$(this).addClass('active');
+				peopleId.push(this_id);
+				peopleName.push($(this).html())
+			}
+			console.log(peopleId);
+			$('.get_people a').html(peopleName.join(','));
+		})
+		
+		var textarea = $('.list_area');
+		textarea.each(function(index,item) {
+			console.log(item)
+			inputChange(item);
+		})
+	}
+	
+	function inputChange(self) {
+		$(self).on('change',function() {
+			var areaRows = $(this).val().split("\n").length;
+			var width = textWidth($(this).val());
+			if(width > $(this).width()) {
+				$(this).css('line-height','20px').css('text-align','left');
+				if(width / $(this).width() > 2) {
+					$(this).parents('.textarea_padding').height(width / $(this).width() * 22 + 40)
+					$(this).height(width / $(this).width() * 21 )
+				}
+			}else {
+				if(areaRows > 1) {
+					$(this).parents('.textarea_padding').height(areaRows * 22 + 40)
+					$(this).height(areaRows * 21 )
+				}
+			}
+		})
+		$(self).on('input propertychange',function() {
+			var areaRows = $(this).val().split("\n").length;
+			var width = textWidth($(this).val());
+			if(width > $(this).width()) {
+				$(this).css('line-height','20px').css('text-align','left');
+				if(width / $(this).width() > 2) {
+					$(this).parents('.textarea_padding').height(width / $(this).width() * 22 + 40)
+					$(this).height(width / $(this).width() * 21 )
+				}
+			}else {
+				if(areaRows > 1) {
+					$(this).parents('.textarea_padding').height(areaRows * 22 + 40)
+					$(this).height(areaRows * 21 )
+				}
+			}
+		})
+	}
+	
+	function textWidth(text){
+			var sensor = $('<pre>'+ text +'</pre>').css({display: 'none'}); 
+			$('body').append(sensor); 
+			var width = sensor.width();
+			sensor.remove(); 
+			return width;
+	};
+	
+	common.promise().then(function() {
+		return getPeople()
+	})
+	.then(function(res) {
+		console.log(res)
+		var html = '';
+		for(var i=0;i<res.data.length;i++) {
+			var item = res.data[i];
+			people.push({value: item.Id,text: item.RealName || '0'})
+			html += '<li id='+ item.Id + '>'+ item.RealName +'</li>'
+		}
+		$('#slide_people').html(html)
+		console.log(123)
+		return;
+	})
+	.then(function() {
+		console.log(234)
+		if(projectId) {
+			return getDetail();
+		}
+	})
+	
+	function getDetail() {
+		var getUrl = '/api/CostConsult/DetailNew';
+		return request.post(getUrl,{projectId: projectId}).then(function(res) {
+					console.log(res);
+					if(res.code == 200) {
+							$('.project_names').val(res.data.Name).trigger('change');;
+							$('.project_num p').html(res.data.Number);
+							$('.get_manager').find('a').html(res.data.YWLX);
+							$('.project_require').val(res.data.CustomerRequirement).trigger('change');;
+							$('.contacts_name').val(res.data.ConstructionUnit);
+							$('.contacts_peo').val(res.data.ConstructionUnitLinkMan);
+							$('.contacts_phone').val(res.data.ConstructionUnitTel);
+							startTime = res.data.BeginTime;
+							endTime = res.data.EndTime;
+							$('.start_time').val(startTime);
+							$('.end_time').val(endTime);
+							peopleId = res.data.ZYRY_C;
+							managerId = res.data.XMFZR_C.join(',');
+							productManagerId = res.data.CPFZR_C.join(',');
+							$('.get_project a').html(getNameString(res.data.XMFZR_C));
+							$('.get_product a').html(getNameString(res.data.CPFZR_C));
+							$('.get_people a').html(getNameString(res.data.ZYRY_C));
+							peopleName = getNameString(res.data.ZYRY_C).split(',')
+					}
+				})
+	}
+	
+	function getNameString(arr) {
+		console.log(people)
+		var name = '';
+		for(var j=0;j<arr.length;j++) {
+			for(var i=0;i<people.length;i++) {
+				if(arr[j] == people[i].value) {
+					if(name == '') {
+						name += people[i].text;
+					}else {
+						name += ',' + people[i].text;
+					}
+				}
+			}
+		}
+		return name;
+	}
+	 
+	//保存
+	mui('.footer_submit_one').on('tap','.class_save',function() {
+		submit()
+	})
+	function submit() {
+		if(!$('.project_names').val()) {
+			mui.toast('请输入项目名称');
+			return;
+		}
+		if(!$('.contacts_name').val()) {
+			mui.toast('请输入客户名称');
+			return;
+		}
+		if(!startTime) {
+			mui.toast('请选择项目开始时间');
+			return;
+		}
+		if(!endTime) {
+			mui.toast('请选择项目结束时间');
+			return;
+		}
+		
+		var postData = {};
+		postData.Name = $('.project_names').val();
+		postData.ConstructionUnit = $('.contacts_name').val();
+		postData.ConstructionUnitLinkMan = $('.contacts_peo').val();
+		postData.ConstructionUnitTel = $('.contacts_phone').val();
+		postData.CustomerRequirement = $('.project_require').val();
+		postData.cpfzrs = productManagerId || '';
+		postData.xmfzrs = managerId || '';
+		postData.zyrys = peopleId.length > 0 ? peopleId.join(',') : '';
+		postData.BeginTime = startTime;
+		postData.EndTime = endTime;
+		postData.isSubmit = true;
+		if(projectId) {
+			postData.Id = projectId;
+		}
+		
+		console.log(postData)
+		var url = '/api/CostConsult/SaveProjectInfo';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('保存失败！'+ res.msg);
+			}
+		})
+ 	}
+
+	(function(mui,doc) {
+		
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						if($(_self).hasClass('start')) {
+							startTime = rs.text;
+						}
+						if($(_self).hasClass('end')) {
+							endTime = rs.text
+						}
+						$(_self).find('input').val(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					options.type = 'date';
+					var setTime;
+					if($(_self).hasClass('end')) {
+						console.log(123)
+						if(startTime) {
+							var yearMonth = startTime.split(' ')[0].split('-');
+							options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+						}
+						setTime = endTime;
+					}
+					if($(_self).hasClass('start')) {
+						console.log(234)
+						if(endTime) {
+							var yearMonth = endTime.split(' ')[0].split('-');
+							options.beginDate = new Date(yearMonth[0] - 10, yearMonth[1]-1, yearMonth[2])
+							options.endDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+						}
+						setTime = startTime;
+					}
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.setSelectedValue(setTime);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('start')) {
+							startTime = rs.text;
+						}
+						if($(_self).hasClass('end')) {
+							endTime = rs.text
+						}
+						$(_self).find('input').val(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				console.log(startTime,endTime)
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					var _this = this;
+					userPicker.setData(people);
+					if($(this).hasClass('get_project')) {
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							managerId = items[0].value;
+						});
+					}
+					
+					if($(this).hasClass('get_product')) {
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							productManagerId = items[0].value;
+						});
+					}
+					
+					
+				}, false);
+			});
+		});	
+		
+	})(mui,document);
+	
+</script>
+
+
+

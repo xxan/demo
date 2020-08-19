@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css" />
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+		<style type="text/css">
+			hr {
+				height: 10px;
+			}
+			.this_examine,.in_time_info,.pay_type_other {
+				display: none;
+			}
+			
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 70%;
+			}
+			.mui-content {
+				padding-bottom: 70px;
+			}
+			/* .type1,
+			.type2 {
+				display: none;
+			} */
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">借款申请</h1>
+		</header>
+		<div class="mui-content">
+			<h5>借款单编号</h5>
+			<div class="task_time" style="background: #BCBCBC;">
+				<p class="loan_number">审批通过后自动生成</p>
+			</div>
+			<h5>申请部门<span>＊</span></h5>
+			<div class="task_time">
+				<p class="get_project"><a>请选择</a></p>
+			</div>
+			<h5>借款金额<span>＊</span></h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="get_price" /></p>
+			</div>
+			<h5>借款用途<span>＊</span></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="get_to_do" /></p>
+			</div>
+			<h5>付款方式</h5>
+			<div class="task_time">
+				<p class="get_manager pay_type"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="task_time pay_type_other">
+				<p><input type="text" name="" id="" placeholder="请填写其他付款方式" class="type_other" /></p>
+			</div>
+			<h5>支票号码</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="get_check_number" /></p>
+			</div>
+			<h5>借用时间</h5>
+			<div class="task_time">
+				<p class="checktime start_time"><a>选择开始时间</a><span class="choose_img"></span></p>
+				<p class="checktime end_time"><a>选择结束时间</a><span class="choose_img"></span></p>
+			</div>
+			
+			<h5>预计归还时间</h5>
+			<div class="task_time">
+				<p class="checktime expect_time"><a>选择开始时间</a><span class="choose_img"></span></p>
+			</div>
+			
+			<h5>领款人</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="get_user" /></p>
+			</div>
+			<h5>借款明细</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="get_price_detail" placeholder="请填写"></textarea>
+			</div>
+			
+			
+				<h5>附件上传</h5>
+				<div class="plan_time file_upload">
+					<span>附件上传</span>
+					<input type="file" name="" id="add_file_title" multiple /><label for="add_file_title" class="btn_add_title choose_img">添加</label>
+				</div>
+				<ul class="file_tendering_list">
+					<!-- <li><span class="file_list_name"></span><span class="file_list_delete">删除</span></li> -->
+				</ul>
+
+			<h5>审批流程</h5>
+			<div class="list_box_content">
+				<div class="task_time">
+					<p class="get_manager approval_process"><a>选择流程</a><span class="choose_img"></span></p>
+					<hr>
+				</div>
+				<ul class="list_content_procedure">
+
+				</ul>
+			</div>
+
+			<div class="content_bottom">
+
+			</div>
+		</div>
+		
+		<!-- 弹框开始 -->
+		<div class="htsp_modal htsp_modal_jj">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认拒绝<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinioncancel" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认拒绝</span></div>
+		    </div>
+		</div>
+		<div class="htsp_modal htsp_modal_ty">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认同意<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinionok" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认同意</span></div>
+		    </div>
+		</div>
+		
+		<div class="htsp_modal sign_modal">
+			<div class="content_box">
+				<div class="mui-modal_all_title">添加签名<span class="mui-icon mui-icon-close"></span></div>
+				<div class="canvas_box">
+					<canvas id="canvas"></canvas>
+				</div>
+				<div class="canvas_btn">
+					<span class="canvas_reset">重置</span><span class="canvas_save">保存</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer_submit this_update">
+			<span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+		<div class="footer_submit this_examine">
+			<span class="btn_refuse">拒绝</span><span class="btn_agree">同意</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/process_view.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	var user = 	JSON.parse(localStorage.getItem('userInfo'));
+	$('.get_project').find('a').html(user.DepartmentName)
+	var id = common.getQueryUrl('id');
+	var isFlag = common.getQueryUrl('isExamine');
+	var isOperation = common.getQueryUrl('isOperation');
+	var showbottom = common.getQueryUrl('showbottom');
+	var ischeck = common.getQueryUrl('check');
+	var onlysee = common.getQueryUrl('onlysee');
+	if(isFlag) {
+		$('.this_update').css('display','none');
+		$('.this_examine').css('display','block');
+	}
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	
+	var payType = [];
+	var payTypeId;
+	var processList = [];
+	var processId;
+	var startTime,endTime,reimTime;
+	var fileList = [];
+	var newFile = [];
+	var isShowAngree = false;
+	var isUpdate = false;
+	var BCode;
+	mui.showLoading()
+	common.promise().then(getPayType)
+		.then(function(res) {
+			return approvalProcess('财务管理');
+		}).then(function(res) {
+			processList = res;
+			if(id) {
+				return getDetail()
+			}
+		}).then(function() {
+			mui.hideLoading()
+		})
+		
+
+		
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/BorrowMoneyDetail';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				if(res.data.BCode) {
+					$('.loan_number').html(res.data.BCode);
+					BCode = res.data.BCode;
+				}
+				$('.get_project').find('a').html(res.data.BorrowUnit)
+				$('.get_price').val(res.data.Total);
+				$('.get_to_do').val(res.data.Reason);
+				if(res.data.BorrowType) {
+					payTypeId = res.data.BorrowType;
+					$('.pay_type').find('a').html(common.getKeyValue(payType,payTypeId));
+					if(common.getKeyValue(payType,payTypeId) == '其他') {
+						$('.pay_type_other').show();
+						$('.type_other').val(res.data.BorrowTypeOther);
+					}
+				}
+				$('.get_check_number').val(res.data.CheckNum);
+				startTime = res.data.BeginTime;
+				endTime = res.data.EndTime;
+				reimTime = res.data.ReimTime;
+				
+				if(startTime) {
+					$('.start_time').find('a').html(startTime);
+				}
+				if(endTime) {
+					$('.end_time').find('a').html(endTime);
+				}
+				if(reimTime) {
+					$('.expect_time').find('a').html(reimTime);
+				}
+				$('.get_user').val(res.data.Payee);
+				$('.get_price_detail').val(res.data.Remark);
+					$('.get_price_detail').css('height',$('.get_price_detail')[0].scrollHeight + 'px');
+					
+				
+				
+				if(res.data.Template > 0 && res.data.State != -1) {
+					processId = res.data.Template;
+					$('.approval_process').find('a').html(common.getKeyValue(processList,processId));
+					processDetail(processId);
+					$('.this_update').hide();
+					
+					if(showbottom) {
+						$('.this_update').show();
+					}else {
+						if(!isOperation) {
+							isUpdate = true;
+							common.disbledForm();
+							$('.choose_img').hide()
+						}
+					}
+				}
+				
+				if(ischeck) {
+					if(res.data.State == -1 || res.data.State == 1 || res.data.State == 2) {
+						$('.mui-title').html('借款申请详情');
+					}
+				}
+				if(onlysee) {
+					isUpdate = true;
+					common.disbledForm();
+					$('.choose_img').hide();
+					$('.footer_submit').hide();
+				}
+				
+				var names = '';
+				for(var i=0;i<res.data.lstFile.length;i++) {
+					var lists = res.data.lstFile[i];
+					var deStr = '删除';
+					if(isUpdate) {
+						deStr = '';
+					}
+					names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+					+ lists.FilePath +'>'
+					+ lists.FileName + lists.Extension +
+					'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+				}
+				fileList = fileList.concat(res.data.lstFile);
+				$('.file_tendering_list').html(names);
+				
+				// if(res.data.State == 2) {
+				// 	$('.in_time_info').show();
+				// 	$('.invoice_number').val(res.data.InvoiceNumber);
+				// 	$('.invoice_code').val(res.data.InvoiceCode);
+				// }
+			
+			}
+		})
+	}
+
+
+	//获取付款方式
+	function getPayType(id) {
+		var url = '/api/Finance/BorrowTypeList';
+		return request.post(url).then(function(res) {
+			console.log('合同列表：', res);
+			if (res.code == 200) {
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					}
+					payType.push(obj);
+				}
+			}
+		})
+	}
+
+	function submit(flag) {
+		var postData = {};
+	
+		if (!$('.get_price').val()) {
+			mui.toast('请输入金额!');
+			return;
+		}
+		if (!$('.get_to_do').val()) {
+			mui.toast('请输入借款用途!');
+			return;
+		}
+		if(flag) {
+			if(!processId && processId != 0) {
+				mui.toast('请选择审批流程!');
+				return;
+			}
+		} 
+		if(!startTime) {
+			mui.toast('请输入开始时间!');
+			return;
+		}
+		if(!endTime) {
+			mui.toast('请输入结束时间!');
+			return;
+		}
+		if(!reimTime) {
+			mui.toast('请输入预计归还时间!');
+			return;
+		}
+		if(flag) {
+			if(!processId) {
+				mui.toast('请选择审批流程!');
+				return;
+			}
+		}
+		if(id) {
+			postData.Id = id;
+		}
+		postData.IsSubmit = flag;
+		if(processId) postData.Template = processId;
+		postData.BorrowUnit = user.DepartmentName;
+		postData.Total = $('.get_price').val();
+		postData.Reason = $('.get_to_do').val();
+		if(payTypeId>=0) {
+			postData.BorrowType = payTypeId;
+			if(common.getKeyValue(payType,payTypeId) == '其他') {
+				postData.BorrowTypeOther = $('.type_other').val() || '';
+			} 
+		}
+		
+		if(BCode) {
+			postData.BCode = BCode;
+		}
+		
+		postData.CheckNum = $('.get_check_number').val() || '';
+		
+		postData.BeginTime = startTime || '';
+		postData.EndTime = endTime || '';
+		postData.ReimTime = reimTime || '';
+		
+		if(endTime <= startTime) {
+			mui.toast('结束时间小于开始时间!');
+			return;
+		}
+		if(reimTime <= startTime) {
+			mui.toast('预计归还时间小于开始时间!');
+			return;
+		}
+		
+		postData.Payee = $('.get_user').val() || '';
+		postData.Remark = $('.get_price_detail').val() || '';
+
+		common.promise().then(function() {
+			// if ($("#add_file_title")[0].files.length>0) {
+			// 	var files = $("#add_file_title")[0].files;
+			// 	var arr = []
+			// 	for(var i=0;i<files.length;i++) {
+			// 		if(files[i].deletetrue) {
+			// 			continue;
+			// 		}
+			// 		var formData = new FormData();
+			// 		formData.append("file",files[i]);
+			// 		arr.push(upload(formData))
+			// 	}
+			// 	return Promise.all(arr);
+			// } else {
+				return;
+			// }
+		}).then(function() {
+			postData.lstFile = newFile;
+			console.log(postData);
+			var url = '/api/Finance/SaveBorrowMoney';
+			return request.post(url,postData).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast(res.msg)
+				}
+			})
+		})
+	}
+	
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=BorrowMoney';
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					// "Type": flag ? "投标申请_投标文件" : "投标申请_招标文件",
+					"tid": flag
+				}
+				newFile.push(data)
+				return;
+			}
+		})
+	}
+	
+	function deleteFile(ids) {
+		var url = '/api/Finance/DeleteBorrowMoneyFile';
+		return request.post(url,{Ids: ids}).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.toast('删除成功！')
+			}else {
+				mui.toast('删除失败！')
+			}
+		})
+	}
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		mui.showLoading('加载中...');
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			console.log(newFile)
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	})
+
+	//点击文件上传按钮
+	$("#add_file_title").on('change', function(e) {
+		
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +
+			'><span class="file_list_name spans_back" item='+ files[i].lastModified +'>'
+			+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	})
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+					deleteFile(id)
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(newFile[i].tid == item) {
+					newFile.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	
+
+
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(false);
+	});
+	mui('.footer_submit').on('tap', '.btn_submit', function() {
+		submit(true);
+	});
+	
+	canvasInit();
+	
+
+	$('.get_small_price').on('blur', function() {
+		var text = common.smallToLarge($(this).val());
+		$('.get_big_price').html(text);
+	});
+	
+
+
+	(function(mui) {
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				if(isUpdate) {
+					return;
+				}
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						if($(_self).hasClass('expect_time')) {
+							reimTime = rs.text;
+						}
+						$(_self).html(rs.text + '<span></span>');
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					options.type = 'date';
+					if($(_self).hasClass('end_time') || $(_self).hasClass('expect_time')) {
+						var yearMonth = startTime.split('-');
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						if($(_self).hasClass('expect_time')) {
+							reimTime = rs.text;
+						}
+						$(_self).html(rs.text + '<span></span>');
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					if(isUpdate) {
+						return;
+					}
+					var _this = this;
+					if ($(this).hasClass('pay_type')) {
+						userPicker.setData(payType);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							payTypeId = items[0].value;
+							if(items[0].text == '其他') {
+								$('.pay_type_other').show();
+							}else {
+								$('.pay_type_other').hide();
+							}
+						});
+					}
+					if ($(this).hasClass('approval_process')) {
+						userPicker.setData(processList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							processId = items[0].value;
+							getProcessDetail(processId);
+						});
+					}
+					
+				}, false);
+			});
+		});
+	})(mui);
+</script>

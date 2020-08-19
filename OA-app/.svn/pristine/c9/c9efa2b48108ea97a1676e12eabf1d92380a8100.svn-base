@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/jygl_chengguowenjian.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.contract_info {
+				position: relative;
+			}
+			.mui-popover {
+				height: 30px;
+				width: 50px;
+				opacity: 1;
+				border: none;
+				text-align: center;
+				left: 40%;
+				top: 10%;
+				/* overflow: hidden; */
+			}
+			
+			.mui-popover span {
+					width:0;
+					height:0;
+					overflow:hidden;
+					font-size: 0;     
+					line-height: 0;  
+					border-width:10px;
+					border-style:solid dashed dashed dashed;
+					border-color:#3B9CFF transparent transparent transparent;
+					position: absolute;
+					bottom: -23px;
+					left: 30%;
+			}
+			
+			.mui-btn-outlined {
+				background: white;
+			}
+		</style>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加产品</h1>
+		</header>
+		<div class="mui-content htsp_content">
+			<h5>产品名称</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="name"/></p>
+			</div>
+			<h5>产品类别</h5>
+			<div class="task_time">
+				<p class="get_manager"><a>请选择</a><span></span></p>
+			</div>
+			<h5>单价（元）</h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="price"/></p>
+			</div>
+			<h5>产品备注</h5>
+			<div class="task_name"><textarea rows="" cols="" class="remark" placeholder="请填写"></textarea></div>
+
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	var id = common.getQueryUrl('id');
+	var isUpdate = common.getQueryUrl('update');
+	var typeList = [];
+	var typeId;
+	
+	var isOperation = false;
+	if(id) {
+		if(isUpdate == 'true') {
+			$('.mui-title').html('修改信息');
+		}else {
+			isOperation = true;
+			common.disbledForm();
+			$('.mui-title').html('查看信息');
+			$('.footer_submit_one').css('display','none');
+		}
+		
+	}
+
+	common.promise().then(function() {
+		return getTypeList()
+	}).then(function() {
+		if(id) {
+			getDetail()
+		}
+	})
+	
+	function getDetail() {
+		var url = '/api/BusinessManage/FillProduct';
+		return request.post(url,{Id:id}).then(function(res) {
+			console.log('详情',res);
+			if(res.code == 200) {
+				$('.name').val(res.data.Name);
+				$('.price').val(res.data.Price);
+				$('.remark').val(res.data.Note);
+				typeId = res.data.TypeID;
+				$('.get_manager').find('a').html(common.getKeyValue(typeList,typeId))
+			}
+		})
+	}
+
+	function getTypeList() {
+		var url = '/api/BusinessManage/ProductTypeSelect';
+		return request.post(url).then(function(res) {
+			console.log('类型',res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {};
+					obj.value = res.data[i].ID;
+					obj.text = res.data[i].Name;
+					typeList.push(obj);
+				}
+			}
+			return;
+		})
+	}
+	
+	
+	function submit() {
+		var postData = {};
+		postData.Name = $('.name').val() || '';
+		postData.Price = $('.price').val() || '';
+		postData.Note = $('.remark').val() || '';
+		postData.TypeID = typeId;
+		console.log(postData);
+		
+		var url = '/api/BusinessManage/SaveProduct';
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('提交失败');
+			}
+		})
+	}
+	
+	mui('.footer_submit_one').on('tap','.btn_save',function() {
+		submit()
+	});
+
+	//下拉列表点击事件集合
+	(function(mui,doc) {
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					if(isOperation) return;
+					var _this = this;
+					userPicker.setData(typeList);
+					userPicker.show(function(items) {
+						$(_this).find('a').html(items[0].text)
+						typeId = items[0].value;
+					});
+				}, false);
+			});
+		});
+	})(mui,document);
+
+	
+
+	
+
+	
+</script>
+
+
+

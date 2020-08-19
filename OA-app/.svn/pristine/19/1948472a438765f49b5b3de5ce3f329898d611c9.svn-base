@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/contract.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<!-- 主界面不动、菜单移动 -->
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right" id="offCanvasSide">
+				<h5>筛选</h5>
+				<div class="search_content">
+					<p>合同类型</p>
+					<div class="choose_task_status">
+
+					</div>
+					<hr>
+					<p>付款类型</p>
+					<div class="choose_task_class">
+
+					</div>
+					<hr>
+					<p>合同金额</p>
+					<div class="constract_prices">
+						<input type="number" value="" class="price_small" onchange="changePrice(this)" oninput="OnInput(this)"
+						 onpropertychange="OnPropChanged(this)" /> —
+						<input type="number" value="" class="price_big" onchange="changePrice(this)" oninput="OnInput(this)"
+						 onpropertychange="OnPropChanged(this)" />
+					</div>
+					<hr>
+
+					<p>合同状态</p>
+					<div class="choose_task_document">
+						<span>已归档</span><span class="middle_status">未归档</span>
+					</div>
+					<hr>
+					<p>签订日期</p>
+					<div class="plan_time">
+						<span class="choose_time start_time plan_times">开始时间</span> — <span class="choose_time end_time plan_times">结束时间</span>
+					</div>
+
+				</div>
+				<div class="footer_btn spans">
+					<span class="btn_reset spans">重置</span><span class="btn_submit spans">确定</span>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">合同归档</h1>
+					<span class="mui-nav-more">
+						<img src="../../img/more_know.png">
+					</span>
+				</header>
+				<div class="mui-nav-more_nr_t">
+					<div class="mui-nav-more_nr one_title">
+						<p>
+							<img class="add_invoice" src="../../img/constract_shaixuan.png"><span>筛选</span>
+						</p>
+					</div>
+				</div>
+				<div class="mui-content">
+					<div class="message_title">
+						<div class="search_box">
+							<div class="mui-input-row mui-search">
+								<input id="search_input" type="text" class="" placeholder="搜索项目名称、人员、业务类型、建设单位">
+								<span class="photo_search" index='item1'></span>
+							</div>
+						</div>
+					</div>
+					<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+						<p class="up_fress data-loading-icon">
+							<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+						</p>
+						<div class="mui-scroll">
+							<div class="message_content">
+								<ul class="contract_list new_document_list">
+									<li>
+										<h5 class="background_green">海淀区亮甲店保障房智慧工地项目</h5>
+										<div class="text_info">
+											<div class="user_name">
+												<p class="color_green">张晓明</p>
+												<span>申请人员</span>
+											</div>
+											<div class="date_box">
+												<p class="color_green">张晓明</p>
+												<span>申请日期</span>
+											</div>
+											<div class="constract_number">
+												<p class="color_green">HT-123123</p>
+												<span>合同编号</span>
+											</div>
+											<div class="constract_price">
+												<p class="color_green">50.00万</p>
+												<span>合同金额</span>
+											</div>
+										</div>
+										<div class="company_box">
+											<span class="company_name">对方单位：北京北排集团有限公司</span>
+											<div class="status_span">
+												<span class="success_pass">审核通过</span>
+												<span class="success_pass">已盖章</span>
+											</div>
+										</div>
+										<div class="btn_list">
+											<span class="background_green">导出申请表</span>
+											<span class="background_blue">盖章确认</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<p class="down_fress data-loading-icon">
+						<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+					</p>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.base64.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	// var height = 44 + $('.title_box').height() + 30 + 16;
+	// console.log(height)
+	// $('#pullrefresh').css('top',height + 'px');
+	var page = 1;
+	var searchText = '';
+	var searchObjs;
+	var minPrice = '',
+		maxPrice = '',
+		startTime = '',
+		endTime = '';
+	var input = $("input");
+	clickInit();
+	
+	localStorage.removeItem('changeList');
+
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios ? 0.003 : 0.0009
+	});
+	var isfresh = false;
+	var is_first = false;
+	document.querySelector('#pullrefresh').addEventListener('scroll', function(e) {
+		if (isfresh || !is_first) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('display', 'block');
+				$('.up_fress').css('opacity', '1');
+				page = 1;
+				searchObjs = null;
+				getList(true).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('display', 'none');
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -40) {
+			var liLength = $('.contract_list li').length;
+			if (liLength % 10 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt(liLength / 10) + 1;
+			getList(false, searchText, searchObjs).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+
+	function clickInit() {
+		input.blur();
+		//点击头部更多
+		mui('.header_box').on('tap', '.mui-nav-more', function() {
+			input.blur();
+			$('.mui-nav-more_nr_t').show();
+		})
+		mui('.mui-nav-more_nr_t')[0].addEventListener('tap', function() {
+			$('.mui-nav-more_nr_t').hide();
+		})
+
+		mui('.mui-nav-more_nr').on('tap', 'p', function() {
+			if ($(this).hasClass('add_files')) {
+				window.location.href = 'add_file.html';
+			} else {
+				mui('.mui-off-canvas-wrap').offCanvas().show();
+			}
+		})
+
+		mui('.choose_task_status').on('tap', 'span', function() {
+			input.blur();
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+
+		mui('.choose_task_class').on('tap', 'span', function() {
+			input.blur();
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+
+		mui('.choose_task_document').on('tap', 'span', function() {
+			input.blur();
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+
+		mui('.footer_btn').on('tap', 'span', function() {
+			if ($(this).hasClass('btn_reset')) {
+				minPrice = '';
+				maxPrice = '';
+				startTime = '';
+				endTime = '';
+				$('.search_content').find('span').removeClass('active');
+				$('.start_time').html('开始时间');
+				$('.end_time').html('结束时间');
+				$('.constract_prices').find('input').val('');
+			} else {
+				var obj = {};
+				if ($('.choose_task_status').find('.active').length > 0) {
+					obj.Type = Number($('.choose_task_status').find('.active').attr('id'));
+				}
+				if ($('.choose_task_class').find('.active').length > 0) {
+					obj.Payment = Number($('.choose_task_class').find('.active').attr('id'));
+				}
+				if ($('.choose_task_document').find('.active').length > 0) {
+					obj.IsFiling = $('.choose_task_document').find('.active').hasClass('middle_status') ? 0 : 1;
+				}
+
+				if (minPrice && maxPrice) {
+					obj.MinContractPrice = minPrice;
+					obj.MaxContractPrice = maxPrice;
+				}
+				if (startTime && endTime) {
+					obj.MinSignDate = startTime;
+					obj.MaxSignDate = endTime;
+				}
+				searchObjs = obj;
+				console.log(obj)
+				page = 1;
+				getList(true, searchText, obj).then(() => {
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 200);
+				})
+				mui('.mui-off-canvas-wrap').offCanvas().close();
+			}
+		})
+
+		mui('.search_box').on('tap', '.photo_search', function() {
+			page = 1;
+			searchText = $('#search_input').val();
+			console.log(searchText)
+			getList(true, searchText).then(function() {
+				mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 500);
+			})
+		})
+		mui('.contract_list').on('tap', 'li', function(e) {
+			localStorage.setItem('documentscrolltop', JSON.stringify({
+				page: page,
+				scroll: scroll.y
+			}))
+			if ($(e.target).hasClass('btn_document') ||
+				$(e.target).hasClass('btn_update') ||
+				$(e.target).hasClass('get_table') ||
+				$(e.target).hasClass('btn_abolish') ||
+				$(e.target).hasClass('btn_no_abolish') ||
+				$(e.target).hasClass('btn_update_contract') ||
+				$(e.target).hasClass('btn_update_contract_see') ||
+				$(e.target).hasClass('btn_again')
+			) {
+				return;
+			}
+			var id = $(this).attr('id');
+			if (!id) return;
+			window.location.href = 'add_apply.html?id=' + id + '&check=true'
+		});
+
+		//合同归档
+		mui('.contract_list').on('tap', '.btn_document', function(e) {
+			var id = $(this).parents('li').attr('id');
+			window.location.href = 'to_document.html?id=' + id;
+		});
+
+		//修改合同归档
+		mui('.contract_list').on('tap', '.btn_update', function(e) {
+			var id = $(this).parents('li').attr('id');
+			window.location.href = 'to_document.html?id=' + id;
+		});
+		mui('.contract_list').on('tap', '.get_table', function(e) {
+			var id = $(this).attr('geturl');
+			if (!id) {
+				mui.toast('还未生成');
+				return;
+			}
+			var link = document.createElement('a');
+			link.setAttribute("download", $(this).parents('li').find('h5').html() + '.pdf');
+			link.href = baseUrl + id;
+			link.download = $(this).parents('li').find('h5').html() + '.pdf';
+			link.click();
+		});
+
+		//合同作废
+		mui('.contract_list').on('tap', '.btn_abolish', function(e) {
+			var id = $(this).parents('li').attr('id');
+			window.location.href = 'abolish_constract.html?id=' + id;
+		});
+
+		//取消作废
+		mui('.contract_list').on('tap', '.btn_no_abolish', function(e) {
+			var id = $(this).parents('li').attr('id');
+			console.log(id)
+			mui.confirm('是否取消作废？', '提示', ['否', '是'], function(e) {
+				if (e.index == 1) {
+					
+					request.post('/api/ContractManage/EditCancellation', {
+							State: false,
+							ID: id
+						})
+						.then(function(data) {
+							console.log(data)
+							var obj = JSON.parse(localStorage.getItem('documentscrolltop'));
+							console.log(obj)
+							if (obj) {
+								if (obj.page > 1) {
+									return getList(true, searchText, searchObjs, obj.page * 10).then(() => {
+										mui('.mui-scroll-wrapper').scroll().scrollTo(0, obj.scroll + 100, 100);
+										localStorage.removeItem('documentscrolltop')
+									})
+								} else {
+									return getList(true, searchText, searchObjs).then(() => {
+										mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+										localStorage.removeItem('documentscrolltop')
+									})
+								}
+							} else {
+
+								return getList(true);
+							}
+						})
+
+				}
+			});
+		});
+
+		//合同查看
+		mui('.contract_list').on('tap', '.btn_update_contract', function(e) {
+			var id = $(this).parents('li').attr('id');
+			window.location.href = 'change_see.html?id=' + id;
+		});
+		//合同变更
+		mui('.contract_list').on('tap', '.btn_update_contract_see', function(e) {
+			var id = $(this).parents('li').attr('id');
+			window.location.href = 'contract_change.html?id=' + id;
+		});
+	}
+
+
+
+	common.promise().then(() => {
+			mui.showLoading('加载中...');
+			return;
+		}).then(() => {
+			return getConstractType();
+		})
+		.then(res => {
+			if (res.code == 200) {
+				var html = '';
+				var num = 0;
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					num++;
+					if (num == 2) {
+						html += '<span id=' + item.SUB_ID + ' class="middle_status">' + item.SUB_NM + '</span>';
+					} else {
+						html += '<span id=' + item.SUB_ID + '>' + item.SUB_NM + '</span>';
+					}
+					if (num == 3) {
+						num = 0;
+					}
+				}
+				$('.choose_task_status').html(html);
+			}
+			return;
+		})
+		.then(() => {
+			return getPayType();
+		})
+		.then(res => {
+			if (res.code == 200) {
+				var html = '';
+				var num = 0;
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					num++;
+					if (num == 2) {
+						html += '<span id=' + item.SUB_ID + ' class="middle_status">' + item.SUB_NM + '</span>';
+					} else {
+						html += '<span id=' + item.SUB_ID + '>' + item.SUB_NM + '</span>';
+					}
+					if (num == 3) {
+						num = 0;
+					}
+				}
+				$('.choose_task_class').html(html);
+			}
+			return;
+		})
+		.then(() => {
+			var obj = JSON.parse(localStorage.getItem('documentscrolltop'));
+			console.log(obj)
+			if (obj) {
+				if (obj.page > 1) {
+					return getList(true, searchText, searchObjs, obj.page * 10).then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, obj.scroll + 100, 100);
+						localStorage.removeItem('documentscrolltop')
+					})
+				} else {
+					return getList(true, searchText, searchObjs).then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+						localStorage.removeItem('documentscrolltop')
+					})
+				}
+			} else {
+
+				return getList(true);
+			}
+		}).then(() => {
+			mui.hideLoading();
+		})
+
+	//获取列表
+	function getList(flag, searchText, searchObj) {
+		var postData = {
+			page: page,
+			limit: 10,
+			IsStamp: 1
+		}
+		if (searchText) {
+			postData.Name = searchText;
+		}
+		if (searchObj) {
+			if (searchObj.Type >= 0) {
+				postData.Type = searchObj.Type;
+			}
+			if (searchObj.Payment >= 0) {
+				postData.Payment = searchObj.Payment;
+			}
+			if (searchObj.IsFiling >= 0) {
+				postData.IsFiling = searchObj.IsFiling;
+			}
+
+			if (searchObj.MinContractPrice >= 0 && searchObj.MaxContractPrice >= 0) {
+				postData.MinContractPrice = searchObj.MinContractPrice;
+				postData.MaxContractPrice = searchObj.MaxContractPrice;
+			}
+
+			if (searchObj.MinSignDate && searchObj.MaxSignDate) {
+				postData.MinSignDate = searchObj.MinSignDate;
+				postData.MaxSignDate = searchObj.MaxSignDate;
+			}
+		}
+		console.log(postData)
+		var url = '/api/ContractManage/GetList';
+		return request.post(url, postData).then(res => {
+			console.log(res)
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					var backColor = '';
+					var textColor = '';
+					var statusSpan = '';
+					var btnSpan = '';
+
+					if (item.IsFiling == "已归档") {
+						backColor = 'background_green';
+						textColor = 'color_green';
+						statusSpan = '<span class="success_pass">已归档</span>';
+
+						if (item.AlterationState == '') {
+							btnSpan =
+								'<span class="btn_update">修改归档信息</span><span class="btn_abolish">合同作废</span><span class=" btn_update_contract_see">合同变更</span>';
+						} else {
+							btnSpan =
+								'<span class="btn_update">修改归档信息</span><span class="btn_abolish">合同作废</span><span class="btn_update_contract">变更查看</span>';
+						}
+					} else if (item.IsFiling == "未归档") {
+						backColor = 'background_red';
+						textColor = 'color_red';
+						statusSpan = '<span class="application_refuse">未归档</span>';
+						btnSpan = '<span class="btn_document">合同归档</span><span class="btn_abolish">合同作废</span>';
+					} else {
+						backColor = 'background_orange';
+						// textColor = 'color_red';
+						statusSpan = '<span class="application_ing">已作废</span>';
+						btnSpan = '<span class="btn_no_abolish">取消作废</span>';
+					}
+
+					// if(item.IsStamp == '是') {
+
+					// }else {
+					// 	btnSpan += ' <span class="background_blue">导出申请表</span>';
+					// }
+					// btnSpan += ' <span class="background_blue get_table" geturl='+ item.HTSQBfile +'>导出申请表</span>';
+
+					var price = item.ContractPrice;
+					if (Number(item.ContractPrice) > 10000) {
+						price = (Number(item.ContractPrice) / 10000).toFixed(2) + '万';
+					}
+
+					var change_text = '';
+					if (item.AlterationState == '审批中') {
+						change_text = '<h5 class=' + backColor + '><p>' + item.ProjectName + '</p>变更申请中</h5>';
+					} else if (item.AlterationState == '审批通过') {
+						change_text = '<h5 class=' + backColor + '><p>' + item.ProjectName + '</p>已变更</h5>';
+					} else {
+						change_text = '<h5 class=' + backColor + '>' + item.ProjectName + '</h5>'
+					}
+
+					html += '<li id=' + item.Id + '>' + change_text +
+						'<div class="text_info">' +
+						'<div class="user_name"><p class=' + textColor + '>' + item.CreateUser + '</p><span>申请人员</span></div>' +
+						'<div class="date_box"><p class=' + textColor + '>' + item.CreateTime + '</p><span>申请日期</span></div>' +
+						'<div class="constract_number"><p class=' + textColor + '>' + item.ContractNumber +
+						'</p><span>合同编号</span></div>' +
+						'<div class="constract_price"><p class=' + textColor + '>' + price + '</p><span>合同金额</span></div>' +
+						'</div>' +
+						'<div class="company_box">' +
+						'<span class="company_name">对方单位：' + item.ConstructionUnit + '</span>' +
+						'<div class="status_span">' + statusSpan + '</div>' +
+						'</div>' +
+						'<div class="new_btn_list">' + btnSpan + '</div>' +
+						'</li>';
+				}
+
+				if (flag) {
+					$('.contract_list').html(html);
+				} else {
+					$('.contract_list').append(html);
+				}
+
+				if ($('.contract_list li').length == 0) {
+					html = '<li class="is_node_data"><div class="detail_info detail_info_no_data" style="padding-bottom: 20px">' +
+						'<img src="../../img/no_data.png" ><p>还未有数据！</p></div></li>';
+					$('.contract_list').html(html);
+				}
+				is_first = true;
+			} else {
+				mui.toast('获取失败！' + res.msg);
+			}
+		})
+	}
+
+	//获取合同类型
+	function getConstractType() {
+		var url = '/api/ContractManage/HTLXSelect';
+		return request.post(url).then(res => {
+			console.log(res);
+			return res;
+		})
+	}
+
+	//付款方式
+	function getPayType() {
+		var url = '/api/ContractManage/SFFSSelect';
+		return request.post(url).then(res => {
+			console.log(res);
+			return res;
+		})
+	}
+
+
+
+	//价格监听
+	function OnInput(self) {
+		changePrice(self)
+	}
+
+	function OnPropChanged(self) {
+		changePrice(self)
+	}
+
+	function changePrice(self) {
+		if ($(self).hasClass('price_small')) {
+			if (maxPrice) {
+				if (Number($(self).val()) > maxPrice) {
+					$(self).css('border', 'solid 1px red');
+					minPrice = '';
+					return;
+				} else {
+					minPrice = $(self).val();
+				}
+			} else {
+				minPrice = $(self).val();
+			}
+			$(self).css('border', 'solid 1px #ccc');
+
+		} else {
+			if (minPrice) {
+				if (minPrice > Number($(self).val())) {
+					$(self).css('border', 'solid 1px red');
+					maxPrice = '';
+					return;
+				} else {
+					maxPrice = $(self).val();
+				}
+			} else {
+				maxPrice = $(self).val();
+			}
+			$(self).css('border', 'solid 1px #ccc');
+		}
+	}
+
+	//选择器
+	(function(mui) {
+		//时间选择
+		var btns = mui('.choose_time');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						if ($(_self).find('.buy_date').length > 0) {
+							$('.buy_date').val(rs.text);
+						}
+						if ($(_self).find('.expire_date').length > 0) {
+							$('.expire_date').val(rs.text);
+						}
+						$(_self).html(rs.text);
+
+						if ($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if ($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					if ($(_self).hasClass('end_time') && startTime) {
+						options.beginDate = new Date(startTime);
+					}
+					if ($(_self).hasClass('start_time') && endTime) {
+						options.endDate = new Date(endTime);
+					}
+					_self.picker = new mui.DtPicker(options);
+
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+
+						if ($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if ($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+	})(mui);
+</script>

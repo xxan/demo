@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/xiangmulei.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.mui-content {
+				height: auto;
+			}
+
+			.mui-content .content_detail {
+				box-sizing: border-box;
+				overflow: hidden;
+			}
+
+			.content_info {
+				height: auto !important;
+			}
+
+			.photo_search {
+				top: 33%;
+			}
+
+			#index2 li,
+			#index4 li,
+			#index5 li {
+				position: relative;
+			}
+
+			#middlePopover {
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				top: 0;
+				left: 0;
+			}
+
+			#middlePopover button {
+				width: 20%;
+				margin: 0;
+				margin-top: 20%;
+				background: white;
+				border: solid 1px #3B9CFF;
+			}
+
+			.bid_no_data img {
+				width: 100px;
+			}
+
+			.photo_search {
+				width: 40px;
+				height: 40px;
+				background-size: 20px 20px;
+				top: 0;
+			}
+
+			.up_fress {
+				top: 0px;
+				background: #F2F2F2;
+				opacity: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">经营管理</h1>
+			<img src="../../img/add.png" class="add_new_project">
+		</header>
+		<div class="mui-content">
+			<div class="title_tab">
+				<span index='1'>项目类</span><span index='2'>产品类</span>
+			</div>
+			<div class="content_detail">
+				<div id="process_tab" class="mui-segmented-control">
+					<div class="tab_list">
+						<a class="mui-control-item" href="#item1">跟踪中</a><a class="mui-control-item" href="#item2">进行中</a><a class="mui-control-item"
+						 href="#item3">已完成</a>
+					</div>
+				</div>
+				<div id="product_tab" class="mui-segmented-control">
+					<div class="tab_list">
+						<a class="mui-control-item" href="#index1">客户公示区</a><a class="mui-control-item add_active" href="#index2">客户管理</a><a
+						 class="mui-control-item" href="#index3">用户管理</a><a class="mui-control-item add_active" href="#index4">产品管理</a><a
+						 class="mui-control-item" href="#index5">订单查询</a>
+					</div>
+				</div>
+			</div>
+			<div id="slider" class="mui-slider mui-fullscreen">
+				<div id="pullrefresh" class="mui-slider-group mui-scroll-wrapper">
+					<p class="up_fress data-loading-icon">
+						<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+					</p>
+					<div id="scroll1" class="mui-scroll">
+						<div class="content_info process_tab">
+						</div>
+					</div>
+					<p class="down_fress data-loading-icon">
+						<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+	<!-- <li>
+	<div class="list_left">
+		<span>张三</span>
+	</div>
+	<div class="list_right">
+		<h4>海淀区亮甲店保障房智慧工地项目</h4>
+		<p>企业类型：<span>张三</span></p>
+		<p>客户部门：<span>项目管理</span></p>
+		<p>客户职务：<span>北控建设集团</span></p>
+		<p>联系方式：<span>11111111</span></p>
+		<p>创建时间：<span>2019-09-05</span></p>
+		<p>本次拜访时间：<span>未拜访</span></p>
+	</div>
+</li> -->
+</html>
+
+<script type="text/javascript" src="../../js/request.js"></script>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.pullToRefresh.js"></script>
+<script src="../../js/mui.pullToRefresh.material.js"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	localStorage.removeItem("detail_num");
+	mui.init({
+		gestureConfig: {
+			tap: true, //默认为true
+			doubletap: true, //默认为false
+			longtap: true, //默认为false
+			swipe: true, //默认为true
+			drag: true, //默认为true
+			hold: true, //默认为false，不监听
+			release: false //默认为false，不监听
+		},
+	});
+	var index1 = 1,
+		index2 = 1;
+	var searchIndex = 1,
+		searchProductIndex = 1;
+	var thisItem = localStorage.getItem('jymanager') || 1;
+	var thisProductItem = localStorage.getItem('jymanager_two') || 1;
+	var thisprocessItem = localStorage.getItem('jymanager_one') || 1;
+	var serachName = '';
+	var input;
+	var scrollObj = JSON.parse(localStorage.getItem('scrollObj'));
+	console.log(scrollObj)
+	// if(scrollObj) {
+	// 	index1 = scrollObj.page || 1;
+	// 	index2 = scrollObj.page || 1;
+	// }
+
+
+	// mui('body')[0].addEventListener('tap', function() {
+	// 	input.blur();
+	// })
+
+	var scroll;
+
+	var html1 = '<div class="content_info process_tab"><div id="item1" class="mui-control-content">' +
+		'<div class="search_box"><div class="mui-input-row mui-search">' +
+		'<input value="" type="text" class="" placeholder="搜索项目名称、客户名称、负责人等">' +
+		'<span class="photo_search" index="item1"></span></div></div>' +
+		'<div class="project_list_box"><ul></ul></div></div>' +
+		'<div id="item2" class="mui-control-content"><div class="search_box">' +
+		'<div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索项目名称、客户名称、负责人等">' +
+		'<span class="photo_search" index="item2"></span></div></div><div class="project_list_box">' +
+		'<ul></ul></div></div><div id="item3" class="mui-control-content"><div class="search_box">' +
+		'<div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索项目名称、客户名称、负责人等">' +
+		'<span class="photo_search" index="item3"></span></div>' +
+		'</div><div class="project_list_box"><ul></ul></div></div></div>';
+	var html2 = '<div class="content_info product_tab"><div id="index1" class="mui-control-content">' +
+		'<div class="search_box"><div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索单位名称、客户名称、客户部门等">' +
+		'<span class="photo_search"></span></div></div><div class="project_list_box">' +
+		'<ul></ul></div></div><div id="index2" class="mui-control-content">' +
+		'<div class="search_box"><div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索单位名称、客户名称、客户部门等">' +
+		'<span class="photo_search"></span></div></div><div class="project_list_box">' +
+		'<ul></ul></div></div><div id="index3" class="mui-control-content">' +
+		'<div class="search_box"><div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索单位名称、客户名称、客户部门等">' +
+		'<span class="photo_search"></span></div></div><div class="project_list_box">' +
+		'<ul></ul></div></div><div id="index4" class="mui-control-content">' +
+		'<div class="search_box"><div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索产品名称">' +
+		'<span class="photo_search"></span></div></div>' +
+		'<div class="project_list_box"><ul></ul></div></div>' +
+		'<div id="index5" class="mui-control-content">' +
+		'<div class="search_box"><div class="mui-input-row mui-search">' +
+		'<input type="text" class="" placeholder="搜索订单编号">' +
+		'<span class="photo_search"></span></div></div>' +
+		'<div class="project_list_box"><ul></ul></div></div></div>';
+
+	$('#scroll1').html(html2);
+
+	var token = localStorage.getItem('token');
+	$('.title_tab').find('span').eq(thisItem - 1).addClass('active');
+
+	var isCanDeleteProject = true;
+	var isCanUpdateProject = true;
+	var isFresh = true;
+
+	var this_self;
+
+	function show() {
+		if (getModuleName('ProjectM')) {
+			if (operationArr.length > 0) {
+				for (var i = 0; i < operationArr.length; i++) {
+					if (operationArr[i].KeyCode == 'Create') {
+						if (!operationArr[i].IsValid) {
+							$('.add_new_project').hide();
+						} else {
+							$('.add_new_project').show()
+						}
+					}
+					if (operationArr[i].KeyCode == 'Update') {
+						if (!operationArr[i].IsValid) {
+							isCanUpdateProject = false;
+						}
+					}
+					if (operationArr[i].KeyCode == 'Delete') {
+						if (!operationArr[i].IsValid) {
+							isCanDeleteProject = false;
+						}
+					}
+				}
+			} else {
+				$('.add_new_project').show()
+			}
+		}
+		var leng = $('#process_tab a');
+		for (var i = 0; i < leng.length; i++) {
+			if ($(leng[i]).html() == '跟踪中') {
+				if (!getModuleName('ManagementIndex')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#item1').hide();
+				}
+			}
+			if ($(leng[i]).html() == '进行中') {
+				if (!getModuleName('ManagementUnderWay')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#item2').hide();
+				}
+			}
+			if ($(leng[i]).html() == '已完成') {
+				if (!getModuleName('ManagementCompleted')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#item3').hide();
+				}
+			}
+		}
+		for (var i = 0; i < leng.length; i++) {
+			if (!$(leng[i]).hasClass('mui-control-item')) {
+				$(leng[i]).remove();
+			}
+		}
+		leng = $('#process_tab a')
+		$('#process_tab a').css('width', 100 / leng.length + '%')
+	}
+
+	function productShow() {
+		if (getModuleName('ProductM')) {
+			if (operationArr.length > 0) {
+				for (var i = 0; i < operationArr.length; i++) {
+					if (operationArr[i].KeyCode == 'Create') {
+						if (!operationArr[i].IsValid) {
+							$('.add_new_project').hide();
+						}
+					}
+					if (operationArr[i].KeyCode == 'Update') {
+						if (!operationArr[i].IsValid) {
+							isCanUpdateProject = false;
+						}
+					}
+					if (operationArr[i].KeyCode == 'Delete') {
+						if (!operationArr[i].IsValid) {
+							isCanDeleteProject = false;
+						}
+					}
+				}
+			}
+		}
+
+		var leng = $('#product_tab a');
+		for (var i = 0; i < leng.length; i++) {
+			if ($(leng[i]).html() == '客户公示区') {
+				if (!getModuleName('PContacterM')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#index1').hide();
+				}
+			}
+			if ($(leng[i]).html() == '客户管理') {
+				if (!getModuleName('Contacter')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#index2').hide();
+					if (operationArr.length > 0) {
+						for (var i = 0; i < operationArr.length; i++) {
+							if (operationArr[i].KeyCode == 'Create') {
+								if (!operationArr[i].IsValid) {
+									$('.add_new_project').hide();
+								}
+							}
+						}
+					}
+				}
+			}
+			if ($(leng[i]).html() == '用户管理') {
+				if (!getModuleName('CustomerM')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#index3').hide();
+				}
+			}
+			if ($(leng[i]).html() == '产品管理') {
+				if (!getModuleName('ProductManage')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#index4').hide();
+					if (operationArr.length > 0) {
+						for (var i = 0; i < operationArr.length; i++) {
+							if (operationArr[i].KeyCode == 'Create') {
+								if (!operationArr[i].IsValid) {
+									$('.add_new_project').hide();
+								}
+							}
+						}
+					}
+				}
+			}
+			if ($(leng[i]).html() == '订单查询') {
+				if (!getModuleName('OrderSearch')) {
+					$(leng[i]).attr('href', '').removeClass('mui-control-item')
+					$('#index5').hide();
+				}
+			}
+		}
+
+		for (var i = 0; i < leng.length; i++) {
+			if (!$(leng[i]).hasClass('mui-control-item')) {
+				$(leng[i]).remove();
+			}
+		}
+		leng = $('#product_tab a')
+		$('#product_tab a').css('width', 100 / leng.length + '%')
+	}
+
+	if (thisItem == 1) {
+		$('#process_tab').show();
+		$('#product_tab').hide();
+		$('#scroll1').html(html1);
+		$('#process_tab').find('a').eq(thisprocessItem - 1).addClass('mui-active');
+		$('#item' + thisprocessItem).addClass('mui-active');
+		if (scrollObj) {
+			if (scrollObj.page > 1) {
+				jsinit(scrollObj.page * 5).then(() => {
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+					localStorage.removeItem('scrollObj')
+				})
+			} else {
+				jsinit().then(() => {
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+					localStorage.removeItem('scrollObj')
+				})
+			}
+		} else {
+			jsinit()
+		}
+
+		show();
+		input = $('.search_box input');
+	}
+	if (thisItem == 2) {
+		$('#scroll1').html(html2);
+		$('#process_tab').hide();
+		$('#product_tab').show();
+		$('#product_tab').find('a').eq(thisProductItem - 1).addClass('mui-active');
+		$('#index' + thisProductItem).addClass('mui-active');
+		if (scrollObj) {
+			if (scrollObj.page > 1) {
+				if (thisProductItem == 1) {
+					getProductUserList(scrollObj.page * 5, 2, '#index1').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+					$('.add_new_project').css('display', 'none');
+				} else if (thisProductItem == 2) {
+					getProductUserList(scrollObj.page * 5, 0, '#index2').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+				} else if (thisProductItem == 3) {
+					getProductUserList(scrollObj.page * 5, 1, '#index3').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+					$('.add_new_project').css('display', 'none');
+				} else if (thisProductItem == 4) {
+					getProduceList(scrollObj.page * 5, '#index4').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+				} else {
+					console.log(222)
+					getOrderList(scrollObj.page * 5).then(() => {
+						console.log(111222, scrollObj.scroll + 100)
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+
+					}).then(() => {
+						localStorage.removeItem('scrollObj')
+					})
+					$('.add_new_project').css('display', 'none');
+				}
+			} else {
+				if (thisProductItem == 1) {
+					getProductUserList(false, 2, '#index1').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+					$('.add_new_project').css('display', 'none');
+				} else if (thisProductItem == 2) {
+					getProductUserList(false, 0, '#index2').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+				} else if (thisProductItem == 3) {
+					getProductUserList(false, 1, '#index3').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+					$('.add_new_project').css('display', 'none');
+				} else if (thisProductItem == 4) {
+					getProduceList(false, '#index4').then(() => {
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+				} else {
+					console.log(123)
+					getOrderList(false).then(() => {
+						console.log(2232)
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, scrollObj.scroll + 100, 100);
+						localStorage.removeItem('scrollObj')
+					})
+					$('.add_new_project').css('display', 'none');
+				}
+			}
+		} else {
+			if (thisProductItem == 1) {
+				getProductUserList(false, 2, '#index1')
+				$('.add_new_project').css('display', 'none');
+			} else if (thisProductItem == 2) {
+				getProductUserList(false, 0, '#index2')
+			} else if (thisProductItem == 3) {
+				getProductUserList(false, 1, '#index3')
+				$('.add_new_project').css('display', 'none');
+			} else if (thisProductItem == 4) {
+				getProduceList(false, '#index4')
+			} else {
+				console.log(11111)
+				getOrderList(false)
+				$('.add_new_project').css('display', 'none');
+			}
+		}
+
+		addlenter();
+		productShow();
+		input = $('.search_box input');
+	}
+	
+	var deceleration = mui.os.ios ? 0.003 : 0.0009;
+		scroll = mui('.mui-scroll-wrapper').scroll({
+			bounce: true,
+			indicators: false, //是否显示滚动条
+			deceleration: deceleration
+		});
+
+
+	var isfresh = false;
+	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+		if (isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				serachName = '';
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('opacity', '1');
+				$('#search_input').val('');
+				if ($('#scroll1').find('.process_tab').length > 0) {
+					index1 = 1;
+					jsinit().then(function() {
+						setTimeout(function() {
+							$('.up_fress').css('opacity', '0');
+							$('#pullrefresh').css('paddingTop', '0px');
+							mui('.loading_btn').button('reset');
+							mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+							isfresh = false;
+						}, 1000)
+					})
+				}
+				if ($('#scroll1').find('.product_tab').length > 0) {
+					index2 = 1;
+					productInit().then(function() {
+						setTimeout(function() {
+							$('.up_fress').css('opacity', '0');
+							$('#pullrefresh').css('paddingTop', '0px');
+							mui('.loading_btn').button('reset');
+							mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+							isfresh = false;
+						}, 1000)
+					})
+				}
+
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -50) {
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			if ($('#scroll1').find('.process_tab').length > 0) {
+				var itemId = $('#scroll1').find('.process_tab').find('.mui-active').attr('id');
+				var liLength = $('#scroll1').find('.process_tab').find('.mui-active').find('.project_list_box').find(
+					'li').length;
+				console.log(liLength)
+				if (liLength % 5 != 0 || liLength == 0) {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+					return;
+				} else {
+					if (serachName) {
+						searchIndex = parseInt(liLength / 5) + 1;
+					} else {
+						index1 = parseInt(liLength / 5) + 1;
+					}
+					changeHtml(false, parseInt(itemId.substr(4) - 1), '#' + itemId, serachName, serachName ? true : false)
+				}
+			}
+			if ($('#scroll1').find('.product_tab').length > 0) {
+				var itemId = $('#scroll1').find('.product_tab').find('.mui-active').attr('id');
+				var liLength = $('#scroll1').find('.product_tab').find('.mui-active').find('.project_list_box').find(
+					'li').length;
+				if (liLength % 5 != 0 || liLength == 0) {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+					return;
+				} else {
+					var this_index = parseInt(itemId.substr(-1) - 1);
+					if (serachName) {
+						searchProductIndex = parseInt(liLength / 5) + 1;
+					} else {
+						index2 = parseInt(liLength / 5) + 1;
+					}
+					if (this_index == 0) {
+						getProductUserList(false, 2, '#index1', serachName, serachName ? true : false)
+					} else if (this_index == 1) {
+						getProductUserList(false, 0, '#index2', serachName, serachName ? true : false)
+					} else if (this_index == 2) {
+						getProductUserList(false, 1, '#index3', serachName, serachName ? true : false)
+					} else if (this_index == 3) {
+						getProduceList(false, '#index4', serachName, serachName ? true : false)
+					} else {
+						console.log(444444)
+						getOrderList(false, serachName, serachName ? true : false)
+					}
+				}
+			}
+		}
+	
+		setTimeout(function() {
+			$('#pullrefresh').css('bottom', '0px');
+			$('.down_fress').css('zIndex', '0');
+			mui('.loading_btn').button('reset');
+			isfresh = false;
+		}, 1000)
+	})
+	
+
+	//tab点击切换
+	mui('.title_tab').on('tap', 'span', function() {
+		// input.blur();
+		$(this).siblings().removeClass('active');
+		$(this).addClass('active');
+		var index = $(this).attr('index');
+		thisItem = index;
+		index1 = 1;
+		index2 = 1;
+
+		localStorage.setItem('jymanager', thisItem);
+		if (index == 1) {
+			$('#process_tab').show();
+			$('#product_tab').hide();
+			$('#scroll1').html(html1);
+			$('#process_tab').find('a').eq(thisprocessItem - 1).addClass('mui-active');
+			$('#item' + thisprocessItem).addClass('mui-active');
+			index1 = 1;
+			jsinit();
+			show();
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,200)
+		} else {
+			$('#scroll1').html(html2);
+			$('#process_tab').hide();
+			$('#product_tab').show();
+			$('.add_new_project').css('display', 'none');
+			index2 = 1;
+			if (thisItem == 2) {
+				$('#product_tab').find('a').eq(thisProductItem - 1).addClass('mui-active');
+				$('#index' + thisProductItem).addClass('mui-active');
+				if (thisProductItem == 1) {
+					getProductUserList(false, 2, '#index1')
+				} else if (thisProductItem == 2) {
+					getProductUserList(false, 0, '#index2');
+				} else if (thisProductItem == 3) {
+					getProductUserList(false, 1, '#index3');
+				} else if (thisProductItem == 4) {
+					getProduceList(false, '#index4')
+				} else {
+					getOrderList(false);
+				}
+				addlenter();
+				productShow();
+				mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,200)
+			}
+			mui.showLoading("正在加载..", "div");
+			getProductUserList(false, 2, '#index1')
+				.then(function() {
+					mui.hideLoading(function() {});
+				})
+		}
+		input = $('.search_box input');
+	});
+
+	//项目类点击切换
+	mui('#process_tab .tab_list').on('tap', 'a', function() {
+		var item = $(this).attr('href').substr(-1);
+		thisprocessItem = item;
+		localStorage.setItem('jymanager_one', thisprocessItem);
+	})
+
+	//产品类点击切换添加显示
+	mui('#product_tab .tab_list').on('tap', 'a', function() {
+		var item = $(this).attr('href').substr(-1);
+		thisProductItem = item;
+		localStorage.setItem('jymanager_two', thisProductItem);
+		index2 = 1;
+		if ($(this).hasClass('add_active')) {
+			$('.add_new_project').css('display', 'block');
+		} else {
+			$('.add_new_project').css('display', 'none');
+		}
+		common.promise().then(function() {
+			mui.showLoading("正在加载..", "div");
+			if (thisProductItem == 1) {
+				return getProductUserList(false, 2, '#index1')
+			} else if (thisProductItem == 2) {
+				return getProductUserList(false, 0, '#index2');
+			} else if (thisProductItem == 3) {
+				return getProductUserList(false, 1, '#index3');
+			} else if (thisProductItem == 4) {
+				return getProduceList(false, '#index4')
+			} else {
+				return getOrderList(false);
+			}
+		}).then(function() {
+			mui.hideLoading(function() {});
+
+			addlenter()
+		})
+	})
+
+	function addlenter() {
+
+		//查看订单详情
+		mui('#index5').on('tap', '.product_tab li', function(e) {
+			localStorage.setItem('scrollObj', JSON.stringify({
+				page: index2,
+				scroll: scroll.y
+			}))
+			var id = $(this).attr('orderid')
+			var _this = this;
+			var isUpdate = true;
+			var isDelete = true;
+			if (!getModuleName('OrderSearch')) {
+				if (operationArr.length > 0) {
+					for (var i = 0; i < operationArr.length; i++) {
+						if (operationArr[i].KeyCode == 'Update') {
+							if (!operationArr[i].IsValid) {
+								isUpdate = false;
+							}
+						}
+						if (operationArr[i].KeyCode == 'Delete') {
+							if (!operationArr[i].IsValid) {
+								isDelete = false;
+							}
+						}
+					}
+				}
+			}
+			if ($(e.target).hasClass('mui-popover')) {
+				$('#middlePopover').hide();
+				return;
+			}
+			if ($(e.target).hasClass('mui-btn')) {
+				if (!isDelete) {
+					mui.toast('没有权限！');
+				} else {
+					deleteOrder(id, _this);
+				}
+				$('#middlePopover').hide();
+				return;
+			}
+			window.location.href = './order_detail.html?id=' + id;
+		})
+		//查看产品详情
+		mui('#index4').on('tap', '.product_tab li', function(e) {
+			localStorage.setItem('scrollObj', JSON.stringify({
+				page: index2,
+				scroll: scroll.y
+			}))
+			var id = $(this).attr('this_id')
+			var _this = this;
+			var isUpdate = true;
+			var isDelete = true;
+			if (!getModuleName('ProductManage')) {
+				if (operationArr.length > 0) {
+					for (var i = 0; i < operationArr.length; i++) {
+						if (operationArr[i].KeyCode == 'Update') {
+							if (!operationArr[i].IsValid) {
+								isUpdate = false;
+							}
+						}
+						if (operationArr[i].KeyCode == 'Delete') {
+							if (!operationArr[i].IsValid) {
+								isDelete = false;
+							}
+						}
+					}
+				}
+			}
+			if ($(e.target).hasClass('mui-popover')) {
+				$('#middlePopover').hide();
+				return;
+			}
+			if ($(e.target).hasClass('mui-btn')) {
+				if (!isDelete) {
+					mui.toast('没有权限！');
+				} else {
+					deleteProduct(id, _this);
+				}
+				$('#middlePopover').hide();
+				return;
+			}
+			window.location.href = './add_product.html?id=' + id + '&update=' + isUpdate;
+		})
+		// mui('html').on('tap', 'body', function() {
+		// 	$('#middlePopover').hide();
+		// })
+
+		//查看客户信息
+		mui('#index1').on('tap', '.product_tab li', function() {
+			localStorage.setItem('scrollObj', JSON.stringify({
+				page: index2,
+				scroll: scroll.y
+			}))
+			var id = $(this).attr('this_id');
+			window.location.href = './customer_detail.html?id=' + id;
+		})
+		//修改客户信息
+		mui('#index2').on('tap', '.product_tab li', function(e) {
+			localStorage.setItem('scrollObj', JSON.stringify({
+				page: index2,
+				scroll: scroll.y
+			}))
+			var id = $(this).attr('this_id');
+			var _this = this;
+			var isUpdate = true;
+			var isDelete = true;
+			if (!getModuleName('Contacter')) {
+				if (operationArr.length > 0) {
+					for (var i = 0; i < operationArr.length; i++) {
+						if (operationArr[i].KeyCode == 'Update') {
+							if (!operationArr[i].IsValid) {
+								isUpdate = false;
+							}
+						}
+						if (operationArr[i].KeyCode == 'Delete') {
+							if (!operationArr[i].IsValid) {
+								isDelete = false;
+							}
+						}
+					}
+				}
+			}
+			if ($(e.target).hasClass('mui-popover')) {
+				$('#middlePopover').hide();
+				return;
+			}
+			if ($(e.target).hasClass('to_order')) {
+				return;
+			}
+			if ($(e.target).hasClass('mui-btn')) {
+				if (!isDelete) {
+					mui.toast('没有权限！');
+				} else {
+					deleteContacter(id, _this);
+				}
+
+				$('#middlePopover').hide();
+				return;
+			}
+
+			if (isUpdate) {
+				window.location.href = './add_customer.html?id=' + id;
+			} else {
+				window.location.href = './customer_detail.html?id=' + id;
+			}
+
+		})
+		mui('#index3').on('tap', '.product_tab li', function(e) {
+			localStorage.setItem('scrollObj', JSON.stringify({
+				page: index2,
+				scroll: scroll.y
+			}))
+			if ($(e.target).hasClass('to_order')) {
+				return;
+			}
+			var id = $(this).attr('this_id');
+			window.location.href = './customer_detail.html?id=' + id;
+		})
+
+		//长按删除
+		mui('#index4').on('longtap', 'li', function(e) {
+			$('#index4').find('#middlePopover').remove();
+			$(this).append(
+				'<div id="middlePopover" class="mui-popover"><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined">删除</button></div>'
+			);
+			$('#middlePopover').show()
+		})
+
+		mui('#index2').on('longtap', 'li', function(e) {
+			$('#index2').find('#middlePopover').remove();
+			$(this).append(
+				'<div id="middlePopover" class="mui-popover"><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined">删除</button></div>'
+			);
+			$('#middlePopover').show()
+		})
+
+		mui('#index5').on('longtap', 'li', function(e) {
+			$('#index5').find('#middlePopover').remove();
+			$(this).append(
+				'<div id="middlePopover" class="mui-popover"><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined">删除</button></div>'
+			);
+			$('#middlePopover').show()
+		})
+
+		//添加订单
+		mui('#index2').on('tap', '.to_order', function() {
+			var id = $(this).parents('li').attr('this_id')
+			window.location.href = './add_order.html?id=' + id;
+		})
+		//添加订单
+		mui('#index3').on('tap', '.to_order', function() {
+			var id = $(this).parents('li').attr('this_id')
+			window.location.href = './add_order.html?id=' + id;
+		})
+
+	}
+	//项目类搜索
+	mui('#scroll1').on('tap', '.photo_search', function() {
+		input.blur();
+		if (this_self) {
+			this_self.refresh(true);
+		}
+		if (thisItem == 1) {
+			var index = $(this).attr('index');
+			serachName = $(this).prev().val();
+			console.log(serachName)
+			searchIndex = 1;
+			changeHtml(false,parseInt(index.substr(4) - 1), '#' + index, $(this).prev().val(), true);
+		} else {
+			var index = $(this).parents('.content_info').find('.mui-active').attr('id').substr(-1) - 1;
+			searchProductIndex = 1;
+			serachName = $(this).parents('.mui-search').find('input').val();
+			if (index == 0) {
+				getProductUserList(5,2, '#index1', serachName, true);
+			} else if (index == 1) {
+				getProductUserList(5,0, '#index2', serachName, true);
+			} else if (index == 2) {
+				getProductUserList(5,1, '#index3', serachName, true);
+			} else if (index == 3) {
+				getProduceList(5,'#index4', serachName, true);
+			} else {
+				getOrderList(5,serachName, true);
+			}
+		}
+	})
+
+
+	//删除客户信息
+	function deleteContacter(id, self) {
+		var url = '/api/BusinessManage/DelContacter';
+		request.post(url, {
+			Ids: id
+		}).then(function(res) {
+			console.log(res);
+			if (res.code == 200) {
+				$(self).remove();
+				mui.toast('删除成功');
+			} else {
+				mui.toast('删除失败');
+			}
+		})
+	}
+
+	//删除订单信息
+	function deleteOrder(id, self) {
+		var url = '/api/BusinessManage/DelOrderDetailsInfo';
+		request.post(url, {
+			Ids: id
+		}).then(function(res) {
+			console.log(res);
+			if (res.code == 200) {
+				$(self).remove();
+				mui.toast('删除成功');
+			} else {
+				mui.toast('删除失败');
+			}
+		})
+	}
+
+	//删除产品信息
+	function deleteProduct(id, self) {
+		var url = '/api/BusinessManage/DeleteProduct';
+		request.post(url, {
+			Ids: id
+		}).then(function(res) {
+			console.log(res);
+			if (res.code == 200) {
+				$(self).remove();
+				mui.toast('删除成功');
+			} else {
+				mui.toast('删除失败');
+			}
+		})
+	}
+
+	//项目类请求
+	function getProjectList(url, data) {
+		return request.post(url, data).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				mui.toast('获取成功！')
+				common.arrObjTrimAndNull(res.data);
+				var innerHtml = '';
+				for (var i = 0; i < res.data.length; i++) {
+					var list = res.data[i];
+					innerHtml += '<li id="' + list.Id + '">' +
+						'<h4>' + common.getNotNullData(list.Name) + '</h4>' +
+						'<p>客户名称：<span>' + common.getNotNullData(list.ConstructionUnit) + '</span></p>' +
+						'<p>业务类型：<span>' + common.getNotNullData(list.YWLX) + '</span></p>' +
+						'<p>跟踪阶段：<span>' + common.getNotNullData(list.Stage) + '</span></p>' +
+						'<p>负责人：<span>' + common.getNotNullData(list.SetupPerson) + '</span></p>' +
+						'<p>最新跟踪记录：<span>' + common.getNotNullData(list.LastTrack) + '</span></p>' +
+						'<p>执行时间：<span>' + common.getNotNullData(list.LastEditTime) + '</span></p>' +
+						'</li>';
+				}
+				return innerHtml;
+			}
+		})
+	}
+	//获取项目类信息,请求数据整合
+	function changeHtml(limit = 5, stage, byId, AppName, search) {
+		var projectUrl = '/api/BusinessManage/GetData';
+		var page = 0;
+		if (AppName && search) {
+			page = searchIndex;
+		} else {
+			page = index1;
+		}
+		var postData = {
+			"Stage": stage,
+			"AppName": AppName ? AppName : '',
+			"page": page,
+			"limit": limit || 5
+		}
+		// console.log(JSON.stringify(postData))
+		return getProjectList(projectUrl, postData).then(function(html) {
+			// if (html == '') {
+			// 	html = '<div class="detail_info detail_info_no_data bid_no_data">' +
+			// 		'<img src="../../img/no_data.png" ><p>未有数据</p></div>';
+			// }
+			// if(index1 == 1 || (searchIndex == 1 && search)) {
+			// 	$(byId + ' .project_list_box ul').html(html);
+			// }else {
+			// 	$(byId + ' .project_list_box ul').append(html);
+			// }
+			if (search && AppName) {
+				if (searchIndex == 1) {
+					$(byId + ' .project_list_box ul').html(html);
+				} else {
+					$(byId + ' .project_list_box ul').append(html);
+				}
+			} else {
+				if (index1 == 1) {
+					$(byId + ' .project_list_box ul').html(html);
+				} else {
+					$(byId + ' .project_list_box ul').append(html);
+				}
+			}
+			if($(byId + ' .project_list_box ul').find('li').length == 0) {
+				html = '<div class="detail_info detail_info_no_data bid_no_data">' +
+				 		'<img src="../../img/no_data.png" ><p>未有数据</p></div>';
+				$(byId + ' .project_list_box ul').html(html);
+			}
+			return;
+		})
+	}
+	// 项目类数据初始化
+	function jsinit(limit) {
+		mui.showLoading("正在加载..", "div");
+
+		return common.promise().then(function() {
+			//项目类-跟踪中
+			return changeHtml(limit, 0, '#item1');
+		}).then(function() {
+			//项目类-进行中
+			return changeHtml(limit, 1, '#item2');
+		}).then(function() {
+			//项目类-已完成
+			return changeHtml(limit, 2, '#item3');
+		}).then(function() {
+			mui.hideLoading(function() {});
+		})
+	}
+
+	//产品类init
+	function productInit() {
+		mui.showLoading("正在加载..", "div");
+		return getProductUserList(2, '#index1')
+			.then(getProductUserList(0, '#index2'))
+			.then(getProductUserList(1, '#index3'))
+			.then(getProduceList('#index4'))
+			.then(getOrderList())
+			.then(function() {
+				mui.hideLoading(function() {});
+			})
+	}
+
+	//产品类请求(客户、用户)
+	function getProductUserList(limit = 5, type, byId, searchName, search) {
+		var url = '/api/BusinessManage/ContacterList';
+		var pages = 0;
+		if (searchName && search) {
+			pages = searchProductIndex;
+		} else {
+			pages = index2;
+		}
+		var data = {
+			Page: pages,
+			Limit: limit || 5,
+			Stype: type,
+			Name: searchName ? searchName : ''
+		}
+		console.log(data)
+		return request.post(url, data).then(function(res) {
+			console.log(type, res);
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				if (res.data.length == 0 && pages == 1) {
+					var NoDataHtml = '<div class="detail_info detail_info_no_data bid_no_data">' +
+						'<img src="../../img/no_data.png" ><p>还未有数据！</p></div>';
+					console.log(byId)
+					$(byId).find('ul').css('display', 'none');
+					if ($(byId).find('.project_list_box').find('.bid_no_data').length == 0) {
+						$(byId).find('.project_list_box').append(NoDataHtml);
+					}
+				} else {
+					var html = ''
+					for (var i = 0; i < res.data.length; i++) {
+						var data = res.data[i];
+
+						if (byId == '#index1') {
+							html += '<li this_id=' + data.Id + '><div class="list_left"><span>' + common.getNotNullData(data.Name) +
+								'</span></div>' +
+								'<div class="list_right"><h4>' + common.getNotNullData(data.CompanyName) + '</h4>' +
+								'<p>企业类型：<span>' + common.getNotNullData(data.CompanyType) + '</span></p>' +
+								'<p>客户部门：<span>' + common.getNotNullData(data.DepartName) + '</span></p>' +
+								'<p>客户职务：<span>' + common.getNotNullData(data.PostName) + '</span></p>' +
+								'<p>联系方式：<span>' + common.getNotNullData(data.Phone) + '</span></p>' +
+								'<p>创建时间：<span>' + common.getNotNullData(data.CreateTime) + '</span></p>' +
+								'<p>本次拜访时间：<span>' + common.getNotNullData(data.LastVisitTime) + '</span></p>' +
+								'</div></li>';
+						} else if (byId == '#index2' || byId == '#index3') {
+							html += '<li this_id=' + data.Id + '><div class="list_left"><span>' + common.getNotNullData(data.Name) +
+								'</span></div>' +
+								'<div class="list_right"><h4>' + common.getNotNullData(data.CompanyName) + '</h4>' +
+								'<p>企业类型：<span>' + common.getNotNullData(data.CompanyType) + '</span></p>' +
+								'<p>客户部门：<span>' + common.getNotNullData(data.DepartName) + '</span></p>' +
+								'<p>客户职务：<span>' + common.getNotNullData(data.PostName) + '</span></p>' +
+								'<p>联系方式：<span>' + common.getNotNullData(data.Phone) + '</span></p>' +
+								'<p>创建时间：<span>' + common.getNotNullData(data.CreateTime) + '</span></p>' +
+								'<p>本次拜访时间：<span>' + common.getNotNullData(data.LastVisitTime) + '</span></p>' +
+								'<p>购买意向：<span>' + common.getNotNullData(data.Products) +
+								'</span></p><button type="button" class="to_order">下单</button></div></li>';
+						}
+					}
+					$(byId).find('.bid_no_data').css('display', 'none');
+					// console.log(index2,searchProductIndex)
+					if (search && searchName) {
+						if (searchProductIndex == 1) {
+							$(byId).find('ul').html(html);
+						} else {
+							$(byId).find('ul').append(html);
+						}
+					} else {
+						if (index2 == 1) {
+							$(byId).find('ul').html(html);
+						} else {
+							$(byId).find('ul').append(html);
+						}
+					}
+
+					$(byId).find('ul').css('display', 'block');
+				}
+			} else {
+				mui.toast(res.msg)
+			}
+		})
+	}
+
+
+	//产品类请求(产品)
+	function getProduceList(limit = 5, byId, searchName, search) {
+		var url = '/api/BusinessManage/ProductListQuery';
+		var pages = 0;
+		if (search && searchName) {
+			pages = searchProductIndex;
+		} else {
+			pages = index2;
+		}
+		var data = {
+			Page: pages,
+			Limit: limit || 5,
+			Name: searchName ? searchName : ''
+		}
+		console.log(data)
+		return request.post(url, data).then(function(res) {
+			console.log('产品列表', res)
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				if (res.data.length == 0 && pages == 1) {
+					var NoDataHtml = '<div class="detail_info detail_info_no_data bid_no_data">' +
+						'<img src="../../img/no_data.png" ><p>还未有数据！</p></div>';
+					$(byId).find('ul').css('display', 'none');
+					$(byId).find('.project_list_box').append(NoDataHtml);
+				} else {
+					var html = '';
+					for (var i = 0; i < res.data.length; i++) {
+						var data = res.data[i];
+						html += '<li this_id=' + data.Id + '><h4>' + common.getNotNullData(data.Name) + '</h4>' +
+							'<p>产品类型：<span>' + common.getNotNullData(data.Type) + '</span></p>' +
+							'<p>单价（元）：<span>' + (Number(data.Price).toFixed(2) || 0.00) + '</span></p><p>产品备注：<span>' + common.getNotNullData(data.Note) +
+							'</span></p>' +
+							'<p>历史订单数量：<span>' + (data.Orders ? data.Orders : 0) + '</span></p>' +
+							'<p>创建时间：<span>' + common.getNotNullData(data.CreateTime) + '</span></p></li>';
+					}
+					$(byId).find('.bid_no_data').css('display', 'none');
+					if (search && searchName) {
+						if (searchProductIndex == 1) {
+							$(byId).find('ul').html(html);
+						} else {
+							$(byId).find('ul').append(html);
+						}
+					} else {
+						if (index2 == 1) {
+							$(byId).find('ul').html(html);
+						} else {
+							$(byId).find('ul').append(html);
+						}
+					}
+					$(byId).find('ul').css('display', 'block');
+					mui.toast('加载完成');
+				}
+
+			}
+		})
+	}
+	//产品类请求(订单)
+	function getOrderList(limit = 5, searchName, search) {
+		var url = '/api/BusinessManage/GetOrders';
+		var postData = {
+			Page: (search && searchName) ? searchProductIndex : index2,
+			Limit: limit || 5,
+			Name: searchName ? searchName : ''
+		}
+		console.log(postData)
+		return request.post(url, postData).then(function(res) {
+			console.log('订单', res)
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				var byId = '#index5';
+				if (res.data.length == 0 && index2 == 1) {
+					var NoDataHtml = '<div class="detail_info detail_info_no_data bid_no_data">' +
+						'<img src="../../img/no_data.png" ><p>还未有数据！</p></div>';
+					$(byId).find('ul').css('display', 'none');
+					$(byId).find('.project_list_box').append(NoDataHtml);
+				} else {
+					var html = '';
+					for (var i = 0; i < res.data.length; i++) {
+						var data = res.data[i];
+						html += '<li orderid=' + data.Id + '><p class="order_title"><span class="this_name">' + data.InvoiceTitle +
+							'</span><span class="this_price">￥' + (data.TotalPrices ? Number(data.TotalPrices).toFixed(2) : 0.00) +
+							// '</span>('+ data.ProductCount +'件产品)<span class="this_time">'+ data.ASingleTime +'</span></p>'+
+							'元</span>(' + data.ProductCount + '件产品)</p>' +
+							'<p>订单编号：<span>' + (data.OrderNumber ? data.OrderNumber : '无') + '</span></p>' +
+							'<p>发票抬头：<span>' + data.InvoiceTitle + '</span></p>' +
+							'<p>纳税人识别号：<span>' + data.TINumber + '</span></p>' +
+							'<p>负责人：<span>' + data.RealName + '</span></p></li>';
+					}
+					$(byId).find('.bid_no_data').css('display', 'none');
+					if (search && searchName) {
+						if (searchProductIndex == 1) {
+							$(byId).find('ul').html(html);
+						} else {
+							$(byId).find('ul').append(html);
+						}
+					} else {
+						if (index2 == 1) {
+							$(byId).find('ul').html(html);
+						} else {
+							$(byId).find('ul').append(html);
+						}
+					}
+
+					$(byId).find('ul').css('display', 'block');
+					mui.toast('加载完成');
+				}
+			}
+		})
+	}
+
+
+	//回到顶部
+	var arr = new Array();
+	arr.forEach.call((document.querySelectorAll(".mui-control-item")), function(item) {
+		item.addEventListener('tap', function() {
+			index1 = 1;
+			index2 = 1;
+			searchIndex = 1;
+			searchProductIndex = 1;
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 500);
+		})
+	});
+
+	//跳转详情
+	mui('#scroll1').on('tap', '.process_tab li', function() {
+		localStorage.setItem('scrollObj', JSON.stringify({
+			page: index1,
+			scroll: scroll.y
+		}))
+		if (getModuleName('ManagementDetail')) {
+			window.location.href = './detail_1.html?id=' + $(this).attr('id');
+		} else {
+			mui.toast('没有权限！');
+		}
+
+	});
+	//添加订单
+	mui('#index2').on('tap', '.to_order', function() {
+		var id = $(this).parents('li').attr('this_id')
+		window.location.href = './add_order.html?id=' + id;
+	})
+
+
+	//新建项目
+	mui('.header_box').on('tap', '.add_new_project', function() {
+		if (thisItem == 1) {
+			window.location.href = './new_project.html';
+		} else {
+			if (thisProductItem == 2) {
+				window.location.href = './add_customer.html';
+			}
+			if (thisProductItem == 4) {
+				window.location.href = './add_product.html';
+			}
+		}
+
+	});
+</script>

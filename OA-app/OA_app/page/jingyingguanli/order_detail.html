@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<style type="text/css">
+			.choose_other,.express_info {
+				display: none;
+			}
+			.company_info .order_checkbox {
+				width: 20px;
+				/* height: 20px; */
+				margin-right: 20px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">订单详情</h1>
+		</header>
+		<div class="mui-content order">
+			<div class="company_info">
+				<p><span class="class_name">企业名称</span><input type="text" disabled name="" id="" placeholder="" class="company_name"/></p>
+				<p><span class="class_name">联系人姓名</span><input type="text" name="" disabled id="" placeholder="" class="user_name"/></p>
+				<p><span class="class_name">联系方式</span><input type="text" name="" disabled id="" placeholder="" class="user_phone"/></p>
+				<p><span class="class_name">发票抬头</span><input type="text" name="" disabled id="" placeholder="" class="company_id"/></p>
+				<p><span class="class_name">纳税人识别号</span><input type="text" name="" disabled id="" placeholder="" class="company_idn"/></p>
+				<p><span class="class_name">开票信息</span><input type="file" name="" id="add_file" value="" multiple/><label for="add_file" class="add_file_btn" style="display: none;">添加</label></p>
+				<ul class="file_tendering_list">
+					
+				</ul>
+				<p><label class="class_name">是否需要快递</label><input type="checkbox" class="order_checkbox" onchange="changeExpress(this)" disabled/></p>
+				<p class="express_info"><span class="class_name">快递信息</span><input type="text" placeholder="" class="express_text" disabled/></p>
+				<p><span class="class_name">备注</span><input type="text" name="" id="" disabled placeholder="" class="company_remark"/></p>
+				<div class="order_list">
+					<div class="list_item">
+						<h5>产品订单</h5>
+						<p><span class="class_name">产品名称</span><input type="text" name="" disabled id="" placeholder="" class="product_name"/></p>
+						<p class=""><span class="class_name">产品类型</span><input type="text" disabled name="" id="" value="" class="product_type"/></p>
+						<p class=""><span class="class_name">价格</span><input type="text" disabled name="" id="" value="" class="product_price"/></p>
+						<p><span class="class_name">订单数量</span><input type="text" name="" disabled id="" placeholder="" class="count"/></p>
+						<p class=""><span class="class_name">总价</span><input type="text" disabled name="" id="" value="" class="all_count"/></p>
+						<p><span class="class_name">订单性质</span><input type="text" name="" disabled id="" placeholder="" class="nature"/></p>
+						<p class="choose_other"><span class="class_name">其他</span><input type="text" name="" id="" placeholder="" class="order_type_text"/></p>
+						<p class="choose"><span class="class_name">赠品名称</span><input type="text" name="" id="" placeholder="" class="give_name"/></p>
+						<p class=""><span class="class_name">赠品数量</span><input type="number" name="" id="" placeholder="0" class="give_number"/></p>
+						<p><span class="class_name">备注</span><input type="text" name="" disabled id="" placeholder="" class="remark"/></p>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	mui.init();
+	var orderNature = [];
+	var id = common.getQueryUrl('id');
+	
+	mui.showLoading('加载中...');
+	common.promise().then(function() {
+		return getOrderNature();
+	}).then(function() {
+		return getDetail();
+	}).then(function() {
+		mui.hideLoading();
+	})
+	.catch(function(err) {
+		mui.hideLoading();
+		mui.alert('加载错误！' + err.responseText);
+	})
+	
+	function getDetail() {
+		var url = '/api/BusinessManage/PlaceAnOrderDetails';
+		return request.post(url,{id: id}).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				$('.company_name').val(res.data.CompanyName);
+				var userInfo = res.data.mdoel;
+				$('.user_name').val(userInfo.Name);
+				$('.user_phone').val(userInfo.Phone);
+				var info = res.data.PlaceAnOrder;
+				$('.company_id').val(info.InvoiceTitle);
+				$('.company_idn').val(info.TINumber);
+				$('.company_remark').val(info.Remark);
+				if(info.isExpressage) {
+					$('.order_checkbox').prop('checked',true);
+					$('.express_info').show();
+					$('.express_text').val(info.ExpressInboxMessages);
+				}
+				var list = res.data.PlaceAnOrder_Product;
+				var length = list.length;
+				for(var i=0;i<length;i++) {
+					if(i>=1) {
+						var element = $('.order_list .list_item').eq(0).clone();
+						$('.order_list').append(element);
+					}
+					var item = $('.order_list .list_item').eq(i);
+					$(item).find('.product_name').val(list[i].ProductName);
+					$(item).find('.product_type').val(list[i].Type);
+					$(item).find('.product_price').val(list[i].Price);
+					$(item).find('.count').val(list[i].Quantity);
+					$(item).find('.all_count').val(list[i].TotalPrices);
+					$(item).find('.nature').val(common.getKeyValue(orderNature,list[i].ProductState));
+					$(item).find('.remark').val(list[i].Remark);
+					if(common.getKeyValue(orderNature,list[i].ProductState) == '其他') {
+						$('.choose_other').show();
+						$(item).find('.order_type_text').val(list[i].ProductStateText);
+					}
+					$(item).find('.give_name').val(list[i].ComplimentaryName);
+					$(item).find('.give_number').val(list[i].ComplimentarySum);
+				}
+				var names = '';
+				var filearr = [];
+				for(var i=0;i<res.data.LstFile.length;i++) {
+					var lists = res.data.LstFile[i];
+					lists.Type = '资格预审--资格预审文件审批';
+					var data = {
+						"FileName": lists.Name,
+						"Extension": lists.FileFormat,
+						"FilePath": lists.FilePath,
+						"Type": lists.Type,
+						"Id": lists.Id
+					}
+					filearr.push(data);
+					var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+					var deStr = '';
+					
+					names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.Name + doc +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+					
+				}
+				fileList = filearr;
+				$('.file_tendering_list').html(names); 
+			}
+			return res;
+		})
+	}
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		preview(this,fileList)
+	})
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	
+	//获取订单性质
+	function getOrderNature() {
+		var url = '/api/BusinessManage/RemarkTypeConfigSelect';
+		return request.post(url).then(function(res) {
+			console.log('订单性质',res);
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					}
+					orderNature.push(obj);
+				}
+			}
+			return res;
+		})
+	}
+	
+</script>
+
+
+

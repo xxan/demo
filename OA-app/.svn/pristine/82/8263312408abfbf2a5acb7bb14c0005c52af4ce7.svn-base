@@ -1,0 +1,264 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/konw.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig:{
+				   tap: true, //默认为true
+				   doubletap: true, //默认为false
+				   longtap: true, //默认为false
+				   swipe: true, //默认为true
+				   drag: true, //默认为true
+				   hold:false,//默认为false，不监听
+				   release:false//默认为false，不监听
+				  }
+			})
+		</script>
+		<style type="text/css">
+			#pullrefresh{
+				top: 44px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title"></h1>
+		</header>
+		
+		<div class="mui-content">
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<p class="up_fress data-loading-icon">
+					<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+				</p>
+				<div class="mui-scroll">
+					<ul class="list_box">
+						<!-- <li>
+							<div class="list_info">
+								<div class="img_box">
+									<img src="../../img/file_know.png" >
+								</div>
+								<div class="text_box">
+									<p>绩效考核办法</p>
+									<p>张三 &nbsp; 2020-02-02 <span>17.10 MB</span></p>
+								</div>
+							</div>
+							<div class="list_btn">
+								<span class="list_btn_edit"><img src="../../img/know_edit.png" ></span><span class="list_btn_del"><img src="../../img/know_del.png" ></span>
+							</div>
+						</li> -->
+					</ul>
+					<div class="detail_info detail_info_no_data bid_no_data">
+						<img src="../../img/no_data.png" >
+						<p>还未有数据！</p>
+					</div>
+				</div>
+			</div>
+			<p class="down_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+			</p>
+			
+		</div>
+	</body>
+
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	var id = common.getQueryUrl('id');
+	var name = common.getQueryUrl('name');
+	var page = 1;
+	
+	$('.mui-title').html(name)
+	clickInit();
+	
+	common.promise().then(function() {
+		mui.showLoading('加载中...');
+		return;
+	}).then(function() {
+		return getList();
+	}).then(function() {
+		mui.hideLoading();
+	})
+	
+	function clickInit() {
+		//左滑
+		mui('.list_box').on('swipeleft', 'li', function() {
+			$(this).find('.list_info').animate({left: '-120px'},500).find('span').css('textAlign','center');
+			$(this).siblings().find('.list_info').animate({left: '0px'},500).find('span').css('textAlign','left');
+		});
+		//右滑
+		mui('.list_box').on('swiperight', 'li', function() {
+			$(this).find('.list_info').animate({left: '0px'},500).find('span').css('textAlign','left');
+		});
+		
+		//查看
+		mui('.list_box').on('tap', 'li', function(e) {
+			var isBox = $(this).attr('is_file_box');
+			var path = $(this).attr('path');
+			var this_id = $(this).attr('id');
+			var this_name = $(this).find('.this_name').html();
+			if($(e.target).hasClass('list_btn_del') || $(e.target).parent().hasClass('list_btn_del')) {
+				return;
+			}
+			if(isBox == 0) {
+				mui.showLoading('加载中...');
+				console.log(baseUrl + path)
+				openFile(baseUrl + path)
+			}else {
+				window.location.href = 'share_file_class.html?id=' + id + '&name=' + name + '&this_id=' + this_id;
+			}
+		});
+		
+		//列表点击修改
+		mui('.list_box').on('tap','.list_btn_edit',function() {
+			var editId = $(this).parents('li').attr('id');
+			window.location.href = 'add_file.html?edit=true&id='+ editId;
+		})
+		//列表删除
+		mui('.list_box').on('tap','.list_btn_del',function() {
+			var id = $(this).parents('li').attr('id');
+			var url = '/api/DataManage/DelDocument';
+			var _this = this;
+			request.post(url,{ids: [id]}).then(function(res) {
+				console.log(res);
+				if(res.code == 200) {
+					$(_this).parents('li').remove();
+				}else {
+					mui.toast('删除失败！');
+				}
+			})
+		})
+	}
+	
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios?0.003:0.0009
+	});
+	var isfresh = false;
+	document.querySelector('#pullrefresh').addEventListener('scroll', function(e) {
+		if(isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('display', 'block');
+				$('#search_input').val('');
+				page = 1;
+				getList().then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('display', 'none');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -80) {
+			var liLength = $('.revene_all li').length;
+			if (liLength % 20 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt( liLength / 20) + 1;
+			getList(true).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+	
+	function getList(flag) {
+		var postData = {
+			Page: page,
+			Limit: 20,
+			Type: id
+		};
+		
+		var url = '/api/DataManage/GetDocumentList';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var isFileBox = 0;
+					var path = '';
+					var item = res.data[i];
+					var src = '../../img/file_know.png';
+					if(item.lstFile.length > 1) {
+						src = '../../img/FILE.png';
+						isFileBox = 1;
+					}
+					if(item.lstFile.length == 1) {
+						item.lstFile[0].FileFormat.toLowerCase();
+						if(item.lstFile[0].FileFormat.indexOf('.doc') != -1) {
+							src = '../../img/WORD.png'
+						}else if(item.lstFile[0].FileFormat.indexOf('.xlsx') != -1) {
+							src = '../../img/Excel(1).png'
+						}else if(item.lstFile[0].FileFormat.indexOf('.pdf') != -1) {
+							src = '../../img/pdf.png'
+						}else if(item.lstFile[0].FileFormat.indexOf('.ppt') != -1) {
+							src = '../../img/PPT.png'
+						}else if(item.lstFile[0].FileFormat.indexOf('.txt') != -1) {
+							src = '../../img/txt.png'
+						}else if(item.lstFile[0].FileFormat.indexOf('.zip') != -1) {
+							src = '../../img/ZIP.png'
+						}else {
+							src = '../../img/IMG.png'
+						}
+						path = item.lstFile[0].FilePath;
+					}
+					html += '<li id='+ item.Id +' path="'+ path +'" is_file_box='+ isFileBox +
+									'><div class="list_info">'+
+									'<div class="img_box"><img src='+ src +' ></div>'+
+									'<div class="text_box"><p class="this_name">'+ item.Name +'</p>'+
+									'<p>'+ item.UserName +' &nbsp; '+ item.CreateTime +'</p></div>'+
+									'</div><div class="list_btn"><span class="list_btn_edit">'+
+									'</span><span class="list_btn_del">'+
+									'</span></div></li>';
+				}
+				if(flag) {
+					$('.list_box').append(html);
+				}else {
+					$('.list_box').html(html);
+				}
+				
+				if($('.list_box li').length == 0) {
+					$('.bid_no_data').show();
+				}
+			}
+		})
+	}
+
+	
+</script>

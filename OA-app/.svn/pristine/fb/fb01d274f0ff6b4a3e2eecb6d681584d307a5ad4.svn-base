@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+				<link rel="stylesheet" type="text/css" href="../../css/jygl_chengguowenjian.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		
+		<style type="text/css">
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 75%;height: 100%;
+			}
+			.file_this_name {
+				color: #3B9CFF !important;
+			}
+		</style>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">成果文件签收</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>签收时间</h5>
+			<div class="task_time">
+				<p class="checktime"><a class="sign_time">请选择</a><span></span></p>
+			</div>
+			<h5>签收单</h5>
+			<div class="plan_time file_upload">
+				<span class="file_this_name"></span>
+				<input type="file" name="" id="add_file_tendering"/><label for="add_file_tendering" class="btn_add">添加</label>
+			</div>
+			<h5>备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="remark" placeholder="请填写"></textarea>
+			</div>
+			
+			<div class="content_bottom">
+				
+			</div>
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	mui.init();
+	
+	var name = common.getQueryUrl('projectName');
+	var projectId = common.getQueryUrl('projectId');
+	var id = common.getQueryUrl('id');
+	$('.point_title').html(name);
+	var fileData = {};
+	
+	if(id) {
+		getDetail()
+	}
+	
+	function getDetail() {
+		var url = '/api/CostConsult/FillOutcomeSign';
+		return request.post(url,{ID: id}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				$('.sign_time').html(res.model.pomodel);
+				$('.remark').val(res.model.Remarks);
+				$("#add_file_tendering").prev('span').html(res.model.FileName)
+				$("#add_file_tendering").prev('span').attr('path',res.model.FilePath);
+				fileData.FilePath = res.model.FilePath;
+				fileData.FileName = res.model.FileName.split('.')[0];
+				fileData.Extension = res.model.FileName.split('.')[1];
+			}
+		})
+	}
+	
+	//点击文件上传按钮
+	$("#add_file_tendering").on('change', function(e) {
+		console.log($(this)[0].files[0].name)
+		$(this).prev('span').html($(this)[0].files[0].name)
+		var formData = new FormData();
+		formData.append("file", $(this)[0].files[0]);
+		var _this = this;
+		upload(formData).then(function(res) {
+			fileData = res;
+			fileData.tid = $(_this)[0].files[0].lastModified;
+			$(_this).prev('span').attr('item',$(_this)[0].files[0].lastModified)
+		})
+	});
+	
+	
+	//预览
+	mui('.file_upload').on('tap','.file_this_name',function() {
+		preview(this,fileData)
+	})
+	function preview(self,fileData) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+				if(item == fileData.tid) {
+					openFile(baseUrl + fileData.FilePath)
+				}
+		}
+	}
+	
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=OutcomeSign';
+		return request.upload(url, formData).then(function(res) {
+			if(res.code == 200) {
+				return res.data;
+			}else {
+				mui.toast('文件上传失败!');
+				return;
+			}
+		})
+	}
+	
+	function submit() {
+		if (!fileData.FilePath) {
+			mui.toast('请上传文件！');
+			return;
+		}
+		var postData = {};
+		postData.ProjectId = projectId;
+		var time = $('.sign_time').html();
+		postData.SignTime = time.indexOf('请选择') != -1 ? '' : time;
+		postData.Remarks = $('.remark').val() || '';
+		if(id) {
+			postData.OutcomeID = id;
+		}
+		common.promise().then(function() {
+			var path = fileData.FilePath;
+			postData.FilePath = path;
+			postData.FileName = fileData.FileName + fileData.Extension;
+			var url = '/api/CostConsult/SaveOutcomeSign';
+			console.log(postData)
+			return request.post(url,postData).then(function(res) {
+				console.log(res);
+				if(res.code == 200) {
+					mui.back()
+				}else{
+					mui.toast(res.msg);
+				}
+			})
+		})
+	}
+	
+	mui('.footer_submit_one').on('tap','.btn_save',function() {
+		submit();
+	});
+	
+
+	(function(mui) {
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+	})(mui);
+
+</script>
+
+
+

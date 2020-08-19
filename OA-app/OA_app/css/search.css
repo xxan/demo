@@ -1,0 +1,154 @@
+.framework_search input {
+	width: 90%;
+	float: left;
+	padding: 0;
+	margin-bottom: 0;
+	height: 38px;
+}
+
+.mui-search .mui-placeholder {
+	width: 100%;
+	line-height: 60px;
+}
+
+.mui-icon.mui-icon-search {
+	position: absolute;
+	right: 8%;
+	top: 15px;
+	font-size: 30px !important;
+}
+
+.framework_search button {
+	width: 20%;
+	float: right;
+	border: none;
+	background: #3B9CFF;
+	color: white;
+	border-radius: 10px;
+	height: 37px;
+}
+
+.search_choose {
+	height: 50px;
+}
+
+.search_choose div {
+	width: 49%;
+	height: 50px;
+	line-height: 50px;
+	float: left;
+	clear: none;
+	text-align: center;
+}
+
+.mui-radio input[type='radio']:before,
+.mui-checkbox input[type='checkbox']:before {
+	margin-top: 15px;
+	position: relative;
+	top: 8px;
+}
+
+#pullrefresh {
+	top: 114px;
+}
+
+.mui-bar-nav~.mui-content .mui-pull-top-pocket {
+	top: 10px !important;
+}
+.mui-scroll {
+	background: white;
+}
+
+.list_title {
+	height: 40px;
+	padding: 9px 0px;
+	margin: 0;
+	border-top: solid 1px #D1D1D1;
+	border-bottom: solid 1px #D1D1D1;
+}
+.list_title li {
+	float: left;
+	height: 20px;
+	line-height: 20px;
+	width: 17%;
+	text-align: center;
+	border-right: solid 1px #E6E6E6;
+	color: #666666;
+}
+
+.list_title li:nth-child(3),
+.day_lists li>div:nth-child(3){
+	width: 32%;
+}
+.day_lists li {
+	padding: 15px 0px !important;
+}
+
+.day_lists li:nth-child(even) {
+	background: #E6E6E6;
+}
+
+
+.day_lists li>div {
+	float: left;
+	width: 17%;
+	text-align: center;
+	font-size: 14px;
+	height: 100%;
+	min-height: 20px;
+}
+
+.day_lists li>div.time {
+	height: 50%;
+}
+
+.day_lists li>div.line{
+	vertical-align: middle;
+	height: 100%;
+}
+
+.day_lists li>div.time span {
+	height: 20px;
+	line-height: 20px;
+	width: 100%;
+	display: inline-block;
+}
+
+.day_lists li>div.content {
+	overflow: hidden;
+	white-space: normal;
+	word-break:break-all;
+	word-wrap:break-word;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	padding: 0 5px;
+	text-align: left;
+}
+
+.day_lists li>div.operation span {
+	width: 70%;
+	height: 25px;
+	line-height: 25px;
+	display: inline-block;
+	background: #3B9CFF;
+	color: white;
+	border-radius: 16px;
+}
+.day_lists .detail_info_no_data {
+	text-align: center;
+}
+.day_lists .detail_info_no_data > img {
+	width: 100px;
+	height: 50%;
+	margin-top: 10%;
+}
+.day_lists .detail_info_no_data > p {
+	padding: 0;
+	color: #999999;
+}
+
+.search_box {
+	height: 60px;
+}

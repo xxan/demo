@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/genzongjilu.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/Finance.css"/>
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+		
+		<style type="text/css">
+			.file_list_class {
+				padding-left: 10%;
+				font-size: 12px;
+			}
+			
+			.file_list_class .text_name {
+				font-family: "MicrosoftYaHei-Bold";
+				color: #000000;
+				display: inline-block;
+				width: 18%;
+				vertical-align: top;
+			}
+			.file_list_class .file_name {
+				display: inline-block;
+				width: 82%;
+				color: #3B9CFF;
+				word-wrap:break-word;
+				padding-right: 10px;
+			}
+			.income_top {
+				
+			}
+			.income_top_part1 {
+				height: auto;
+				min-height: 90px;
+				line-height: 30px;
+				text-indent: 0;
+				/* padding: 10px 0px; */
+				background: none;
+			}
+			.income_top_part1 h5 {
+				background: url(../../../img/income_top_bg.png) no-repeat;
+				background-size: 100% 100%;
+				font-size: 16px;
+				font-weight: bold;
+				color: #fff;
+				margin: 0;
+				line-height: 24px;
+				padding: 20px 10px 60px;
+			}
+			
+			.income_top_part2 {
+				margin-top: -33px;
+				margin-bottom: 15px;
+			}
+			
+			.income_top_part2 li p {
+				margin-top: 3px;
+				margin-bottom: 0;
+				height: 24px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">收入管理</h1>
+			<img src="../../../img/add.png" class="mui-nav-more">
+		</header>
+		<div class="mui-nav-more_nr_t">
+			<div class="mui-nav-more_nr">
+				<img src="../../../img/tjsk_img.png"><span>添加收款</span>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="income_top">
+				<div class="income_top_part1">
+					<h5>海淀区亮甲店保障房智慧工地项目亮甲店保障房智慧工地项目亮甲店保障房智慧工地项目亮甲店保障房智慧工地项目亮甲店保障房智慧工地项目亮甲店保障房智慧工地项目亮甲店保障房智慧工地项目</h5>
+					<ul class="income_top_part2">
+						<li>
+							<p><span class="count_all">100.00</span>元</p><span>合同金额</span>
+						</li>
+						<li>
+							<p><span class="count_get">100.00</span>元</p><span>累计收款</span>
+						</li>
+						<li>
+							<p><span class="count_surplus">100.00</span>元</p><span>尚欠款</span>
+						</li>
+					</ul>
+				</div>
+				
+			</div>
+			<div class="project_detail_list project_task_point">
+				<div class="record_list">
+					<ul class="recive_list">
+						<li>
+							<div class="record_list_left">
+								<span class="time_year">2016</span>
+								<p>10-30 <span></span></p>
+							</div>
+							<div class="record_list_right">
+								<span></span>
+								<div class="record_list_right_box">
+									<div class="detail_info">
+										<p>拜访人员：<span>项目管理</span></p>
+										<p>联系电话：<span>123123123</span></p>
+										<p>拜访目的：<span>系统开发</span></p>
+										<p>拜访结果：<span>按时完成开发</span></p>
+										<p>记录状态：<span>技术开发合同</span></p>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		
+		</div>
+
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	mui.init({
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: true, //默认为false，不监听
+					release: false //默认为false，不监听
+				},
+			});
+	var id = common.getQueryUrl('id');
+	var name = common.getQueryUrl('name');
+	$('.income_top_part1 h5').html(name);
+	common.promise().then(getDetail)
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/GetCCInComeHistory';
+		var postData = {
+			Page: 1,
+			Limit: 1000,
+			ProjectCId: id
+		}
+		return request.post(url,postData).then(function(res) {
+			console.log('详情：',res)
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				$('.count_all').html(res.data.top.Price ? res.data.top.Price : '0.00');
+				$('.count_get').html(res.data.top.Amount ? res.data.top.Amount : '0.00');
+				$('.count_surplus').html(res.data.top.Diff ? res.data.top.Diff : '0.00');
+				var list = res.data.data;
+				if(list.length == 0) {
+					html = '<li class="list_no_data"><div class="detail_info detail_info_no_data result_bid">'+
+					'<img src="../../../img/no_data.png"><p>没有信息</p></div></li>';
+				}else {
+					var year = '';
+					for(var i=0;i<list.length;i++) {
+						var str = '';
+						for(var j=0;j<list[i].lstFile.length;j++) {
+							var file = list[i].lstFile[j];
+							str += '<div class="file_list_class"><span class="text_name">附件：</span><span class="file_name" path='+ file.FilePath +'>'+ file.Name+ file.FileFormat +'</span></div>'
+						}
+						console.log(str)
+						var this_year = list[i].CreatedTime;
+						if(year != this_year.split('-')[0]) {
+							year = this_year.split('-')[0];
+							html += '<li thisid='+ list[i].ID +'><div class="record_list_left">'+
+											'<span class="time_year">'+ year +'</span><p>'+ this_year.split('-')[1] + '-' + 
+											this_year.split('-')[2]+'<span></span></p>'+
+											'</div><div class="record_list_right"><span></span>'+
+											'<div class="record_list_right_box"><div class="detail_info">'+
+											'<p>收款金额：<span>'+ (list[i].Amount ? list[i].Amount : '0.00') +'元</span></p>'+
+											'<p>是否最后一次收款：<span>'+ list[i].IsLast +'</span></p>'+
+											'<p>备注：<span>'+ list[i].Remark +'</span></p>'+
+											// '<p>附件：<span></span></p>'+
+											str +
+											'</div></div></div></li>'
+						}else {
+							html += '<li thisid='+ list[i].ID +'><div class="record_list_left">'+
+											'<p>'+ this_year.split('-')[1] + '-' + 
+											this_year.split('-')[2]+'<span></span></p>'+
+											'</div><div class="record_list_right">'+
+											'<div class="record_list_right_box"><div class="detail_info">'+
+											'<p>收款金额：<span>'+ (list[i].Amount ? list[i].Amount : '0.00') +'元</span></p>'+
+											'<p>是否最后一次收款：<span>'+ list[i].IsLast +'</span></p>'+
+											'<p>备注：<span>'+ list[i].Remark +'</span></p>'+
+											// '<p>附件：<span></span></p>'+
+											str+
+											'</div></div></div></li>'
+						}
+					}
+					
+					
+				}
+				$('.recive_list').html(html);
+			}
+		})
+	}
+	
+	mui('.recive_list').on('tap','li',function(e) {
+		if($(e.target).hasClass('delete_record')||$(e.target).hasClass('file_name')) {
+			return;
+		}
+		if($('#middlePopover').css('display') == 'block') {
+			$('#middlePopover').hide();
+			return;
+		}
+		var this_id = $(this).attr('thisid');
+		var isCreate = true;
+		if(getModuleName('FinanceCostCInCome')) {
+			if(operationArr.length > 0) {
+				for(var i=0;i<operationArr.length;i++) {
+					if(operationArr[i].KeyCode == 'Update') {
+						if(!operationArr[i].IsValid) {
+							isCreate = false;
+						}
+					}
+				}
+			}
+		}
+		if(isCreate) {
+			window.location.href = 'add_receipts.html?check=true&id=' + this_id + '&name=' + name +'&projectId=' + id;
+		}else {
+			mui.toast('没有权限！');
+		}
+		
+	})
+	
+	mui('.recive_list').on('tap','.file_name',function() {
+		var path = $(this).attr('path');
+		mui.showLoading('加载中...');
+		console.log(baseUrl + path)
+		openFile(baseUrl + path);
+	})
+	
+	//长按删除
+	mui('.recive_list').on('longtap', 'li', function(e) {
+		$('.recive_list').find('#middlePopover').remove();
+		$(this).append(
+			'<div id="middlePopover" class="mui-popover"><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined delete_record">删除</button></div>'
+		);
+		$('#middlePopover').show()
+	})
+	
+	mui('.record_list').on('tap','.delete_record',function() {
+		var this_id = $(this).parents('li').attr('thisid');
+		var url = '/api/Finance/DeleteReceivable';
+		var _this = this;
+		var isCreate = true;
+		if(getModuleName('FinanceCostCInCome')) {
+			if(operationArr.length > 0) {
+				for(var i=0;i<operationArr.length;i++) {
+					if(operationArr[i].KeyCode == 'Delete') {
+						if(!operationArr[i].IsValid) {
+							isCreate = false;
+						}
+					}
+				}
+			}
+		}
+		if(!isCreate) {
+			mui.toast('没有权限！');
+		}
+		request.post(url,{Ids: this_id}).then(function(res) {
+			console.log(res);
+			if(res.code == 200){
+				$(_this).parents('li').remove();
+				mui.toast('删除成功！');
+			}else {
+				mui.toast('删除失败！');
+			}
+		})
+	})
+	
+	mui('html').on('tap', 'body', function() {
+		$('#middlePopover').hide()
+	})
+	
+
+	
+	
+	//点击添加收款
+	mui('.mui-nav-more_nr_t').on('tap','.mui-nav-more_nr',function() {
+		var isCreate = true;
+		if(getModuleName('FinanceCostCInCome')) {
+			if(operationArr.length > 0) {
+				for(var i=0;i<operationArr.length;i++) {
+					if(operationArr[i].KeyCode == 'Create') {
+						if(!operationArr[i].IsValid) {
+							isCreate = false;
+						}
+					}
+				}
+			}
+		}
+		if(isCreate) {
+			window.location.href = './add_receipts.html?projectId=' + id + '&name=' + name ;
+		}else {
+			mui.toast('没有权限！');
+		}
+	})
+	
+	//点击头部更多
+	mui('.header_box').on('tap','.mui-nav-more',function() {
+		$('.mui-nav-more_nr_t').show();
+	})
+	
+	mui('.mui-nav-more_nr_t')[0].addEventListener('tap',function() {
+		$('.mui-nav-more_nr_t').hide();
+	})
+
+</script>
+
+
+

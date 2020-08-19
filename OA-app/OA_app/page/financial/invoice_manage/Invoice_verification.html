@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css"/>
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js">
+
+		</script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">发票开立确认</h1>
+		</header>
+		<div class="mui-content">
+			
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>发票代码</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="in_code" oninput="getNumber(this)" onpropertychange="getNumber(this)"/></p>
+			</div>
+			<h5>发票号码</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="in_number" oninput="getNumber(this)" onpropertychange="getNumber(this)"/></p>
+			</div>
+			
+			<div class="content_bottom">
+				
+			</div>
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	var name = common.getQueryUrl('name');
+
+	console.log(name)
+
+	$('.point_title').html(name);
+
+	getDetail();
+	function submit() {
+		var postData = {};
+		if(!$('.in_code').val() || !$('.in_number').val()) {
+			mui.toast('请输入完整信息！');
+			return;
+		}
+		postData.Id = id;
+		postData.InvoiceCode  = $('.in_code').val();
+		postData.InvoiceNumber = $('.in_number').val();
+		
+		var url = '/api/Finance/SaveInvoiceApplysCheck';
+		
+		request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.toast('提交成功！');
+				mui.back();
+			}else {
+				mui.toast(res.msg);
+			}
+		})
+	}
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/InvoiceApplysDetail';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				if(res.data.InvoiceCode) {
+					$('.in_code').val(res.data.InvoiceCode)
+				};
+				if(res.data.InvoiceNumber) {
+					$('.in_number').val(res.data.InvoiceNumber)
+				}
+			}
+		})
+	}
+	
+	
+	mui('.footer_submit_one').on('tap','.btn_save',function() {
+		submit();
+	});
+	
+</script>
+
+
+

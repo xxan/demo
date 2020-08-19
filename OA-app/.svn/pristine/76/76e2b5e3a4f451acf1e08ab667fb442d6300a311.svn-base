@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/jiedian.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: true, //默认为false，不监听
+					release: false //默认为false，不监听
+				},
+			})
+		</script>
+		<style type="text/css">
+			.point_detail p span {
+				font-size: 12px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">进度计划</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<div class="point_detail">
+				<p>任务名称：<span>系统开发</span></p>
+				<p>任务类型：<span>系统开发</span></p>
+				<p>接收人员：<span>10工时</span></p>
+				<p>计划时间：<span>2019-09-05 09:00 至 2019-09-06 09:00</span></p>
+				<p>计划工时：<span>10工时</span></p>
+			</div>
+			
+			<div class="project_daily">
+				<p>
+					<img src="../../img/daily.png" >
+					项目日报
+					<span class="add_point">添加</span>
+				</p>
+				<ul>
+					<li class="list_no_data">
+						<div class="detail_info detail_info_no_data result_bid">
+							<img src="../../img/no_data.png">
+							<p>没有信息</p>
+						</div>
+					</li>
+				</ul>
+				
+			</div>
+		</div>
+	</body>
+
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	var projectId = common.getQueryUrl('id');
+	var projectName = common.getQueryUrl('name');
+	var taskId = common.getQueryUrl('taskid');
+	var pageIndex = 1;
+	var peoples = [];
+	var taskName = '';
+	
+	$('.point_title').html(projectName);
+	
+	//获取详情
+	function getTaskDetail() {
+		var url = '/api/CostConsult/AddOrUpdateTrackingRecord';
+		return request.post(url,{ID: taskId}).then(function(res) {
+			return res;
+		})
+	}
+	function detailCollation(res) {
+		if(res.code == 200) {
+			var data = res.data;
+			taskName = data.Name;
+			var html = '<p>任务名称：<span>'+ data.Name +'</span></p>'+
+								 '<p>任务类型：<span>'+ data.TaskType +'</span></p>' + 
+								 '<p>接收人员：<span>'+ data.ParticipantName +'</span></p>'+
+								 '<p>执行时间：<span>'+ data.StartTime +' 至 '+ data.EndTime +'</span></p>'+
+								 '<p>计划用时：<span>'+ data.UsingDays +'工时</span></p>';
+			$('.point_detail').html(html);
+		}
+	}
+	
+	//获取进度计划
+	function getPlanList() {
+		var url = '/api/CostConsult/TrackingRecordList';
+		var postData = {
+			page: pageIndex,
+			Limit: 10000,
+			Id: taskId
+		}
+		return request.post(url,postData)
+	}
+	
+	function PlanDetail(res) {
+		if(res.code == 200) {
+			common.arrObjTrimAndNull(res.data)
+			var html = '';
+			for(var i=0;i<res.data.length;i++) {
+				var item = res.data[i];
+				html += '<li Id='+ item.Id +'><div class="daily_date"><div>' + 
+								'<p>'+ item.CreateTime.split('-')[0] +'</p>'+
+								'<p>'+ item.CreateTime.split('-')[1] + '-' + item.CreateTime.split('-')[2] +'</p></div></div>'+
+								 '<div class="daily_info">'+
+								 // <p>'+ item.CreateUser +'，'+ item.CreateTime +'</p>'+
+								'<p>工作时间：<span>'+ item.WorkTime +'</span></p>'+
+								'<p>本日工时：<span>'+ item.UseDays +'</span></p>'+
+								'<p class="content_info_work">工作内容：<span>'+ item.WorkContent +'</span></p>'+
+								'<p>当日比例：<span>'+ item.Prop +'%</span></p>'+
+								'<p>累计比例：<span>'+ item.AddProp +'%</span></p>'+
+								'<p>成果文件：<a path='+ item.FilePath +' class="file_item">'+ item.FilePath.split('/')[item.FilePath.split('/').length - 1] +'</a></p></div></li>';
+			}
+			if(res.data.length > 0) {
+				$('.project_daily ul').html(html);
+			}
+			
+		}
+	}
+	
+	//添加日报
+	mui('.project_daily').on('tap','.add_point',function() {
+		window.location.href = 'daily.html?id=' + taskId + '&projectName='+ projectName+'&projectid=' + projectId;
+	})
+	
+	//文件预览
+	mui('.project_daily').on('tap','.file_item',function() {
+		var path = $(this).attr('path');
+		common.openFile(baseUrl+ path);
+	})
+	
+	
+	//长按删除
+	mui('.project_daily').on('longtap', 'li', function(e) {
+		$('.project_daily').find('#middlePopover').remove();
+		$(this).append(
+			'<div id="middlePopover" class="mui-popover"><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined delete_record">删除</button><span></span></div>'
+		);
+		$('#middlePopover').show()
+	})
+	
+	mui('html').on('tap', 'body', function() {
+		$('#middlePopover').hide()
+	})
+	
+	//删除日报
+	mui('.project_daily').on('tap', '.delete_record', function(e) {
+		e.stopPropagation();
+		var id = $(this).parents('li').attr('Id');
+		var deleteUrl = '/api/CostConsult/DeleteTrackingRecord';
+		var postdta = {
+			ids: id.split(',')
+		}
+		var _this = this;
+		
+		request.post(deleteUrl, postdta).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				mui.toast('删除成功！');
+				$(_this).parents('li').remove();
+			} else {
+				mui.toast('删除失败！')
+			}
+		})
+	})
+	
+	common.promise()
+	.then(getPeople)
+	.then(function(res) {
+		console.log('参与人员',res);
+		if(res.code == 200) {
+			peoples = res.data
+		}
+		return getTaskDetail();
+	})
+	.then(function(res) {
+		console.log('详情',res)
+		detailCollation(res);
+		return getPlanList();
+	})
+	.then(function(res) {
+		console.log('进度计划列表',res)
+		PlanDetail(res)
+	})
+</script>
+
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+		<title></title>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link href="../../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/login.css" />
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+		</script>
+		<style type="text/css">
+			.login_cancel {
+				    height: 44px;
+				    max-height: 44px;
+				    margin-top: 3vh;
+				    background: #999999;
+				    border-radius: 44px;
+				    padding: 0px;
+				    border: none;
+				    outline: none;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="mui-content">
+			<div class="logo_box">
+			</div>
+			<div class="login_box">
+				<p>注  册</p>
+				<div class="mui-input-row">
+					<label></label>
+					<input class="username" type="number" placeholder="请输入手机号">
+				</div>
+				<div class="mui-input-row password">
+					<label></label>
+					<input type="password" class="password_text mui-input-password" placeholder="请输入密码">
+				</div>
+				<div class="mui-input-row password">
+					<label></label>
+					<input type="password" class="password_text_two mui-input-password" placeholder="请确认密码">
+				</div>
+				<button type="button" data-loading-icon-position="right" class="login_btn mui-btn mui-btn-blue mui-btn-block">注册</button>
+				<button type="button" data-loading-icon-position="right" class="login_cancel mui-btn mui-btn-blue mui-btn-block">取消</button>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="../../js/jquery.min.js"></script>
+	<script type="text/javascript" src="../../js/request.js"></script>
+	<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		mui.plusReady(function() {
+			// console.log(JSON.stringify(plus))
+			plus.navigator.setStatusBarStyle("light");
+			plus.navigator.setStatusBarBackground("#3B9CFF");
+
+		})
+		
+
+		function changebox(self) {
+			console.log($(self).is(':checked'))
+			isRemeber = $(self).is(':checked');
+		}
+		
+		mui('.login_box').on('tap', '.login_cancel', function() {
+			window.location.href = 'login.html';
+		})
+
+		mui('.login_box').on('tap', '.login_btn', function() {
+			
+			var check = true;
+			
+			var _this = this;
+			if(!common.isPhoneNumber($('.username').val())) {
+				mui.alert("请输入正确的手机号！");
+				return
+			}
+			if(!$('.password_text').val()) {
+					mui.alert("密码不能为空！");
+					return
+			}
+			if($('.password_text').val() != $('.password_text_two').val()) {
+					mui.alert("两次输入密码不一致！");
+					return
+			}
+			mui('.login_btn').button('loading');
+			if (check) {
+				var data = {};
+				data.UserName = $('.username').val();
+				data.Phone = $('.username').val();
+				data.UserPassWord = $('.password_text').val();
+				data.RealName = '';
+				var url = '/api/Home/SaveRegister';
+				request.post(url,data).then(function(res) {
+					console.log(res);
+					if(res.code == 200) {
+						window.location.href = 'login.html';
+					}
+				})
+			}
+		})
+	
+	
+	</script>
+</html>
+

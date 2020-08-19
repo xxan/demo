@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.footer_submit span {
+				width: 100%;
+			}
+			.mui-content {
+				padding-bottom: 90px;
+			}
+		</style>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新建日程</h1>
+		</header>
+		<div class="mui-content">
+			<h5>工作内容</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="content_work"></textarea>
+			</div>
+			<h5>计划取得结果</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="achieve_result"></textarea>
+			</div>
+			<h5>计划开始时间</h5>
+			<div class="task_time">
+				<p class="checktime start_time"><a>请选择</a><span></span></p>
+			</div>
+			<h5>计划结束时间</h5>
+			<div class="task_time">
+				<p class="checktime end_time"><a>请选择</a><span></span></p>
+			</div>
+			<h5>项目名称</h5>
+			<div class="task_time">
+				<p class="get_manager"><a>请选择</a><span></span></p>
+			</div>
+		</div>
+		<div class="footer_submit">
+			<span class="btn_save">保存</span>
+		</div>
+		<div class="footer_submit_three" style="display: none;">
+			<span class="btn_cancel">取消日程</span><span class="btn_sure">已完成</span><span class="btn_save">保存修改</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	var newDate = common.getQueryUrl('date');
+	console.log(newDate)
+	var id = common.getQueryUrl('id');
+	var ischeck = common.getQueryUrl('check');
+	var projectList = [];
+	var chooseProjectId;
+	var startTime = (newDate ? newDate : getTime('year')) + ' 9:00',endTime = (newDate ? newDate : getTime('year')) + ' 18:30';
+	$('.start_time').find('a').html(startTime);
+	$('.end_time').find('a').html(endTime);
+	
+	if(ischeck) {
+		$('.mui-title').html('修改日程');
+		$('.footer_submit').hide();
+		$('.footer_submit_three').show();
+	}
+	
+	common.promise().then(getProjectList)
+	.then(function() {
+		if(id) {
+			getDayDetail();
+		}
+	})
+	
+	//获取详情
+	function getDayDetail() {
+		var url = '/api/Home/FileNotepad';
+		return request.post(url,{ID: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				$('.content_work').val(res.data.JobContent);
+				$('.achieve_result').val(res.data.AchieveResult);
+				startTime = res.data.StartTime;
+				endTime = res.data.EndTime;
+				$('.start_time').find('a').html(startTime);
+				$('.end_time').find('a').html(endTime);
+				chooseProjectId = res.data.ProjectId;
+				$('.get_manager a').html(common.getKeyValue(projectList,chooseProjectId))
+			}
+		})
+	}
+	
+	//获取项目
+	function getProjectList() {
+		url = '/api/Home/ProjectSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {};
+					obj.value = res.data[i].Id;
+					obj.text = res.data[i].Name;
+					projectList.push(obj);
+				}
+			}
+		})
+	}
+	
+	//
+	function submit(){
+		var postData = {};
+		postData.JobContent = $('.content_work').val();
+		postData.AchieveResult = $('.achieve_result').val();
+		postData.StartTime = startTime;
+		postData.EndTime = endTime;
+		if(chooseProjectId || chooseProjectId == 0) {
+			postData.ProjectId = chooseProjectId;
+		}
+		if(id) {
+			postData.ID = id;
+		}
+		
+		console.log(postData);
+		var url = '/api/Home/SaveNotepad';
+		request.post(url,postData).then(function(res) {
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast(res.msg);
+			}
+		})
+	}
+	
+	(function(mui,doc) {
+		
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('a').html(rs.text);
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					if($(_self).hasClass('end_time')) {
+						var yearMonth = startTime.split(' ')[0].split('-');
+						var minuts = startTime.split(' ')[1].split(':');
+						options.type = 'datetime';
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],minuts[0],minuts[1])
+					}
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('a').html(rs.text);
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					userPicker.setData(projectList);
+					var _this = this;
+					userPicker.show(function(items) {
+						$(_this).find('a').html(items[0].text);
+						chooseProjectId = items[0].value;
+					});
+				}, false);
+			});
+			
+			
+		});
+	})(mui,document);
+	
+	mui('.footer_submit').on('tap','.btn_save',function() {
+		submit();
+	})
+	
+	//修改日程状态
+	mui('.footer_submit_three').on('tap', 'span', function() {
+		var _this = this;
+		var state;
+		if($(this).hasClass('btn_cancel')) {
+			state = -1;
+			updateState();
+		}else if($(this).hasClass('btn_sure')){
+			state = 1;
+			updateState();
+		} else {
+			submit();
+		}
+		function updateState() {
+			var url = '/api/Home/EditNotepadState';
+			var data = {
+				ID: id,
+				NotepadState: state
+			}
+			request.post(url,data).then(function(res) {
+				if(res.code == 200) {
+					mui.toast('操作成功！');
+					mui.back();
+				}else {
+					mui.toast('操作失败！');
+				}
+			})
+		}
+		
+	});
+	
+</script>
+
+
+

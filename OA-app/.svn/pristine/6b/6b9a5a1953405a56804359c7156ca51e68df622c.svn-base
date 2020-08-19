@@ -1,0 +1,52 @@
+.staff_title {
+	height: 125px;
+	background: #3B9CFF;
+	text-align: center;
+	padding-top: 20px;
+}
+.staff_title img {
+	width: 60px;
+}
+
+.staff_title p {
+	margin: 0;
+	margin-top: 10px;
+	font-size: 16px;
+	color: white;
+}
+
+.content_list {
+	background: white;
+}
+
+.content_list p {
+	height: 50px;
+	line-height: 50px;
+	border-bottom: solid 1px #E6E6E6;
+	padding: 0 5%;
+	color: #333333;
+	position: relative;
+	margin: 0;
+}
+
+.content_list p span{
+	color: #666666;
+}
+
+.content_list p .tel_img,.content_list p .phone_img {
+	width: 30px;
+	height: 100%;
+	display: inline-block;
+	background: url(../img/tel.png) no-repeat;
+	background-size: 20px;
+	background-position: center;
+	position: absolute;
+	right: 5%;
+}
+
+.content_list p .phone_img {
+	background: url(../img/phone.png) no-repeat;
+	background-size: 15px;
+	background-position: center;
+}
+

@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style type="text/css">
+			.mui-scroll h5 b {
+				color: red;
+			}
+			.open h5{
+				height: 30px;
+				    line-height: 30px;
+				    padding-left: 5%;
+			}
+			.is_show {
+				display: none;
+			}
+			
+			#offCanvasSide {
+				width: 100%;
+				height: 60%;
+				min-height: 0;
+				position: absolute;
+				top: 40%;
+				bottom: 0;
+			}
+			
+			#offCanvasSide p.choose_title {
+				text-align: center;
+				background-color: white;
+				position: relative;
+				margin: 0;
+				padding: 0;
+			}
+			
+			#offCanvasSide p.choose_title span {
+				position: absolute;
+				right: 10px;
+				top: 10px;
+				font-weight: bold;
+			}
+			
+			#offCanvasSide #slide_list {
+				width: 100%;
+				padding: 10px 20px;
+			}
+			
+			#offCanvasSide #slide_list li {
+				width: 100%;
+				height: auto;
+				background: white;
+				border: none;
+				margin: 0;
+			}
+			
+			#offCanvasSide #slide_list li .list_title {
+				margin: 0;
+				padding: 0;
+				height: 14px;
+				line-height: 14px;
+				font-size: 12px;
+				text-align: left;
+			}
+			
+			#offCanvasSide #slide_list li .list_title i {
+				display: inline-block;
+				width: 14px;
+				height: 14px;
+				background: #3B9CFF;
+				vertical-align: middle;
+				border-radius: 50%;
+				margin-right: 15px;
+				position: relative;
+				top: -1px;
+			}
+			
+			#offCanvasSide #slide_list li .list_title span {
+				color: #3B9CFF;
+				font-size: 14px;
+				margin-right: 10px;
+			}
+			.info_box {
+				border-left: solid 4px #DCDCDC;
+				margin-left: 5px;
+				padding: 10px 20px;
+			}
+			
+			.detail {
+				width: 100%;
+				height: auto;
+				background:rgba(255,255,255,1);
+				box-shadow:0px 2px 7px 0px rgba(157,157,157,0.4);
+				border-radius:4px;
+				padding: 10px;
+			}
+			
+			.detail div {
+				width: 100%;
+				height: auto;
+				overflow: hidden;
+			}
+			.detail div span {
+				display: inline-block;
+				width: 70px;
+				height: 24px;
+				line-height: 24px;
+				float: left;
+				text-align: left;
+			}
+			.detail div p {
+				width: calc(100% - 70px);
+				line-height: 24px;
+				float: left;
+				overflow: hidden;
+				text-align: left;
+				white-space: pre-wrap;
+				margin: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right" id="offCanvasSide">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<p class="choose_title">任务修改历史 <span class="close_modal mui-icon mui-icon-closeempty"></span></p>
+						<!-- 菜单具体展示内容 -->
+						<ul id="slide_list">
+							<li>
+								<p class="list_title">
+									<i></i><span>张三</span> 2020-09-09 12:09
+								</p>
+								<div class="info_box">
+									<div class="detail">
+										<div>
+											<span>修改内容：</span> <p>人物类型</p>
+										</div>
+										<div>
+											<span>修改前值：</span> <p>人物类型</p>
+										</div>
+										<div>
+											<span>修改后值：</span> <p>人物类型</p>
+										</div>
+										<div>
+											<span>修改原因：</span> <p>人物类型阿萨德发卡机水电费卡萨丁哈师大开了房阿萨德联发科时代峰峻</p>
+										</div>
+									</div>
+								</div>
+							</li>
+							<li>
+								<p class="list_title">
+									<i></i><span>张三</span> 2020-09-09 12:09
+								</p>
+								<div class="info_box">
+									<div class="detail">
+										<div>
+											<span>修改内容：</span> <p>人物类型</p>
+										</div>
+										<div>
+											<span>修改前值：</span> <p>人物类型</p>
+										</div>
+										<div>
+											<span>修改后值：</span> <p>人物类型</p>
+										</div>
+										<div>
+											<span>修改原因：</span> <p>人物类型阿萨德发卡机水电费卡萨丁哈师大开了房阿萨德联发科时代峰峻</p>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<!-- <div class="footer_submit">
+						<span class="btn_cancel_slide">取消</span><span class="btn_submit_slide">确定</span>
+					</div> -->
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">新增任务</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+						<h5>任务名称<b>*</b></h5>
+						<div class="task_name">
+							<textarea class="task_name_point" rows="" cols="" placeholder="请填写任务名"></textarea>
+						</div>
+						<h5>任务类型<b>*</b></h5>
+						<div class="task_time">
+							<p class="get_manager task_type"><a>请选择</a><span></span></p>
+						</div>
+						<div class="open" style="display: none;">
+							<h5>开发类型<b>*</b></h5>
+							<div class="task_time">
+								<p class="get_manager open_type"><a>请选择</a><span></span></p>
+							</div>
+						</div>
+						<h5>接收人员<b>*</b></h5>
+						<div class="task_time">
+							<p class="get_manager recive_people"><a>选择人员</a><span></span></p>
+						</div>
+						<h5>计划时间<b>*</b></h5>
+						<div class="task_time">
+							<p class="checktime task_start_time"><a>计划开始时间</a><span></span></p>
+							<p class="checktime task_end_time" style="display: none;"><a>计划完成时间</a><span></span></p>
+						</div>
+						<h5>计划工时<b>*</b></h5>
+						<div class="plan_time">
+							<input class="task_plan_time"  type="number" name="" id="" value="" placeholder="0"/><label for="">工时</label>
+						</div>
+						
+						<h5 class="is_show">修改原因<b>*</b></h5>
+						<div class="task_name task_remarks is_show">
+							<textarea class="task_remark" rows="" cols="" placeholder="请填写"></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="footer_submit_one">
+					<span class="btn_submit">保存</span>
+				</div>
+				<div class="footer_submit" style="display: none;">
+					<span class="btn_see">修改历史</span><span class="btn_submit">修改</span>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+				
+			</div>
+		</div>
+		
+	</body>
+</html>
+
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	mui.init();
+	mui('.mui-scroll-wrapper').scroll({
+	deceleration: 0.0005
+	});
+	var addPeople = [];
+	var choosePeopleId;
+	
+	var taskType = [];
+	var taskTypeId;
+	var isOpen = false;//判断是否是开发
+	
+	var openType = [];
+	var openId;
+	
+	var projectId = common.getQueryUrl('id');
+	var projectName = common.getQueryUrl('name');
+	var taskId = common.getQueryUrl('taskid');
+	
+	if(taskId) {
+		$('.mui-title').html('任务修改')
+	}
+	
+	document.getElementsByClassName('mui-inner-wrap')[0].addEventListener('drag', function(event) {
+	　　event.stopPropagation();
+	});
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+	
+	if(taskId) {
+		$('.footer_submit').show();
+		$('.footer_submit_one').hide();
+		$('.is_show').show();
+	}
+	mui('.footer_submit').on('tap','.btn_see',function() {
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+	})
+	
+	mui('#offCanvasSide').on('tap','.close_modal',function() {
+		mui('.mui-off-canvas-wrap').offCanvas().close();
+	})
+	
+	var startTime;
+	var endTime;
+	
+	$('.point_title').html(projectName);
+
+	(function(mui,doc) {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						if($(_self).hasClass('task_start_time')) {
+							startTime = rs.text;
+							$('.task_end_time').show();
+						}
+						if($(_self).hasClass('task_end_time')) {
+							endTime = rs.text
+						}
+						if(startTime && endTime && endTime > startTime) {
+							 var date = new Date(endTime).getTime() - new Date(startTime).getTime(); 
+							 console.log(date)
+							 var leave1 = date % (24*3600*1000)
+							  var hours = (leave1/(3600*1000)).toFixed(1);
+								$('.task_plan_time').val(hours)
+						}
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					if($(_self).hasClass('task_end_time')) {
+						var yearMonth = startTime.split(' ')[0].split('-');
+						var minuts = startTime.split(' ')[1].split(':');
+						options.type = 'datetime';
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],minuts[0],minuts[1])
+					}
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('task_start_time')) {
+							startTime = rs.text;
+							$('.task_end_time').show();
+						}
+						if($(_self).hasClass('task_end_time')) {
+							endTime = rs.text
+						}
+						if(startTime && endTime && endTime > startTime) {
+							 var date = new Date(endTime).getTime() - new Date(startTime).getTime(); 
+							 console.log(date)
+							 // var days = parseInt(date / (24*3600*1000));
+							 // var day_hours = date % (24*3600*1000)
+							 // console.log(day_hours)
+							  var hourss = (date/(3600*1000)).toFixed(1);
+								console.log(hourss)
+								// var hours = days*8 + Number((day_hours/(3600*1000)).toFixed(1))
+								$('.task_plan_time').val(hourss)
+						}
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+	
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					// if(isDisabled) return;
+					input.blur();
+					textarea.blur();
+					var _this = this;
+					if($(this).hasClass('task_type')) {
+						userPicker.setData(taskType);
+						userPicker.show(function(items) {
+							console.log(items[0].text)
+							taskTypeId = items[0].value;
+							$(_this).find('a').html(items[0].text);
+							if(items[0].text == '开发') {
+								$('.open').show();
+								isOpen = true;
+							}else {
+								$('.open').hide();
+								isOpen = false;
+							}
+						});
+					}else if($(this).hasClass('recive_people')) {
+						userPicker.setData(addPeople);
+						userPicker.show(function(items) {
+							console.log(items[0].text)
+							choosePeopleId = items[0].value;
+							$(_this).find('a').html(items[0].text);
+						});
+					}else if($(this).hasClass('open_type')) {
+						userPicker.setData(openType);
+						userPicker.show(function(items) {
+							console.log(items[0].text)
+							openId = items[0].value;
+							$(_this).find('a').html(items[0].text);
+						});
+					}
+					
+					
+				}, false);
+			});
+			
+			
+		});
+	
+	})(mui,document);
+	
+	//侧滑数据
+	function slideData(dataArr) {
+		var html = ''
+		for(var i=0;i<dataArr.length;i++) {
+				html += '<li Id='+ dataArr[i].Id +'>'+ dataArr[i].RealName +'</li>';
+		}
+		$('#slide_list').html(html);
+	}
+	//默认选中项
+	function slideDetail(idArr) {
+		var list = $('#slide_list li');
+		for(var i=0;i<idArr.length;i++) {
+			for(var j=0;j<list.length;j++) {
+				if(idArr[i] == $(list[j]).attr('Id')) {
+					$(list[j]).addClass('active');
+				}
+			}
+		}
+	}
+	
+	// //获取详情
+	function getTaskDetail() {
+		var url = '/api/CostConsult/NewAddOrUpdateSchedule';
+		var postData = {
+			id: taskId,
+			projectId: projectId,
+			isSee: true
+		}
+		return request.post(url,postData).then(function(res) {
+			console.log('详情：',res)
+			if(res.code == 200) {
+				$('.task_name_point').val(res.data.Name);
+				taskTypeId = res.data.ScheduleCategory;
+				$('.task_type a').html(common.getKeyValue(taskType,taskTypeId));
+				if(common.getKeyValue(taskType,taskTypeId) == '开发'){
+					$('.open').show();
+					isOpen = true;
+					openId = res.data.DevelopCategory;
+					$('.open_type a').html(common.getKeyValue(openType,openId));
+				}
+				choosePeopleId = res.data.ParticipantId;
+				$('.recive_people a').html(common.getKeyValue(addPeople,choosePeopleId));
+				startTime = res.data.StartTime;
+				$('.task_start_time a').html(startTime);
+				endTime = res.data.EndTime;
+				$('.task_end_time').show();
+				$('.task_end_time a').html(endTime);
+				$('.task_plan_time').val(res.data.UsingDays);
+			}else {
+				mui.toast('获取详情失败'+res.msg);
+			}
+			return res;
+		})
+	}
+	
+	common.promise()
+	.then(function() {
+		mui.showLoading('加载中...');
+		return;
+	})
+	.then(function() {
+		return getRecivePeople();
+	})
+	.then(function() {
+		return getTaskType();
+	})
+	.then(function() {
+		return getOpenType();
+	})
+	.then(function(res) {
+		if(taskId) {
+			return getTaskDetail();
+		}else {
+			return;
+		}
+	})
+	.then(function(res) {
+		if(taskId) {
+			return getRecord();
+		}else {
+			return;
+		}
+	})
+	.then(function() {
+		mui.hideLoading();
+	})
+	.catch(function(err) {
+		console.log(err)
+	})
+	
+	//获取修改列表
+	function getRecord() {
+		var url = '/api/CostConsult/ScheduleLogListQuery';
+		return request.post(url,{scheduleId: taskId,page: 1,limit: 10000}).then(function(res) {
+			console.log('历史记录：',res)
+			if(res.code == 200) {
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					html += '<li>'+
+									'<p class="list_title">'+
+									'<i></i><span>'+ item.RealName +'</span> '+ item.UpdateTime +'</p>'+
+									'<div class="info_box">'+
+									'<div class="detail">'+
+									'<div><span>修改内容：</span> <p>'+ item.UpdateName +'</p></div>'+
+									'<div><span>修改前值：</span> <p>'+ item.Oldtext +'</p></div>'+
+									'<div><span>修改后值：</span> <p>'+ item.NewText +'</p></div>'+
+									'<div><span>修改原因：</span> <p>'+ item.Reason +'</p></div>'+
+									'</div></div></li>';
+				}
+				console.log(html)
+				$('#slide_list').html(html)
+			}
+		})
+	}
+	
+	//获取接收人
+	function getRecivePeople() {
+		var url = '/api/CostConsult/ReceiverSelect';
+		return request.post(url,{projectId: projectId}).then(function(res) {
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					addPeople.push({value: res.data[i].Id,text: res.data[i].RealName})
+				}
+			}
+			return res;
+		})
+	}
+	
+	//获取任务类型
+	function getTaskType() {
+		var url = '/api/CostConsult/TaskTypeSelect';
+		return request.post(url).then(function(res) {
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					taskType.push({value: res.data[i].SUB_ID,text: res.data[i].SUB_NM})
+				}
+			}
+			return res;
+		})
+	}
+	
+	//获取开发类型
+	function getOpenType() {
+		var url = '/api/CostConsult/ProjectTypeSelect';
+		return request.post(url).then(function(res) {
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					openType.push({value: res.data[i].SUB_ID,text: res.data[i].SUB_NM})
+				}
+			}
+			return res;
+		})
+	}
+	//提交数据
+	function submit() {
+		var postData = {};
+		if(taskId) {
+			postData.ID = taskId;
+			if(!$('.task_remark').val()) {
+				mui.toast('请输入修改原因！');
+				return;
+			}
+			postData.Remark = $('.task_remark').val();
+		}
+		
+		if(!$('.task_name_point').val()) {
+			mui.toast('请输入任务名称！');
+			return;
+		}
+		if(!taskTypeId) {
+			mui.toast('请选择任务类型！');
+			return;
+		}
+		if(isOpen) {
+			if(!openId) {
+				mui.toast('请选择开发类型！');
+				return;
+			}
+			postData.DevelopCategory = openId;
+		}
+		
+		if(!choosePeopleId) {
+			mui.toast('请选择接收人员！');
+			return;
+		}
+		
+		if(!startTime) {
+			mui.toast('请选择计划开始时间！');
+			return;
+		}
+		
+		if(!endTime) {
+			mui.toast('请选择计划结束时间！');
+			return;
+		}
+		postData.ProjectId = projectId;
+		postData.Name = $('.task_name_point').val();
+		postData.StartTime = startTime;
+		postData.EndTime = endTime;
+		postData.UsingDays = $('.task_plan_time').val();
+		postData.ScheduleCategory = taskTypeId;
+		postData.ParticipantId = choosePeopleId;
+		console.log(postData)
+		
+		var url = '/api/CostConsult/SaveNewSchedule';
+		request.post(url,postData).then(function(res) {
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast(res.msg);
+			}
+		})
+	}
+	
+	//打开侧滑
+	//公司资质
+	// mui('.task_time').on('tap', '.get_manager', function() {
+	// 	mui('.mui-off-canvas-wrap').offCanvas().show();
+	// 	if($(this).hasClass('recive_people')) {
+	// 		$('.choose_title').html('接收人员选择');
+	// 		slideData(addPeople);
+	// 		if(choosePeopleId.length > 0) {
+	// 			slideDetail(choosePeopleId);
+	// 		}
+	// 	}else if($(this).hasClass('task_type')) {
+	// 		$('.choose_title').html('任务类型');
+	// 		slideData(taskType);
+	// 		if(taskTypeId.length > 0) {
+	// 			slideDetail(taskTypeId);
+	// 		}
+	// 	}
+		
+	// })
+	
+	//侧滑点击列表
+	mui('#slide_list').on('tap', 'li', function() {
+		var Id = $(this).attr('Id');
+		var Hname = $(this).html();
+		if($(this).hasClass('active')) {
+			$(this).removeClass('active');
+			var index = choosePeopleId.indexOf(Id);
+			choosePeopleId.slice(index,1);
+			var nameIndex = choosePeopleName.indexOf('Hname');
+			choosePeopleName.slice(nameIndex,1);
+		}else {
+			choosePeopleId.push(Id);
+			choosePeopleName.push(Hname)
+			$(this).addClass('active');
+		}
+	})
+	//侧滑确认选择
+	mui('.footer_submit').on('tap', '.btn_submit_slide', function() {
+		$('.get_manager').find('a').html(choosePeopleName.join(','));
+		mui('.mui-off-canvas-wrap').offCanvas().close();
+	})
+	//关闭侧滑
+	mui('.footer_submit').on('tap', '.btn_cancel_slide', function() {
+		mui('.mui-off-canvas-wrap').offCanvas().close();
+	})
+	
+
+	
+	function detailData(res) {
+		// if(res.code == 200) {
+			choosePeopleId = res.data.purString.split(',');
+			for(var i=0;i<addPeople.length;i++) {
+				for(var j=0;j<choosePeopleId.length;j++) {
+					if(addPeople[i].Id == choosePeopleId[j]) {
+						choosePeopleName.push(addPeople[i].RealName)
+					}
+				}
+			}
+			$('.task_start_time').html(res.data.d.StartTime);
+			$('.task_end_time').html();
+			$('.task_plan_time').val();
+			$('.task_remark').val();
+		// }
+	}
+	
+	//提交
+	mui('.footer_submit_one').on('tap','.btn_submit',function() {
+		submit()
+	})
+	mui('.footer_submit').on('tap','.btn_submit',function() {
+		submit()
+	})
+</script>
+
+

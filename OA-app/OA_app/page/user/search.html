@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<style type="text/css">
+			.this_body,.mui-content {
+				background: #F2F2F2;
+			}
+			.message_title {
+				background: #3B9CFF;
+			}
+			.mui-search {
+				width: 85%;
+				float: left;
+				padding: 0px 10px;
+			}
+			.cancel {
+				width: 15%;
+				color: white;
+				float: left;
+				text-align: left !important;
+			}
+			.list_content > p {
+				height: 40px;
+				line-height: 40px;
+				padding-left: 20px;
+				background: #F2F2F2;
+				margin: 0;
+			}
+			.result_list {
+				padding: 0;
+				margin: 0;
+			}
+			.result_list li {
+				padding: 10px 10px 10px 20px;
+				height: 70px;
+				line-height: 70px;
+				background: white;
+			}
+			.result_list li .img_box {
+				width: 15%;
+				height: 50px;
+				float: left;
+			}
+			.result_list li .img_box img{
+				width: 50px;
+			}
+			.user_info {
+				width: 55%;
+				height: 50px;
+				float: left;
+				padding: 5px 10px;
+			}
+			.user_info p {
+				margin: 0;
+				height: 20px;
+				line-height: 20px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+			.user_info p .user_name {
+				color: #3B9CFF;
+			}
+			.user_info p.user_detail {
+				font-size: 12px;
+			}
+			.operation {
+				width: 30%;
+				height: 50px;
+				line-height: 50px;
+				float: left;
+				text-align: center;
+				border: none;
+			}
+			.operation img.user {
+				width: 33px;
+				position: relative;
+				top: -2px;
+				left: 5%;
+			}
+			.operation span {
+				display: inline-block;
+				width: 2px;
+				height: 30px;
+				margin-top: 10px;
+				background: #F2F2F2;
+			}
+			.operation img.phone {
+				width: 24px;
+				margin-top: 15px;
+				margin-right: 5%;
+			}
+			.photo_search {
+				width: 40px;
+				height: 40px;
+				background-size: 20px 20px;
+				top: 25%;
+			}
+			.search_box div input {
+					padding-right: 15%;
+			}
+		</style>
+		
+	</head>
+
+	<body class="this_body">
+	
+		<div class="mui-content">
+			<div class="message_title">
+				<div class="search_box">
+					<div class="mui-input-row mui-search">
+						<input id="search_input" type="text" class="" placeholder="搜索联系人">
+						<span class="photo_search" index='item1'></span>
+					</div>
+					<div class="cancel">
+						取消
+					</div>
+				</div>
+			</div>
+			<div class="list_content">
+				<p>你可能想找</p>
+				<ul class="result_list">
+					
+				</ul>
+			</div>
+		</div>
+
+	</body>
+</html>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	mui.init();
+	var userList = [];
+	var input = $('input');
+	input.blur();
+	mui('.search_box').on('tap','.photo_search',function() {
+		input.blur();
+		var text = $('#search_input').val();
+		var url = '/api/AddressList/SelectRoleUser';
+		request.post(url,{Name: text}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				var html = '';
+				userList = res.data;
+				for(var i=0;i<res.data.length;i++) {
+					var reg = new RegExp(text,"g");
+					var a = res.data[i].RealName.replace(reg,'<span class="user_name">'+ text +'</span>');
+					html += '<li num='+i+' id='+ res.data[i].Id +'>'+
+									'<div class="img_box"><img src="../../img/avatar_de.png" >'+
+									'</div><div class="user_info">'+
+									'<p>'+ a +'</p>'+
+									'<p class="user_detail">'+ res.data[i].CompanyName+ '-' 
+									+ res.data[i].DepartmentName +'</p>'+
+									'</div><div class="operation"><img src="../../img/greenphone.png" class="phone" phone='+
+									res.data[i].Phone + '>' +
+									'<span></span><img src="../../img/topeople.png" class="user">'+
+									'</div></li>';
+				}
+				if(res.data.length == 0) {
+					html = '<div class="detail_info detail_info_no_data result_bid">'+
+					'<img src="../../img/no_data.png"><p>没有信息</p></div>'
+				}
+				$('.result_list').html( html)
+			}
+		})
+	})
+	mui('.result_list').on('tap','.user',function() {
+		var this_id = $(this).parents('li').attr('id');
+		mui.openWindow('./peopel_detail.html?id=' + this_id, 'peopel_detail', {});
+	})
+	
+	
+	//保存拨打电话信息
+	function saveCall(self) {
+		var url = '/api/AddressList/SaveNearestContact';
+		var postData = {};
+		var index = $(self).parents('li').attr('num');
+		postData.NUserId = userList[index].Id;
+		postData.NCname = userList[index].RealName;
+		postData.NCphone = userList[index].Phone;
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+		})
+	}
+	
+	mui.plusReady(function () {
+		mui('.result_list').on('tap','.phone',function() {
+			var phone = $(this).attr('phone')
+			saveCall(this);
+			plus.device.dial(phone, false); 
+		})
+	})
+	
+	mui('.search_box').on('tap','.cancel',function() {
+		mui.back();
+	})
+</script>
+

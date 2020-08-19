@@ -1,0 +1,145 @@
+
+.record_list {
+	width: 100%;
+}
+
+.record_list ul {
+	padding: 0;
+	margin: 0;
+}
+
+.record_list ul .record_list_left {
+	width: 20%;
+	text-align: center;
+	padding-top: 10px;
+	display: inline-block;
+	float: left;
+}
+
+.record_list ul .record_list_left>span {
+	background: #E6E6E6;
+	padding: 2px 6px;
+	border-radius: 5px;
+	font-size: 13px;
+	color: #777777;
+}
+
+.record_list ul li {
+	position: relative;
+}
+
+.record_list ul li .record_list_left>p {
+	margin-top: 5px;
+	color: #3B9CFF;
+	position: relative;
+}
+
+.record_list ul li.end_save .record_list_left>p {
+	color: #F59517;
+}
+
+.record_list ul li .record_list_left>p span {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	background: #3B9CFF;
+	border-radius: 50%;
+	position: absolute;
+	right: -7px;
+	top: 3px;
+}
+
+.record_list ul li.end_save .record_list_left>p span{
+	background: #F59517;
+}
+
+.record_list ul .record_list_right {
+	display: inline-block;
+	width: 80%;
+	border-left: solid 1px #E6E6E6;
+	padding: 10px 5% 0px;
+}
+
+.record_list ul li:last-child .record_list_right {
+	padding-bottom: 20px;
+}
+
+.record_list ul .record_list_right .record_list_right_box {
+	background:linear-gradient(to bottom, #3B9CFF, #fff);
+	border-radius: 10px;
+	padding-top: 8px;
+	margin-top: 10px;
+}
+
+.record_list ul .record_list_right>span {
+	background: transparent;
+	padding: 2px 6px;
+	border-radius: 5px;
+	font-size: 13px;
+	color: #777777;
+}
+
+.record_list ul li.end_save .record_list_right .record_list_right_box {
+	background:linear-gradient(to bottom, #F59517, #fff);
+}
+
+.record_list ul .record_list_right .record_list_right_box .detail_info {
+	border-bottom: none;
+	background: #F2F2F2;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	height: 98%;
+}
+
+#detail_list {
+	height: 100%;
+}
+
+
+#detail_list .detail_info_no_data {
+	text-align: center;
+	padding: 20px;
+}
+#detail_list .detail_info_no_data > img {
+	width: 25%;
+	height: 50%;
+	
+}
+#detail_list .detail_info_no_data > p {
+	padding: 0;
+	color: #999999;
+}
+
+#detail_list .detail_info h3 {
+	font-size: 14px;
+	padding-left: 10%;
+	color: #3B9CFF;
+}
+
+#detail_list .detail_info .audit_status_ing {
+	color: #F59517;
+}
+
+#detail_list .detail_info .audit_status_success {
+	color: #2EAE01;
+}
+#detail_list .detail_info .audit_status_refuse {
+	color: #FA4441;
+}
+
+.signing_date {
+	width:100%;
+	padding-left: 10%;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.signing_date span {
+	width: 40%;
+	height: 25px;
+	line-height: 25px;
+	display: inline-block;
+	background: #3B9CFF;
+	color: white;
+	border-radius: 5px;
+}

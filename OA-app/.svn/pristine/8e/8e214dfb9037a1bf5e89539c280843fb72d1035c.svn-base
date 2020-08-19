@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/jygl_chengguowenjian.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.contract_info {
+				position: relative;
+			}
+			.mui-popover {
+				height: 30px;
+				width: 50px;
+				opacity: 1;
+				border: none;
+				text-align: center;
+				left: 40%;
+				top: 10%;
+				/* overflow: hidden; */
+			}
+			
+			.mui-popover span {
+					width:0;
+					height:0;
+					overflow:hidden;
+					font-size: 0;     
+					line-height: 0;  
+					border-width:10px;
+					border-style:solid dashed dashed dashed;
+					border-color:#3B9CFF transparent transparent transparent;
+					position: absolute;
+					bottom: -23px;
+					left: 30%;
+			}
+			
+			.mui-btn-outlined {
+				background: white;
+			}
+			
+			#list_box {
+				padding-bottom: 0px;
+				margin: 0;
+			}
+			.procedure {
+				margin-bottom: 0px;
+			}
+			.htsp_content {
+				padding-bottom: 60px;
+			}
+		</style>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">任务单</h1>
+		</header>
+		<div class="mui-content htsp_content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<!-- <h5>任务接收人<b>＊</b></h5>
+			<div class="task_time">
+				<p class="get_manager task_peoples"><a>请选择</a><span></span></p>
+			</div> -->
+			<h5>执行时间</h5>
+			<div class="task_time">
+				<p class="checktime task_start_time"><a>选择开始时间<b></b></a><span class="choose_img"></span></p>
+				<hr >
+				<p class="checktime task_end_time" style="display: none;"><a>选择结束时间<b></b></a><span class="choose_img"></span></p>
+			</div>
+			<h5>工作内容<b>＊</b></h5>
+			<div class="task_name"><textarea rows="" cols="" class="task_content" placeholder="请填写"></textarea></div>
+			<h5>工作要求<b>＊</b></h5>
+			<div class="task_name"><textarea rows="" cols="" class="task_require" placeholder="请填写"></textarea></div>
+			<h5>项目合同<b>＊</b></h5>
+			<div class="task_time">
+				<p class="get_manager task_contract"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<ul class="" id="list_box">
+				<li>
+					<a class="list_title" href="#">委托资料 <span>展开</span></a>
+					
+					<div class="list_box_content files">
+						
+						<div class="entrust_files_list">
+							
+						</div>
+						<div class="add_btn choose_img">
+							<span>+</span>添加资料
+						</div>
+						
+					</div>
+					
+				</li>
+			</ul>
+			<h5>选择审批流程<span>＊</span></h5>
+			<!-- <div class="task_time procedure">
+				<p class="get_manager process_choose"><a>请选择</a><span></span></p>
+			</div> -->
+			<div class="list_box_content">
+				<div class="task_time procedure">
+					<p  class="get_manager process_choose"><a>选择流程</a><span class="choose_img"></span></p>
+				</div>
+				<ul class="list_content_procedure">
+				</ul>
+			</div>
+		</div>
+		<div class="footer_submit_three">
+			<span class="btn_cancel">取消</span><span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init({
+		gestureConfig:{
+			tap: true, //默认为true
+			doubletap: true, //默认为false
+			longtap: true, //默认为false
+			swipe: true, //默认为true
+			drag: true, //默认为true
+			hold:true,//默认为false，不监听
+			release:false//默认为false，不监听
+		},
+	});
+	var projectId = common.getQueryUrl('id');
+	var projectName = common.getQueryUrl('name');
+	var detail = common.getQueryUrl('detail');
+	var processList = []; //流程列表
+	var processId; //流程Id
+	var tasksList = [];//任务接收人列表
+	var taskId;//接收人
+	var contractList = [];//任务单合同列表
+	var contractId;//选中合同ID
+	var entrustlist = [];//委托资料
+	var entrustId;//选中的委托资料的Id；
+	var entrustData = [];//委托资料详细信息
+	var fileList = [];
+	var newFileList = [];
+	var deleteFileId = [];
+	var updateFileId = [];
+	var updateEntrust = [];
+	var btn_flag = false;
+	var isDisabled = false;
+	
+	var startTime,endTime;
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+	
+	console.log(projectName)
+	$('.point_title').html(projectName);
+	
+	common.promise()
+	.then(approvalProcess)
+	.then(function(data) {
+		processList = data;
+		return getTaskReciveList();
+	})
+	.then(function(data) {
+		for (var i = 0; i < data.length; i++) {
+			var tem = {};
+			tem.value = data[i].Id;
+			tem.text = data[i].RealName;
+			tasksList.push(tem);
+		}
+		return getTaskContract();
+	}).then(function(data) {
+		for (var i = 0; i < data.length; i++) {
+			var tem = {};
+			tem.value = data[i].Id;
+			tem.text = data[i].Name;
+			contractList.push(tem);
+		}
+		return getEntrust();
+	}).then(function(data) {
+		fileList = data;
+		setHtml(data);
+		return getTaskDetail()
+	})
+	
+	function getentrustDataOne(id) {
+		for(var i=0;i<entrustData.length;i++) {
+			if(entrustData[i].Id == id) {
+				return entrustData[i];
+			}
+		}
+	}
+	//委托资料html
+	function setHtml(data) {
+		var html = '';
+		for (var i = 0; i < data.length; i++) {
+			html += '<div class="contract_info" fileId='+ data[i].Id +'>'+
+			'<p>资料名称：<input class="entrust_file_name" type="text" name="" id="" value="'+ data[i].FileName +'" placeholder="请填写或自动获取文件名"/></p>'+
+			'<p>上传人员：<span>'+data[i].CreateUser+'</span></p><p>上传日期：<span>'+ data[i].CreateTime +'</span></p>'+
+			'<p>文件：<span class="file_name">'+ data[i].FileName + data[i].Extension +'<b class="delete_this_file choose_img">×</b></span>'+ 
+			'<span class="btn_upload_file" style="display:none">＋<input type="file" name="" id="" value="" class="add_entrust"/></span></p>'+
+			'<div class="delete_files choose_img"><span class="mui-icon mui-icon-trash"></span>删除</div></div>'
+			
+		}
+		$('.entrust_files_list').html(html);
+	}
+	
+	
+	//获取任务详情
+	function getTaskDetail() {
+		var url = '/api/BusinessManage/RWDDetail';
+		return request.post(url,{ProjectId:projectId}).then(function(res) {
+			console.log('任务详情',res);
+			if(res.code == 200) {
+				var data = res.data
+				if(data.BeginTime) {
+					$('.task_start_time').find('a').html(data.BeginTime);
+					startTime = data.BeginTime;
+				}
+				if(data.EndTime) {
+					$('.task_end_time').show();
+					$('.task_end_time').find('a').html(data.EndTime);
+					endTime = data.EndTime;
+				}
+				$('.task_content').val(data.WorkContents);
+				$('.task_require').val(data.WorkRequire);
+				$('.task_contract').find('a').html(common.getKeyValue(contractList,data.Contract.Id));
+				contractId = data.Contract.Id;
+				if (data.Template > 0) {
+					processId = data.Template;
+					processDetail(processId);
+					if(data.State != -1) {
+						isDisabled = true;
+						common.disbledForm();
+						$('.footer_submit_three').css('display','none');
+						$('.choose_img').hide();
+					}
+				}
+			}
+		})
+	}
+	
+	//获取任务单接收人列表
+	function getTaskReciveList() {
+		var url = '/api/BusinessManage/RWDReceiver';
+		return request.post(url).then(function(res) {
+			console.log('任务接收人',res)
+			return res.data;
+		})
+	}
+	
+	//获取任务单合同列表
+	function getTaskContract() {
+		var url = '/api/BusinessManage/RWDContracts';
+		return request.post(url,{ProjectId: projectId}).then(function(res) {
+			console.log('任务合同列表',res)
+			return res.data;
+		})
+	}
+	
+	//获取委托资料
+	function getEntrust() {
+		var url = '/api/BusinessManage/WTZLList';
+		return request.post(url,{ProjectId: projectId,Page:1,Limit: 1000}).then(function(res) {
+			console.log('委托资料',res)
+			if(res.code == 200) {
+				entrustData = res.data;
+			}
+			return res.data;
+		})
+	}
+	
+	//保存委托资料
+	function saveEntrust(data) {
+		var url = '/api/BusinessManage/SaveWTZL';
+		return request.post(url,data).then(function(res) {
+			console.log('保存委托资料：',res);
+			if(res.code == 200) {
+				return true;
+			}else {
+				mui.toast(data.FileName+'保存失败');
+				return false;
+			}
+		})
+	}
+	//删除委托资料
+	function seleteEntrust(id) {
+		var url = '/api/BusinessManage/DeleteWTZL';
+		return request.post(url,{Ids: id}).then(function(res) {
+			console.log(res);
+		})
+	}
+	
+	//下拉列表点击事件集合
+	(function(mui,doc) {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				if(isDisabled) return;
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						if($(_self).hasClass('task_start_time')) {
+							startTime = rs.text;
+							$('.task_end_time').show();
+						}
+						if($(_self).hasClass('task_end_time')) {
+							endTime = rs.text
+						}
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					if($(_self).hasClass('task_end_time')) {
+						var yearMonth = startTime.split(' ')[0].split('-');
+						var minuts = startTime.split(' ')[1].split(':');
+						options.type = 'datetime';
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],minuts[0],minuts[1])
+					}
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('task_start_time')) {
+							startTime = rs.text;
+							$('.task_end_time').show();
+						}
+						if($(_self).hasClass('task_end_time')) {
+							endTime = rs.text
+						}
+						$(_self).find('a').html(rs.text);
+						
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					if(isDisabled) return;
+					var _this = this;
+					console.log(12312)
+					if($(_this).hasClass('task_peoples')) {
+						userPicker.setData(tasksList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text)
+						});
+					} else if($(_this).hasClass('task_contract')) {
+						userPicker.setData(contractList);
+						userPicker.show(function(items) {
+							contractId = items[0].value;
+							$(_this).find('a').html(items[0].text)
+						});
+					} else if($(_this).hasClass('choose_entrust')) {
+						userPicker.setData(entrustlist);
+						userPicker.show(function(items) {
+							entrustId = items[0].value;
+							$(_this).find('a').html(items[0].text)
+						});
+					}else if($(_this).hasClass('process_choose')) {
+						userPicker.setData(processList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							processId = items[0].value;
+							getProcessDetail(processId);
+						});
+					}
+					
+				}, false);
+			});
+			
+			
+		});
+	})(mui,document);
+	//数据提交
+	function submit(flag) {
+		var postData = {};
+		postData.ProjectId = projectId;
+		if($('.task_start_time').find('a').find('b').length < 1) {
+			postData.BeginTime = $('.task_start_time').find('a').html();
+		}
+		if($('.task_end_time').find('a').find('b').length < 1) {
+			postData.EndTime = $('.task_end_time').find('a').html();
+		}
+		if(postData.BeginTime > postData.EndTime) {
+			mui.toast('开始时间大于结束时间，请修改！');
+			return;
+		}
+		if(!$('.task_content').val()) {
+			mui.toast('请输入工作内容！');
+			return;
+		}
+		if(!$('.task_require').val()) {
+			mui.toast('请输入工作要求！');
+			return;
+		}
+		if(!contractId && contractId !=0) {
+			mui.toast('请选择项目合同！');
+			return;
+		}
+		
+		if(flag) {
+			if(!processId) {
+				mui.toast('请选择审批流程！');
+				return;
+			}
+			postData.Template = processId;
+		}
+		postData.WorkContents = $('.task_content').val();
+		postData.WorkRequire = $('.task_require').val();
+		postData.ContractId = contractId;
+		postData.IsSubmit = flag;
+		console.log(postData)
+		
+		common.promise()
+		.then(function() {
+			if(deleteFileId.length > 0) {
+				return seleteEntrust(deleteFileId)
+			}else {
+				return;
+			}
+		})
+		.then(function(res) {
+			console.log('delete',res)
+			var url = '/api/BusinessManage/SaveRWD';
+			console.log(postData)
+			return request.post(url,postData).then(function(res) {
+				console.log(res);
+				if(res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast(res.msg)
+				}
+			})
+		}).catch(function(err) {
+			console.log(err)
+		})
+		
+		
+	}
+	
+	mui('.footer_submit_three').on('tap','.btn_save',function() {
+		submit(false);
+	})
+	
+	mui('.footer_submit_three').on('tap','.btn_submit',function() {
+		submit(true);
+	})
+	
+	
+	mui(document).on('tap','.list_title',function(){
+		input.blur();
+		textarea.blur();
+	  var display = $(this).next().css('display') === 'none' ? false : true;
+	  $(this).next().slideToggle();
+	  if(display) {
+		   $(this).find('span').html('展开');
+	  }else {
+		  $(this).find('span').html('收起');
+	  }
+	})
+	
+	//文件上传
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=ProjectMaterial';
+		return request.upload(url, formData).then(function(res) {
+			// console.log(res)
+			if (res.code == 200) {
+				return res.data;
+			}else {
+				mui.toast('上传文件失败！');
+			}
+		})
+	}
+	//点击文件上传按钮
+	$(".entrust_files_list").on('change', '.add_entrust',function(e) {
+		input.blur();
+		textarea.blur();
+		var file = $(this)[0].files[0];
+		var FileId = $(this).parents('.contract_info').attr('fileId');
+		var _this = this;
+		if(FileId) {
+			var this_info = getentrustDataOne(FileId);
+			common.promise().then(function() {
+				var formData = new FormData();
+				formData.append("file",file);
+				return upload(formData);
+			}).then(function(data) {
+				$(_this).val('');
+				data.ProjectId = projectId;
+				data.Id = this_info.Id;
+				data.FileName = this_info.FileName;
+				console.log(data)
+				return saveEntrust(data);
+			}).then(function(res) {
+				console.log(res)
+				getEntrust()
+			})
+			$(this).parents('.contract_info').find('.file_name').css('display','inline-block')
+		}else {
+			$(this).parents('.contract_info').find('.entrust_file_name').val(file.name);
+			common.promise().then(function() {
+				var formData = new FormData();
+				formData.append("file",file);
+				return upload(formData);
+			}).then(function(data) {
+				data.ProjectId = projectId;
+				console.log(data)
+				$(_this).val('');
+				return saveEntrust(data);
+			}).then(function(res) {
+				console.log('上传：',res)
+				return getEntrust()
+			}).then(function(res) {
+				setHtml(res);
+			})
+			newFileList.push(file);
+		}
+		$(this).parents('.contract_info').find('.file_name').html(file.name+'<b class="delete_this_file">×</b>');
+		$(this).parent().css('display','none');
+	})
+	
+	//点击修改文件名 
+	$(".entrust_files_list").on('blur', '.entrust_file_name',function(e) {
+		input.blur();
+		textarea.blur();
+		var FileId = $(this).parents('.contract_info').attr('fileId');
+		if(FileId) {
+			var this_info = getentrustDataOne(FileId);
+			console.log(this_info)
+			var data = {};
+			data.FileName = $(this).val();
+			data.Id = this_info.Id;
+			data.ProjectId = projectId;
+			data.Extension = this_info.Extension;
+			data.FilePath = this_info.FilePath;
+			saveEntrust(data)
+		}else {
+			var file = $(this).parents('.contract_info').find('.add_entrust')[0].files[0];
+			console.log(file)
+			file.newname = $(this).val();
+			console.log(file)
+		}
+		
+	})
+	
+	//预览
+	mui('.list_box_content').on('tap','.file_name',function() {
+		input.blur();
+		textarea.blur();
+		var FileId = $(this).parents('.contract_info').attr('fileId');
+		if(FileId) {
+			mui.showLoading('加载中...');
+			openFile(baseUrl + getentrustDataOne(FileId).FilePath)
+		}
+	})
+	
+	//点击删除文件
+	mui('.entrust_files_list').on('tap','.delete_this_file',function() {
+		input.blur();
+		textarea.blur();
+		var FileId = $(this).parents('.contract_info').attr('fileId');
+		var this_name = $(this).parents('.contract_info').find('.entrust_file_name').val();
+		$(this).parents('.contract_info').find('.btn_upload_file').css('display','inline-block');
+		if(FileId) {
+			updateFileId.push(FileId);
+			// var this_info = getentrustDataOne(FileId);
+		}else {
+			for(var i=0;i<newFileList.length;i++) {
+				if(newFileList[i].name == this_name) {
+					newFileList.splice(i,1)
+				}
+			}
+			$(this).parents('.contract_info').find('.entrust_file_name').val('');
+			$(this).parents('.contract_info').find('.file_name').html('');
+		}
+		
+		$(this).parent().css('display','none');
+	})
+
+	
+	
+	mui('#list_box').on('tap','.add_btn',function() {
+		input.blur();
+		textarea.blur();
+		var html = '<div class="contract_info">'+
+		'<p>资料名称：<input class="entrust_file_name" type="text" name="" id="" value="" placeholder="请填写或自动获取文件名"/></p>'+
+		'<p>上传人员：<span>自动生成</span></p><p>上传日期：<span>自动生成</span></p>'+
+		'<p>文件：<span class="file_name"></span>'+ 
+		'<span class="btn_upload_file">＋<input type="file" name="" id="" value="" class="add_entrust"/></span></p>'+
+		'<div class="delete_files"><span class="mui-icon mui-icon-trash"></span>删除</div></div>'
+		$('.entrust_files_list').append(html);
+	})
+	
+	mui('#list_box').on('tap','.delete_files',function() {
+		input.blur();
+		textarea.blur();
+		var FileId = $(this).parents('.contract_info').attr('fileId');
+		var this_name = $(this).parents('.contract_info').find('.entrust_file_name').val();
+		if(FileId) {
+			deleteFileId.push(FileId);
+		}else {
+			for(var i=0;i<newFileList.length;i++) {
+				if(newFileList[i].name == this_name) {
+					newFileList.splice(i,1)
+				}
+			}
+		}
+		$(this).parents('.contract_info').remove();
+	})
+	
+</script>
+
+
+

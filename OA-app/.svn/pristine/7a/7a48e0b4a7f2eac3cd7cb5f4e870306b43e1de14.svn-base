@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/Finance.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/sale.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css"/>
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">销售信息</h1>
+		</header>
+		<div class="mui-content">
+			<div class="seal_status">
+				<p>销售单状态：<span class=" invoice_class">已开票</span><span class="kit_class">未回款</span></p>
+			</div>
+			<div class="user_info_box">
+				<p>客户信息</p>
+				<div class="user_info">
+					<div class="left_img">
+						<img src="../../../img/avatar_de.png" >
+					</div>
+					<div class="middle_info">
+						<p class="user_name">战三</p>
+						<p class="company_name">中间二局第一建筑工程有限公司</p>
+						<p>TEl: <span class="tel_num">123123123123</span></p>
+					</div>
+					<div class="right_img">
+						<img src="../../../img/tel.png" >
+					</div>
+				</div>
+			</div>
+			<div class="seal_order_lists">
+				<p class="order_infos">下单信息<span class="order_time">在嘴贱 2019-10-10</span></p>
+				<ul>
+					<li class="list_product">
+						<div class="state_type">
+							<span>产品</span>
+						</div>
+						<div class="name_class">
+							<p>标准通APP</p>
+							<span>资料管理系列</span>
+						</div>
+						<div class="buy_number">
+							x 234
+						</div>
+						<div class="buy_price">
+							￥ 20000000.00
+						</div>
+					</li>
+					<li class="list_give">
+						<div class="state_type">
+							<span class="give_good">赠品</span>
+						</div>
+						<div class="name_class">
+							<p>标准通APP</p>
+							<span>资料管理系列</span>
+						</div>
+						<div class="buy_number">
+							x 234
+						</div>
+						<div class="buy_price">
+							￥ 20000000.00
+						</div>
+					</li>
+				</ul>
+				<div class="count_amount ">
+					<p>合计：￥<span class="all_amount">2000.00</span></p>
+				</div>
+			</div>
+			
+			<div class="uodate_order company_info">
+				<h5>销售信息</h5>
+				<p><span class="class_name">锁号</span><input type="text" placeholder="请填写" class="lock_num" /></p>
+				<p><span class="class_name">发票号</span><input type="text" placeholder="请填写" class="invoice_number" /></p>
+				<p class="checktime"><span class="class_name">回款日期</span><input type="text" placeholder="请选择" class="price_date" /><span class="up_btn choose_img"></span></p>
+				<p class="choose company_types"><span class="class_name">回款形式</span><input type="text" placeholder="请选择"
+					 class="get_type" /><span class="up_btn choose_img"></span></p>
+				<p><span class="class_name">回款金额（元）</span><input type="number" placeholder="请填写" class="price" /></p>
+				<p><span class="class_name">备注</span><input type="text" placeholder="请填写" class="remark" /></p>
+			</div>
+
+	   </div>	  
+		
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	var returnType = [];
+	var returnId;
+	var id = common.getQueryUrl('id');
+	var time = '';
+	mui.init();
+	clickInit();
+	getThisTime();
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+	
+	common.promise().then(function() {
+		mui.showLoading('加载中...');
+		return;
+	}).then(function() {
+		return getReturnType();
+	}).then(function() {
+		return getDetail()
+	}).then(function() {
+		mui.hideLoading();
+	})
+	
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/FileSell';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				$('.user_name').html(res.data.ContacterName);
+				$('.company_name').html(res.data.CompanyName);
+				$('.tel_num').html(res.data.ContacterPhone);
+				$('.order_time').html(res.data.CreateName + ' ' + res.data.CreateTime);
+				$('.list_product .name_class p').html(res.data.ProhuctName);
+				$('.list_product .name_class span').html(res.data.ProductType);
+				$('.list_product .buy_number').html('x ' + res.data.Quantity);
+				$('.list_product .buy_price').html('￥ ' + Number(res.data.ProductPrice).toFixed(2));
+				$('.all_amount').html(res.data.ProductPrice * res.data.Quantity + '.00')
+				if(res.data.InvoiceNumber) {
+					$('.invoice_class').addClass('kit_green');
+					$('.invoice_class').html('已开票')
+				}else {
+					$('.invoice_class').addClass('kit_red');
+					$('.invoice_class').html('未开票')
+				}
+				if(res.data.ReturnedMoneyAmount) {
+					$('.kit_class').addClass('kit_green');
+					$('.kit_class').html('已回款')
+				}else {
+					$('.kit_class').addClass('kit_red');
+					$('.kit_class').html('未回款')
+				}
+				$('.list_give .name_class p').html(res.data.ComplimentaryName || '无');
+				if(res.data.ComplimentaryType) {
+					$('.list_give .name_class span').html(res.data.ComplimentaryType)
+				}else {
+					$('.list_give .name_class span').html('').hide();
+				}
+				
+				$('.list_give .buy_number').html('x ' + (res.data.ComplimentarySum || 0));
+				$('.list_give .buy_price').html('￥ 0.00');
+				
+				
+				if(res.data.TheLock) {
+					$('.lock_num').val(res.data.TheLock)
+				}
+				if(res.data.InvoiceNumber) {
+					$('.invoice_number').val(res.data.InvoiceNumber)
+				}
+				if(res.data.ReturnedMoneyTime) {
+					$('.price_date').val(res.data.ReturnedMoneyTime);
+					time = res.data.ReturnedMoneyTime;
+				}
+				
+				if(res.data.ReturnedMoneyModality) {
+					returnId = Number(res.data.ReturnedMoneyModality);
+					$('.get_type').val(common.getKeyValue(returnType,returnId));
+				}
+				
+				if(res.data.ReturnedMoneyAmount) {
+					$('.price').val(res.data.ReturnedMoneyAmount)
+				}
+				if(res.data.ReturnedMoneyRemark) {
+					$('.remark').val(res.data.ReturnedMoneyRemark)
+				}
+			}else {
+				mui.toast('获取详情失败');
+			}
+		})
+	}
+	
+	//拨打电话
+	mui.plusReady(function () {
+		mui('.user_info').on('tap','.right_img',function() {
+			plus.device.dial($('.tel_num').html(), false); 
+		})
+	})
+	
+	function clickInit() {
+		//保存
+		mui('.footer_submit_one').on('tap','.btn_save',function() {
+			save();
+		})
+		//下拉框选择
+		mui('.uodate_order').on('tap','.choose',function() {
+			input.blur();
+			textarea.blur();
+			userPicker = new mui.PopPicker();
+			// if(isUpdate) {
+			// 	return;
+			// }
+			if($(".mui-dtpicker").hasClass("mui-active")){
+				return;
+			}
+			var _this = this;
+			if ($(this).hasClass('company_types')) {
+				userPicker.setData(returnType);
+				console.log(userPicker)
+				userPicker.show(function(items) {
+					$(_this).find('.get_type').val(items[0].text);
+					returnId = items[0].value;
+					userPicker.dispose()
+				});
+			}
+		})
+	}
+	
+	//保存
+	function save() {
+		var postData = {};
+		postData.TheLock = $('.lock_num').val() || '';
+		postData.InvoiceNumber = $('.invoice_number').val() || '';
+		postData.ReturnedMoneyTime = time || '';
+		postData.ReturnedMoneyModality = returnId || '';
+		postData.ReturnedMoneyAmount = $('.price').val() || '';
+		postData.ReturnedMoneyRemark = $('.remark').val() || '';
+		postData.Id = id;
+		var url = '/api/Finance/SaveSell';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.toast('保存成功！');
+				mui.back();
+			}else {
+				mui.toast('保存失败！'+res.msg);
+			}
+		})
+	}
+	
+	//获取回款形势
+	function getReturnType() {
+		var url = '/api/Finance/ReturnedMoneyModalitySelect';
+		return request.post(url).then(function(res) {
+			console.log('回款形势',res);
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {};
+					obj.value = res.data[i].SUB_ID;
+					obj.text = res.data[i].SUB_NM;
+					returnType.push(obj);
+				}
+			}
+		})
+	}
+	
+	function getThisTime() {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				// if(isUpdate) {
+				// 	return;
+				// }
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('.price_date').val(rs.text);
+						time = rs.text;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					options.type = 'date';
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('expect_time')) {
+							reimTime = rs.text;
+						}
+						$(_self).find('.price_date').val(rs.text);
+						time = rs.text;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+	}
+</script>

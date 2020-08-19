@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css" />
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+		<style type="text/css">
+			hr {
+				height: 10px;
+			}
+			.this_examine,.in_time_info {
+				display: none;
+			}
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 70%;
+			}
+			
+			.type1,
+			.type2 {
+				display: none;
+			}
+			
+			.detail_info {
+				display: none;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">发票申请</h1>
+		</header>
+		<div class="mui-content">
+			<h5>项目名称<span>＊</span></h5>
+			<div class="task_time">
+				<p class="get_manager get_project"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<h5>合同编号</h5>
+			<div class="task_time">
+				<p class="get_manager get_contract"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<!-- <h5>付款单位<span>＊</span></h5>
+			<div class="task_time">
+				<p class="get_manager pay_unit"><a>请选择</a><span class="choose_img"></span></p>
+			</div> -->
+			<h5>开票内容<span>＊</span></h5>
+			<div class="task_time">
+				<p class="get_manager pay_content"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="pay_content_other" style="display: none;">
+				<div class="task_time">
+					<p><input type="text" name="" id="" placeholder="请填写其他开票内容" class="pay_content_other_text" /></p>
+				</div>
+			</div>
+			<h5>开票金额（小写）<span>＊</span></h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="get_small_price" /></p>
+			</div>
+			<h5>开票金额（大写）<span>＊</span></h5>
+			<div class="task_time project_num">
+				<p class="get_big_price"></p>
+			</div>
+			<h5>发票类型<span>＊</span></h5>
+			<div class="task_time">
+				<p class="get_manager invoice_type"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<h5>附件</h5>
+			<div class="plan_time file_upload">
+				<span>附件上传</span>
+				<input type="file" name="" id="add_file_tendering" value="" multiple /><label for="add_file_tendering" class="btn_add choose_img">添加</label>
+			</div>
+			<ul class="file_tendering_list file_mess">
+				<!-- <li><span class="file_list_name"></span><span class="file_list_delete">删除</span></li> -->
+			</ul>
+			<h5>发票备注信息</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="in_remark" /></p>
+			</div>
+			<h5>开票信息</h5>
+			<div class="task_time">
+				<p class="get_manager get_in_type"><a>请选择填写方式</a><span class="choose_img"></span></p>
+			</div>
+			<!-- <hr> -->
+			<div class="type1">
+				<!-- <div class="company_info">
+					<p>
+						<span class="class_name">开票信息</span>
+						<input type="text"  placeholder="请填写抬头信息" class="company_name" />
+					</p>
+				</div> -->
+			</div>
+			<div class="type2">
+				<h5>上传开票信息图片</h5>
+				<div class="plan_time file_upload">
+					<span><b>上传开票信息</b></span>
+					<input type="file" name="" id="add_file_title" multiple /><label for="add_file_title" class="btn_add_title choose_img">添加</label>
+				</div>
+				<ul class="file_tendering_list file_head">
+					<!-- <li><span class="file_list_name"></span><span class="file_list_delete">删除</span></li> -->
+				</ul>
+			</div>
+			<div class="detail_info">
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">开票单位名称</span>
+						<input type="text" placeholder="请填写" class="in_company_name" />
+					</p>
+				</div>
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">纳税人识别号</span>
+						<input type="text" placeholder="请填写" class="in_number" />
+					</p>
+				</div>
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">地址</span>
+						<input type="text" placeholder="请填写" class="in_address" />
+					</p>
+				</div>
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">电话</span>
+						<input type="number" placeholder="请填写" class="in_tel" />
+					</p>
+				</div>
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">开户行</span>
+						<input type="text" placeholder="请填写" class="in_bank" />
+					</p>
+				</div>
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">账户</span>
+						<input type="number" placeholder="请填写" class="in_bank_num" />
+					</p>
+				</div>
+			</div>
+			
+			
+
+			<h5>审批流程</h5>
+			<div class="list_box_content">
+				<div class="task_time">
+					<p class="get_manager approval_process"><a>选择流程</a><span class="choose_img"></span></p>
+					<hr>
+				</div>
+				<ul class="list_content_procedure">
+
+				</ul>
+			</div>
+			<div class="in_time_info">
+				<hr>
+				<div class="company_info">
+					<p>
+						<span class="class_name">发票代码</span>
+						<input type="text" placeholder="请填写" class="invoice_code" />
+					</p>
+						<hr>
+					<p>
+						<span class="class_name">发票号码</span>
+						<input type="text" placeholder="请填写" class="invoice_number" />
+					</p>
+				</div>
+			</div>
+			
+
+			<div class="content_bottom">
+
+			</div>
+		</div>
+		
+		
+		<!-- 弹框开始 -->
+		<div class="htsp_modal htsp_modal_jj">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认拒绝<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinioncancel" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认拒绝</span></div>
+		    </div>
+		</div>
+		<div class="htsp_modal htsp_modal_ty">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认同意<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinionok" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认同意</span></div>
+		    </div>
+		</div>
+		<div class="htsp_modal sign_modal">
+			<div class="content_box">
+				<div class="mui-modal_all_title">添加签名<span class="mui-icon mui-icon-close"></span></div>
+				<div class="canvas_box">
+					<canvas id="canvas"></canvas>
+				</div>
+				<div class="canvas_btn">
+					<span class="canvas_reset">重置</span><span class="canvas_save">保存</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer_submit this_update">
+			<span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+		<div class="footer_submit this_examine">
+			<span class="btn_refuse">拒绝</span><span class="btn_agree">同意</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/process_view.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+
+
+	var id = common.getQueryUrl('id');
+	var isFlag = common.getQueryUrl('isExamine');
+	var isOperation = common.getQueryUrl('isOperation');
+	var ischeck = common.getQueryUrl('check');
+	var onlysee = common.getQueryUrl('onlysee');
+	if(isFlag) {
+		$('.this_update').css('display','none');
+		$('.this_examine').css('display','block');
+	}
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	
+	var projectList = [];
+	var projectId;
+	var processList = [];
+	var processId;
+	var invoiceType;//发票类型
+	var payUnit = ''; //委托单位
+	var contractList = [];
+	var contractId;
+	var category = 1; //开票类型
+	var payContent; //开票内容
+	var fileList = [];
+	var isShowAngree = false;
+	var isUpdate = false;
+
+	common.promise().then(getProjectList)
+		.then(function(res) {
+			return approvalProcess('财务管理');
+		}).then(function(res) {
+			console.log(res)
+			processList = res;
+			if(id) {
+				return getDetail();
+			}
+		})
+		
+	$('.in_tel').bind('input propertychange', function() {
+		 var length = $(this).val();
+			$(this).val(length.slice(0,11));
+	});
+		
+		
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/InvoiceApplysDetail';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				projectId = res.data.ProjectId;
+				$('.get_project').find('a').html(common.getKeyValue(projectList,projectId));
+				contractId = res.data.CId;
+				common.promise().then(function() {
+					return getContract(projectId);
+				}).then(function(res) {
+					$('.get_contract').find('a').html(common.getKeyValue(contractList,contractId));
+				})
+				$('.pay_unit').find('a').html(res.data.PaymentUnit + 1 == 1 ? '委托单位' : '中标单位');
+				payUnit = res.data.PaymentUnit + 1;
+				$('.in_remark').val(res.data.InRemark);
+				if(res.data.InContent != '招标代理服务费' || res.data.InContent != '咨询费') {
+					$('.pay_content').find('a').html('其他');
+					payContent = '其他';
+					$('.pay_content_other').show();
+					$('.pay_content_other_text').val(res.data.InContent);
+				}else {
+					$('.pay_content').find('a').html(res.data.InContent);
+					payContent = res.data.InContent;
+				}
+				
+				$('.invoice_type').find('a').html(res.data.InType == 1 ? '增值税专用发票' : '增值税普通发票');
+				invoiceType = res.data.InType;
+				$('.get_small_price').val(res.data.Price);
+				$('.get_big_price').html(res.data.PriceText);
+				$('.get_in_type').find('a').html(res.data.Category == true ? '填写抬头信息' : '上传开票信息');
+				if (res.data.Category) {
+					category = 1;
+						$('.detail_info').show();
+						$('.in_company_name').val(res.data.IUoffice);
+						$('.in_number').val(res.data.TINumber);
+						$('.in_address').val(res.data.Address);
+						$('.in_tel').val(res.data.Tel);
+						$('.in_bank').val(res.data.Bank);
+						$('.in_bank_num').val(res.data.BankNumber);
+				}else {
+					category = 2;
+						$('.detail_info').hide();
+				}
+				
+				
+				if (category == 1) {
+					$('.type1').css('display', 'block');
+					$('.type2').css('display', 'none');
+				} else {
+					$('.type1').css('display', 'none');
+					$('.type2').css('display', 'block');
+				}
+				
+				if(res.data.Template > 0 && res.data.State != -1) {
+					processId = res.data.Template;
+					processDetail(processId);
+					
+					if(!isOperation) {
+						isUpdate = true;
+						common.disbledForm();
+						$('.choose_img').hide()
+					}
+				}
+				
+				if(ischeck) {
+					if(res.data.State == 1 || res.data.State == -1 || res.data.State == 2) {
+						$('.footer_submit').hide();
+						$('.mui-title').html('发票申请详情')
+					}
+				}
+				if(onlysee) {
+					isUpdate = true;
+					common.disbledForm();
+					$('.choose_img').hide()
+						$('.footer_submit').hide();
+				}
+				
+				if(res.data.State == 2) {
+					$('.in_time_info').show();
+					$('.invoice_number').val(res.data.InvoiceNumber);
+					$('.invoice_code').val(res.data.InvoiceCode);
+				}
+				
+				var names = '';
+				for(var i=0;i<res.data.lstFile_Invoice.length;i++) {
+					var lists = res.data.lstFile_Invoice[i];
+					lists.Type = "财务管理--发票管理-中标通知书复印件";
+					fileList.push(lists);
+					var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+					// if(isCheck || onlysee) {
+						var str = '删除';
+						if(isUpdate)  {
+							str = '';
+						}
+						names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + doc +
+						'</span><span class="file_list_delete hide_span">'+ str +'</span></li>';
+					// }
+				}
+				// fileList = fileList.concat(res.data.lstFile_Invoice);
+				$('.file_mess').html(names);
+				
+				var names1 = '';
+				for(var i=0;i<res.data.lstFile_InvoiceImg.length;i++) {
+					var lists = res.data.lstFile_InvoiceImg[i];
+					lists.Type = "财务管理--发票管理-发票抬头二维码";
+					fileList.push(lists);
+					var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+					// if(isCheck || onlysee) {
+						var str = '删除';
+						if(isUpdate)  {
+							str = '';
+						}
+						names1 += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + doc +
+						'</span><span class="file_list_delete hide_span">'+ str +'</span></li>';
+					// }
+				}
+				// fileList = fileList.concat(res.data.lstFile_InvoiceImg);
+				$('.file_head').html(names1);
+			
+			}
+		})
+	}
+
+	//获取项目列表
+	function getProjectList() {
+		var url = '/api/Finance/ProjectDownList';
+		return request.post(url).then(function(res) {
+			console.log('项目', res);
+			if (res.code == 200) {
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].Id,
+						text: res.data[i].Name
+					}
+					projectList.push(obj);
+				}
+			}
+			return res;
+		})
+	}
+
+	//获取合同
+	function getContract(id) {
+		var url = '/api/Finance/ContractDownList';
+		return request.post(url, {
+			ProjectId: id
+		}).then(function(res) {
+			console.log('合同列表：', res);
+			if (res.code == 200) {
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].Id,
+						text: res.data[i].Name
+					}
+					contractList.push(obj);
+				}
+			}
+		})
+	}
+
+	function upload(formData, flag, index) {
+		var url = '/api/BusinessManage/UploadFile?Type=Invoice';
+		if (flag) {
+			url = '/api/BusinessManage/UploadFile?Type=InvoiceImg';
+		}
+		console.log(formData)
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": flag ? "财务管理--发票管理-发票抬头二维码" : "财务管理--发票管理-中标通知书复印件",
+					"tid": index
+				}
+				if (fileList.length > 0) {
+					console.log(fileList, data)
+					for (var i = 0; i < fileList.length; i++) {
+						if (fileList[i].FileName == data.FileName && fileList[i].Extension == data.Extension) {
+							fileList.splice(i, 1);
+						}
+					}
+				}
+				fileList.push(data)
+				return;
+			}
+		})
+	}
+	function submit(flag) {
+		var postData = {};
+		if (!projectId && projectId != 0) {
+			mui.toast('请选择项目名称!');
+			return;
+		}
+
+		// if (!payUnit) {
+		// 	mui.toast('请选择付款单位!');
+		// 	return;
+		// }
+		if (!payContent) {
+			mui.toast('请选择开票内容!');
+			return;
+		}
+		if (!invoiceType) {
+			mui.toast('请选择发票类型!');
+			return;
+		}
+		if (!$('.get_small_price').val()) {
+			mui.toast('请输入金额!');
+			return;
+		}
+		if (!$('.get_big_price').html()) {
+			mui.toast('请输入金额!');
+			return;
+		}
+		if(id) {
+			postData.Id = id;
+		}
+		if(flag) {
+			if(!processId) {
+				mui.toast('请选择审批流程!');
+				return;
+			}
+		}
+		postData.IsSubmit = flag;
+		if(processId) postData.Template = processId;
+		postData.ProjectId = projectId;
+		if(contractId) postData.Cid = contractId;
+		postData.PaymentUnit = payUnit;
+		postData.InRemark = $('.in_remark').val() || '';
+		postData.InContent = payContent;
+		if(payContent == '其他') {
+			if(!$('.pay_content_other_text').val()) {
+				mui.toast('请输入其他开票内容!');
+				return;
+			}
+			postData.InContent = $('.pay_content_other_text').val();
+		} 
+		postData.InType = invoiceType;
+		postData.Price = Number($('.get_small_price').val());
+		postData.PriceText = $('.get_big_price').html();
+		if (category == 1) {
+			postData.Category = true;
+			postData.IUoffice = $('.in_company_name').val() || '';
+			postData.TINumber = $('.in_number').val() || '';
+			postData.Address = $('.in_address').val() || '';
+			postData.Tel = $('.in_tel').val() || '';
+			postData.Bank = $('.in_bank').val() || '';
+			postData.BankNumber = $('.in_bank_num').val() || '';
+		}else {
+			postData.Category = false;
+		}
+		
+		common.promise().then(function() {
+			// if ($("#add_file_tendering")[0].files.length>0) {
+			// 	var files = $("#add_file_tendering")[0].files;
+			// 	var arr = []
+			// 	for(var i=0;i<files.length;i++) {
+			// 		if(files[i].deletetrue) {
+			// 			continue;
+			// 		}
+			// 		var formData = new FormData();
+			// 		formData.append("file",files[i]);
+			// 		arr.push(upload(formData))
+			// 	}
+			// 	return Promise.all(arr);
+			// } else {
+				return;
+			// }
+		}).then(function() {
+			// if ($("#add_file_title")[0].files.length>0) {
+			// 	var files = $("#add_file_title")[0].files;
+			// 	var arr = []
+			// 	for(var i=0;i<files.length;i++) {
+			// 		if(files[i].deletetrue) {
+			// 			continue;
+			// 		}
+			// 		var formData = new FormData();
+			// 		formData.append("file",files[i]);
+			// 		arr.push(upload(formData,true))
+			// 	}
+			// 	return Promise.all(arr);
+			// } else {
+				return;
+			// }
+		}).then(function() {
+			console.log(fileList)
+			postData.lstFile = fileList;
+			console.log(postData);
+			var url = '/api/Finance/SaveInvoiceApplys';
+			return request.post(url,postData).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast(res.msg)
+				}
+			})
+		})
+	}
+	
+
+
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(false);
+	});
+	mui('.footer_submit').on('tap', '.btn_submit', function() {
+		submit(true);
+	});
+	
+	canvasInit();
+
+
+	$('.get_small_price').on('blur', function() {
+		var text = common.smallToLarge($(this).val());
+		$('.get_big_price').html(text);
+	});
+	
+	//点击文件上传按钮
+	$("#add_file_tendering").on('change', function(e) {
+		
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,false,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name" '+
+			'item='+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function(res) {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_mess').append(names);
+		}
+	})
+	
+	mui('.file_mess').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		console.log(fileList)
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			// var files = $("#add_file_tendering")[0].files;
+			// console.log(files)
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	
+	mui('.file_head').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+
+	
+	//点击文件上传按钮  抬头二维码
+	$("#add_file_title").on('change', function(e) {
+		var _this = this;
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,true,files[i].lastModified))
+			names += '<li><span class="file_list_name" item='+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_head').append(names)
+		}
+	})
+	
+	mui('.file_mess').on('tap','.file_list_name',function() {
+		mui.showLoading('加载中...');
+		openThis(this);
+	})
+	mui('.file_head').on('tap','.file_list_name',function() {
+		mui.showLoading('加载中...');
+		openThis(this);
+	})
+	
+	function openThis(self) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(item == fileList[i].tid) {
+					openFile(baseUrl + fileList[i].FilePath)
+				}
+			}
+		}
+	}
+
+
+
+	(function(mui) {
+		
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					if(isUpdate) {
+						return;
+					}
+					var _this = this;
+					if ($(this).hasClass('get_project')) {
+						userPicker.setData(projectList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							projectId = items[0].value;
+							getContract(projectId);
+						});
+					}
+					if ($(this).hasClass('get_contract')) {
+						if (!projectId && projectId != 0) {
+							mui.toast('请先选择项目名称！');
+							return;
+						}
+						userPicker.setData(contractList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							contractId = items[0].value;
+						});
+					}
+					if ($(this).hasClass('pay_unit')) {
+						var data = [{
+								value: 1,
+								text: '委托单位'
+							},
+							{
+								value: 2,
+								text: '中标单位'
+							}
+						]
+						userPicker.setData(data);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							payUnit = items[0].value;
+						});
+					}
+					if ($(this).hasClass('pay_content')) {
+						var data = [{
+								value: 1,
+								text: '招标代理服务费'
+							},
+							{
+								value: 2,
+								text: '咨询费'
+							},
+							{
+								value: 3,
+								text: '其他'
+							}
+						]
+						userPicker.setData(data);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							payContent = items[0].text;
+							if(items[0].text == '其他') {
+								$('.pay_content_other').show();
+							}else {
+								$('.pay_content_other').hide();
+							}
+						});
+					}
+					if ($(this).hasClass('approval_process')) {
+						userPicker.setData(processList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							processId = items[0].value;
+							getProcessDetail(processId);
+						});
+					}
+					if ($(this).hasClass('invoice_type')) {
+						var data = [{
+								value: 1,
+								text: '增值税专用发票'
+							},
+							{
+								value: 2,
+								text: '增值税普通发票'
+							}
+						]
+						userPicker.setData(data);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							invoiceType = items[0].value;
+						});
+					}
+					if ($(this).hasClass('get_in_type')) {
+						var data = [{
+								value: 1,
+								text: '填写抬头信息'
+							},
+							{
+								value: 2,
+								text: '上传开票信息'
+							}
+						]
+						userPicker.setData(data);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							category = items[0].value;
+							if (category == 1) {
+								$('.type1').css('display', 'block');
+								$('.type2').css('display', 'none');
+								$('.detail_info').show();
+							} else {
+								$('.type1').css('display', 'none');
+								$('.type2').css('display', 'block');
+								$('.detail_info').hide();
+							}
+						});
+					}
+				}, false);
+			});
+		});
+	})(mui);
+</script>

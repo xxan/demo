@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css" />
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/daily_details.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">日报详情</h1>
+		</header>
+		<div class="mui-content">
+			<div class="details_top">
+				<span class="data_time">日期：2019-11-29</span><span class="user">填报人：李晓明</span>
+			</div>
+			<div class="details_part">
+				<p class="details_title">上午</p>
+				<div class="details_part_all">
+					<div class="details_part_nr">
+						<div class="details_part_l" style="background: #46CC8E;">工作</div>
+						<ul class="details_part_r">
+							<li><span>跟踪记录：</span></li>
+							<li><span>拜访时间：</span>2019-11-19 09:00-15:00</li>
+							<li><span>拜访人：</span>李总</li>
+							<li><span>联系电话：</span>15874125963</li>
+							<li><span>拜访结果：</span>拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果</li>
+						</ul>
+					</div>
+					<div class="details_part_my">
+						<div class="details_part_l" style="background: #3B9CFF;">自己</div>
+						<ul class="details_part_r">
+							<li><span>建科研OA手机版：</span>完成项目管理全部审批页面展示，并完善相关文档。</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="details_part">
+				<p class="details_title">下午</p>
+				<div class="details_part_all">
+					<div class="details_part_nr">
+						<div class="details_part_l" style="background: #46CC8E;">工作</div>
+						<ul class="details_part_r">
+							<li><span>跟踪记录：</span></li>
+							<li><span>拜访时间：</span>2019-11-19 09:00-15:00</li>
+							<li><span>拜访人：</span>李总</li>
+							<li><span>联系电话：</span>15874125963</li>
+							<li><span>拜访结果：</span>拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果拜访结果</li>
+						</ul>
+					</div>
+					<div class="details_part_my">
+						<div class="details_part_l" style="background: #3B9CFF;">自己</div>
+						<ul class="details_part_r">
+							<li><span>建科研OA手机版：</span>完成项目管理全部审批页面展示，并完善相关文档。</li>
+						</ul>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var id = common.getQueryUrl('id');
+	var url = '/api/Daily/GetDailyDetail';
+	var name = common.getQueryUrl('name');
+	request.post(url, {
+		Id: id
+	}).then(function(res) {
+		console.log(res);
+		if (res.code == 200) {
+			$('.details_title').html(res.data.Meridiem);
+			$('.data_time').html('日期：' + res.data.DailyDate);
+			$('.user').html('填报人：' + name);
+			var html = ''
+			if (res.data.type == 1) {
+				html = '<div class="details_part_nr"><div class="details_part_l" style="background: #46CC8E;">工作</div>' +
+					'<ul class="details_part_r"><li>' +
+					'<span>工作内容：</span><textarea id="textRea">' + res.data.WorkContent + '</textarea></li>' +
+					'<li><span>工作时间：</span>' + res.data.DailyTime + '</li>' +
+					'<li><span>工作时长：</span>' + res.data.WorkHours + '</li></ul></div>'
+				$('.details_part_all').html(html)
+			}else {
+				html = '<div class="details_part_my">'+
+				'<div class="details_part_l" style="background: #3B9CFF;">自己</div>'+
+				'<ul class="details_part_r"><li>'+res.data.WorkContent+
+				'</li></ul></div>';
+			}
+			$('.details_part_all').html(html);
+			if($('.details_part_all').find('textarea').length > 0) {
+				let textArea = document.getElementById('textRea');
+				textArea.style.height = textArea.scrollHeight + 'px';
+			}
+		}
+	})
+</script>

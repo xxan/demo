@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/jiedian.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/xmgl.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<link rel="stylesheet" type="text/css" href="../../css/search.css"/>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">日报查询</h1>
+		</header>
+		<div class="mui-content">
+			
+			<!-- <div class="mui-input-row mui-search framework_search">
+				<input type="search" class="search_input" placeholder="搜索填报人">
+			</div> -->
+			<div class="search_box">
+				<div class="mui-input-row mui-search">
+					<input type="text" class="search_input_text" placeholder="搜索填报人">
+					<span class="photo_search"></span>
+				</div>
+			</div>
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<div class="mui-scroll">
+					<ul class="list_title">
+						<li>日期</li>
+						<li>时段</li>
+						<li>工作内容</li>
+						<li>填报人</li>
+						<li>操作</li>
+					</ul>
+					<div class="project_daily my_daily">
+						<ul class="day_lists">
+							
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var page = 1;
+	var searchText = '';
+	
+	var defaulthtml = '<div class="detail_info detail_info_no_data bid_no_data">'+
+	'<img src="../../img/no_data.png"><p>没有记录</p></div>';
+	$('.day_lists').html(defaulthtml);
+	
+	mui.init({
+		pullRefresh: {
+			container: '#pullrefresh',
+			down: {
+				height:50,
+				callback: pulldownRefresh
+			},
+			up: {
+				contentrefresh: '正在加载...',
+				callback: pullupRefresh
+			}
+		}
+	});
+	
+	function pullupRefresh() {
+		var liLength = $('.day_lists li').length;
+		if(liLength % 10 != 0) {
+			mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+		}else {
+			page = parseInt( liLength / 10) + 1;
+			search(searchText,false).then(function() {
+				mui('#pullrefresh').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了。
+			})
+		}
+	}
+	
+	/**
+	 * 下拉刷新具体业务实现
+	 */
+	function pulldownRefresh() {
+		$('#search_input').val('');
+		page = 1;
+		search(searchText,true).then(function() {
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh();
+			mui('#pullrefresh').pullRefresh().refresh(true);
+		})
+	}
+	
+
+	
+	
+	function countHeight() {
+		var length  = $('.day_lists li').length;
+		for(var i=0;i<length;i++) {
+			var thiss = $('.day_lists li').eq(i);
+			var height = thiss.height();
+			console.log(height)
+			thiss.find('div.line').css('height',height + 'px');
+			thiss.find('div.line').css('lineHeight',height + 'px');
+			thiss.find('div.time_point>div').css('lineHeight',height + 'px');
+		}
+	}
+	
+	mui('.search_box').on('tap','.photo_search',function() {
+		var searchText = $('.search_input_text').val();
+		search(searchText,true)
+	})
+	// search('管理员',true);
+	function search(text,flag) {
+		var url = '/api/Daily/GetDailyData';
+		var postData = {
+			page: page,
+			limit: 10,
+			Type: 1
+		}
+		postData.UserName = text;
+		return request.post(url,postData).then(function(res) {
+			console.log('list',res);
+			if(res.code == 200) {
+				var html = '';
+				var time = '';
+				for(var i=0;i<res.data.length;i++) {
+					var data = res.data[i];
+					html += '<li id='+ data.Id +'><div class="time"><span>'+ data.DailyDate.split('-')[0] + '</span><span>' +
+									data.DailyDate.split('-')[1] + '-' + data.DailyDate.split('-')[2] + 
+									'</span></div><div class="time_point">'+
+									'<div class="time_am">'+ data.Meridiem +'</div>'+
+									// '<div class="time_pm">下午</div>'+
+									'</div><div class="content">'+ data.WorkContent +
+									'</div><div class="user line">'+ data.UserName +'</div>'+
+									'<div class="operation line"><span class="check">查看</span></div></li>';
+				}
+				if(res.data.length == 0 && page == 1) {
+					html = '<div class="detail_info detail_info_no_data bid_no_data">'+
+					'<img src="../../img/no_data.png"><p>没有记录</p></div>';
+				}
+				if(flag) {
+					$('.day_lists').html(html);
+				}else {
+					$('.day_lists').append(html);
+				}
+				
+				countHeight()
+			}
+		})
+	}
+	
+	mui('.day_lists').on('tap','.check',function() {
+		var id = $(this).parents('li').attr('id');
+		window.location.href = './details.html?id=' + id + '&name=' +  $(this).parents('li').find('.user').html();
+	})
+	
+</script>
+
+
+

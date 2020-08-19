@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/jygl_chengguowenjian.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/menu.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<style type="text/css">
+			.show_elec,.show_phy,.type_other {
+				display: none;
+			}
+			
+			#meau_box .list_table {
+				padding: 0px;
+			}
+		</style>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript">
+				mui.init();
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">合同审批表</h1>
+		</header>
+		<div class="mui-content htsp_content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>合同名称<b>＊</b></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="contract_name"/></p>
+			</div>
+			<h5>合同编号</h5>
+			<div class="task_time project_num">
+				<p class="contract_num">项目提交后自动生成</p>
+			</div>
+			<h5>合同相对方<b>＊</b></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="construction_unit"/></p>
+			</div>
+			<h5>收款方式<b>＊</b></h5>
+			<div class="task_time">
+				<p class="get_manager payment_type"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="task_time type_other">
+				<p><input type="text" name="" id="" placeholder="请填写其他收款方式" class="payment_type_other"/></p>
+			</div>
+			<h5>合同类型<b>＊</b></h5>
+			<div class="task_time">
+				<p class="get_manager contract_type"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="task_time contract_other">
+				<p><input type="text" name="" id="" placeholder="请填写其他合同类型" class="contract_type_other"/></p>
+			</div>
+			<h5>合同金额<b>＊</b></h5>
+			<div class="task_time task_price">
+				<p><input type="number" name="" id="" placeholder="" class="contract_price"/><span>元</span></p>
+			</div>
+			<h5>合同工期</h5>
+			<div class="task_time">
+				<p class="checktime contract_start_time start_time"><a>选择开始时间<b></b></a><span class="choose_img"></span></p>
+				<hr >
+				<p class="checktime contract_end_time end_time"><a>选择结束时间<b></b></a><span class="choose_img"></span></p>
+			</div>
+			<h5>合同主要条款<b>＊</b></h5>
+			<div class="task_name"><textarea rows="" cols="" class="contract_main" placeholder="请填写"></textarea></div>
+			<h5>备注</h5>
+			<div class="task_name"><textarea rows="" cols="" class="remark" placeholder="请填写"></textarea></div>
+			<ul class="" id="list_box">
+				<li>
+					<a class="list_title" href="#">文件上传<b>＊</b> <span>展开</span></a>
+					<div class="list_box_content">
+						<div class="plan_time file_upload">
+							<span>合同文件<b>＊</b></span>
+							<input type="file" name="" id="add_file_contract" value="" multiple="multiple"/><label for="add_file_contract choose_img">添加</label>
+						</div>
+						<ul class="file_tendering_list">
+							
+						</ul>
+						<hr >
+						<div class="plan_time file_upload">
+							<span>附件<b></b></span>
+							<input type="file" name="" id="add_file_enclosure" value="" multiple="multiple"/><label for="add_file_enclosure choose_img">添加</label>
+						</div>
+						<ul class="enclosure_list">
+							
+						</ul>
+					</div>
+				</li>
+				<li>
+					<a class="list_title" href="#">盖章申请 <span>展开</span></a>
+					<div class="list_box_content list_content_seal">
+						<div class="task_time">
+							<p class="get_manager electron_seal"><a>电子章</a><span class="choose_img"></span></p>
+							<hr >
+							<p class="get_manager physics_seal"><a>物理章</a><span class="choose_img"></span></p>
+							<hr >
+							<p><input type="number" name="" id="" placeholder="盖章文件份数" class="seal_number"/></p>
+						</div>
+					</div>
+				</li>
+				<li>
+					<a class="list_title" href="#">审批流程 <span>展开</span></a>
+					<div class="list_box_content">
+						<div class="task_time">
+							<p  class="get_manager approval_process"><a>选择流程</a><b>＊</b><span class="choose_img"></span></p>
+							<hr >
+						</div>
+						<ul class="list_content_procedure">
+						</ul>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="footer_submit_three">
+			<span class="btn_cancel">取消</span><span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+		<div class="meau_list" id="meau_box">
+			<div class="list_table spans">
+				<div class="show_elec spans">
+					<p>电子章</p>
+					<div class="ele_meal items spans">
+						
+					</div>
+				</div>
+				<div class="show_phy spans">
+					<p>物理章</p>
+					<div class="phy_meal items spans">
+						
+					</div>
+				</div>
+				
+				<p class="btn_box_meau">
+					<button type="button" class="mui-btn meau_cancel spans">取消</button>
+					<button type="button" class="mui-btn mui-btn-blue spans">确定</button>
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
+
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.poppicker.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+
+	
+	var paymentMethodList = [];//收款方式列表
+	var paymentMethodId;//选中的收款方式
+	var contractTypeList = [];//合同列表
+	var contractTypeId;//选中的合同
+	var sealData = [];//章列表
+	var electronSealList = []; //电子章列表
+	var physicsSealList = [];//物理章列表
+	var electronSealId = [];//电子章
+	var newElecId = [];
+	var elecName = [];
+	var newElecName = [];
+	var physicsSealId = [];//物理章
+	var newPhyId = [];
+	var phyName = [];
+	var newPhyname = [];
+	var isShowElec = true;//是否是电子章选择
+	var processList = []; //流程列表	
+	var processId; //流程Id
+	var fileList = [];//文件
+	var isfile = false;
+	
+	var startTime,endTime;
+	
+	var isDisabled = false;
+	
+	var projectId = common.getQueryUrl('id');
+	var projectName = common.getQueryUrl('name');
+	var contractId = common.getQueryUrl('Id');
+	$('.point_title').html(projectName);
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+	
+	common.promise()
+	.then(paymentMethod)
+	.then(function(data) {
+		paymentMethodList = data;
+		return contractType();
+	})
+	.then(function(data) {
+		contractTypeList = data;
+		return getSeal();
+	})
+	.then(function(data) {
+		sealData = data;
+		return approvalProcess()
+	})
+	.then(function(data) {
+		processList = data;
+		if(contractId) {
+			return getContractDetail();
+		}
+	})
+	.catch(function(err) {
+		console.log('ERROR:',err)
+	})
+	
+	function ProcessDetail(id) {
+		var url = '/api/SystemManage/ApplyView';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('审批流程',res);
+			if (res.code == 200) {
+				$('.approval_process').find('a').html(res.data.title);
+				var html = ''
+				for (var i = 0; i < res.data.list.length; i++) {
+					var item = res.data.list[i];
+					var color = '';
+					if(item.eStatus == -1) {
+						color = 'red';
+					}
+					if(item.eStatus == 0) {
+						color = 'orange';
+					}
+					if(item.eStatus == 1) {
+						color = 'green';
+					}
+					if(item.eStatus == 2 || item.eStatus == 3) {
+						color = 'red';
+					}
+					html += '<li id='+item.eDateTime+'><div class="procedure_left"><span>' + item.title +
+						'</span><i></i></div>' +
+						'<div class="procedure_right"><p class="start_check">' + item.detail + '<span class='+ color +'>' + item.tempStatus + '</span></p>'+
+						(item.eDateTime == '无' ? '' : '<span class="opa_time">'+ item.eDateTime +'</span>') +
+						(item.content ? '<p class="contents"><span>' + item.content + '</span></p>' : '')+
+						'</div></li>'
+				}
+				$('.list_content_procedure').html(html);
+			}
+		})
+	}
+	//获取合同详情
+	function getContractDetail() {
+		var url = '/api/BusinessManage/HTSPDetail';
+		return request.post(url,{Id: contractId}).then(function(res) {
+			console.log('详情',res)
+			if(res.code == 200) {
+				var data = res.data;
+				$('.contract_name').val(data.Name);
+				$('.construction_unit').val(data.ConstructionUnit);
+				if(data.Number) $('.contract_num').html(data.Number);
+				$('.payment_type').find('a').html(common.getKeyValue(paymentMethodList,data.PaymentType));
+				if(common.getKeyValue(paymentMethodList,data.PaymentType) == '其他') {
+					$('.type_other').show();
+					$('.payment_type_other').val(data.PaymentTypeOther);
+				}
+				paymentMethodId = data.PaymentType;
+				$('.contract_type').find('a').html(common.getKeyValue(contractTypeList,data.Type));
+				if(common.getKeyValue(contractTypeList,data.Type) == '其他') {
+					$('.contract_other').show();
+					$('.contract_type_other').val(data.TypeOther);
+				}
+				contractTypeId = data.Type;
+				$('.contract_price').val(data.Price);
+				if(data.BeginTime) $('.contract_start_time').find('a').html(data.BeginTime);
+				if(data.EndTime) $('.contract_end_time').find('a').html(data.EndTime);
+				$('.contract_main').val(data.Contents);
+				if(data.ApprovalRemark) $('.remark').val(data.ApprovalRemark);
+					
+				for (var i = 0; i < data.ContractStamp.length; i++) {
+					var item = data.ContractStamp[i];
+					if (item < 200) {
+						electronSealId.push(item);
+						elecName.push(common.getObjValue(sealData[0].Sub, item).SUB_NM);
+					} else {
+						physicsSealId.push(item);
+						phyName.push(common.getObjValue(sealData[1].Sub, item).SUB_NM);
+					}
+				}
+				console.log(electronSealId,physicsSealId)
+				if(elecName.length > 0) {
+					$('.electron_seal').find('a').html(elecName.join(','));
+				}
+				if(phyName.length > 0) {
+					$('.physics_seal').find('a').html(phyName.join(','));
+				}
+				
+				if (data.StampCount) 	$('.seal_number').val(data.StampCount);
+				
+				if (data.Template > 0) {
+					processId = data.Template;
+					ProcessDetail(processId);
+					if(data.State != -1) {
+						isDisabled = true;
+						$(":input").attr("disabled", "disabled"); 
+						$('.footer_submit_three').css('display','none');
+						$('.choose_img').hide();
+					}
+					
+				}
+				if (data.lstFile_ContractFile.length > 0) {
+					fileList = data.lstFile_ContractFile;
+				}
+				var html1 = ''
+				for (var i = 0; i < data.lstFile_ContractFile.length; i++) {
+					var lists = data.lstFile_ContractFile[i];
+					var deStr = '删除';
+					if(isDisabled) {
+						deStr = '';
+					}
+					html1 += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + lists.Extension +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+					
+				}
+							
+				if (data.lstFile_ContractAttach.length > 0) {
+					fileList = fileList.concat(data.lstFile_ContractAttach);
+				}
+				var html2 = ''
+				for (var i = 0; i < data.lstFile_ContractAttach.length; i++) {
+					var lists = data.lstFile_ContractAttach[i];
+					var deStr = '删除';
+					if(isDisabled) {
+						deStr = '';
+					}
+					html2 += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + lists.Extension +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+				}
+				if(html1 != '') {
+					$('.file_tendering_list').html(html1); 
+				}
+				if(html2 != '') {
+					$('.enclosure_list').html(html2); 
+				}
+			}
+		})
+	}
+	
+
+	
+	//添加文件
+	$("#add_file_contract").on('change',function(e) {
+		input.blur();
+		textarea.blur();
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,true,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	})
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		var id = $(this).parent('li').attr('id');
+		var item = $(this).parent('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parent('li').remove();
+	})
+	
+	$("#add_file_enclosure").on('change',function(e) {
+		input.blur();
+		textarea.blur();
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,false,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.enclosure_list').append(names)
+		}
+		
+	})
+	
+	mui('.enclosure_list').on('tap','.file_list_delete',function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		var id = $(this).parent('li').attr('id');
+		var item = $(this).parent('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parent('li').remove();
+	})
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		input.blur();
+		textarea.blur();
+		preview(this,fileList)
+	})
+	mui('.enclosure_list').on('tap','.file_list_name',function() {
+		input.blur();
+		textarea.blur();
+		preview(this,fileList)
+	})
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	function getSealData(res,index) {
+		var data = [];
+		var html1 = '';
+		var html2 = '';
+		for(var i=0;i<res[index].Sub.length;i++) {
+			var item = res[index].Sub[i];
+			var obj = {};
+			obj.value = item.SUB_ID;			
+			obj.text = item.SUB_NM;
+			data.push(obj);
+			if(item.SUB_ID <= 200) {
+				html1 += '<span id='+ item.SUB_ID +' class="spans">'+ item.SUB_NM +'</span>';
+			}else {
+				html2 += '<span id='+ item.SUB_ID +' class="spans">'+ item.SUB_NM +'</span>'
+			}
+		}
+		if(index == 0) {
+			electronSealList = data;
+			$('.ele_meal').html(html1);
+		}else {
+			physicsSealList = data;
+			$('.phy_meal').html(html2);
+		}
+	}
+	
+	(function(mui,doc) {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				if (isDisabled) return;
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('a').html(rs.text);
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}else {
+							endTime = rs.text;
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					if($(_self).hasClass('end_time') && startTime) {
+						var yearMonth = startTime.split('-');
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('a').html(rs.text);
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}else {
+							endTime = rs.text;
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					if (isDisabled) return;
+					var _this = this;
+					if($(_this).hasClass('payment_type')) {
+						userPicker.setData(paymentMethodList);
+						userPicker.show(function(items) {
+							console.log(items[0].text);
+							paymentMethodId = items[0].value;
+							$(_this).find('a').html(items[0].text);
+							if(items[0].text == '其他') {
+								$('.type_other').show();
+							}else {
+								$('.type_other').hide();
+							}
+						});
+					}else if($(_this).hasClass('approval_process')) {
+						common.promise().then(function(res) {
+							userPicker.setData(processList);
+							return userPicker;
+						}).then(function() {
+							return new Promise(function(resolve,reject) {
+								userPicker.show(function(items) {
+									$(_this).find('a').html(items[0].text);
+									processId = items[0].value;
+									return resolve()
+								});
+							})
+							
+						}).then(function() {
+							getProcessDetail(processId)
+						})
+					}else if($(_this).hasClass('contract_type')) {
+						userPicker.setData(contractTypeList);
+						userPicker.show(function(items) {
+							console.log(items[0].text);
+							contractTypeId = items[0].value;
+							$(_this).find('a').html(items[0].text);
+							if(items[0].text == '其他') {
+								$('.contract_other').show();
+							}else {
+								$('.contract_other').hide();
+							}
+						});
+					}
+					
+				}, false);
+			});
+			
+			
+		});
+	})(mui,document);
+	
+	mui('#list_box').on('tap','.list_title',function(){
+		input.blur();
+		textarea.blur();
+	  var display = $(this).next().css('display') === 'none' ? false : true;
+	  $(this).next().slideToggle();
+	  if(display) {
+		   $(this).find('span').html('展开');
+	  }else {
+		  $(this).find('span').html('收起');
+	  }
+		if($(this).html().indexOf('审批流程 ') != -1) {
+			
+		}
+		var this_length = $('.list_content_procedure').find('li').length;
+		for(var i=0;i<this_length;i++) {
+			var li = $('.list_content_procedure').find('li').eq(i);
+			$(li).find('.procedure_left').css('height',$(li).css('height'))
+		}
+		
+	})
+	
+	function upload(formData,flag,index) {
+		var url = '/api/BusinessManage/UploadFile?Type=ContractAttach';
+		if(flag) {
+			url = '/api/BusinessManage/UploadFile?Type=ContractFile';
+		}
+		return request.upload(url,formData).then(function(res) {
+			if(res.code == 200) {
+				var data = {
+				  "FileName": res.data.FileName,
+		      "Extension": res.data.Extension,
+		      "FilePath": res.data.FilePath,
+		      "Type": flag ? "合同审批_合同文件" : "合同审批_附件",
+					"tid": index
+				}
+				if(fileList.length > 0) {
+					console.log(fileList,data)
+					for(var i=0;i<fileList.length;i++) {
+						if(fileList[i].FileName == data.FileName &&
+						 fileList[i].Extension == data.Extension &&
+						 fileList[i].Type == data.Type){
+							fileList.splice(i,1); 
+						}
+					}
+				}
+				fileList.push(data)
+				return;
+			}
+		})
+	}
+	
+	var issubmit = false;
+	//提交数据准备
+	function submit(flag) {
+		
+		var postData = {};
+		postData.ProjectId = projectId;
+		postData.IsSubmit = flag;
+		if(contractId) {
+			postData.Id = contractId;
+		}
+		if(!$('.contract_name').val()) {
+			mui.toast('请输入合同名称！');
+			return;
+		}
+		if(!$('.construction_unit').val()) {
+			mui.toast('请输入合同相对方！');
+			return;
+		}
+		if(!paymentMethodId && paymentMethodId != 0) {
+			mui.toast('请选择收款方式！');
+			return;
+		}
+		if(!contractTypeId && contractTypeId != 0) {
+			mui.toast('请选择合同类型！');
+			return;
+		}
+		if(!$('.contract_price').val()) {
+			mui.toast('请输入合同相金额！');
+			return;
+		}
+		if(!$('.contract_main').val()) {
+			mui.toast('请输入合同主要条款！');
+			return;
+		}
+		
+		if(flag) {
+			if(!processId && processId != 0) {
+				mui.toast('请选择审批流程！');
+				return;
+			}
+		}
+		
+		var isHasTBList = false;
+		for(var i=0;i<fileList.length;i++) {
+			if(fileList[i].Type == '合同审批_合同文件') {
+				isHasTBList = true;
+			}
+		}
+		if(!isHasTBList) {
+			if (!$("#add_file_contract")[0].files[0]) {
+				mui.toast('请上传合同文件！');
+				return;
+			}
+		}
+		
+		postData.Name = $('.contract_name').val();
+		postData.ConstructionUnit = $('.construction_unit').val();
+		postData.PaymentType = paymentMethodId;
+		if(common.getKeyValue(paymentMethodList,paymentMethodId) == '其他') {
+			if(!$('.payment_type_other').val()) {
+				mui.toast('请输入其他收款方式！');
+				return;
+			}
+			postData.PaymentTypeOther = $('.payment_type_other').val();
+		}
+		postData.Type = contractTypeId;
+		if(common.getKeyValue(contractTypeList,contractTypeId) == '其他') {
+			if(!$('.contract_type_other').val()) {
+				mui.toast('请输入其他合同类型！');
+				return;
+			}
+			postData.TypeOther = $('.contract_type_other').val();
+		}
+		postData.Price = $('.contract_price').val();
+		postData.Contents = $('.contract_main').val();
+		
+		if($('.contract_start_time').find('a').find('b').length > 0) {
+			postData.BeginTime = '';
+		}else {
+			postData.BeginTime = $('.contract_start_time').find('a').html();
+		}
+		if($('.contract_end_time').find('a').find('b').length > 0) {
+			postData.EndTime = '';
+		}else {
+			postData.EndTime = $('.contract_end_time').find('a').html();
+		}
+		if(postData.BeginTime > postData.EndTime) {
+			mui.toast('合同开始时间大于结束时间！');
+			return;
+		}
+		postData.ApprovalRemark = $('.remark').val();
+		
+		postData.ContractStamp = [];
+		if(electronSealId.length > 0) {
+			postData.ContractStamp = postData.ContractStamp.concat(electronSealId);
+		}
+		if(physicsSealId.length > 0) {
+			postData.ContractStamp = postData.ContractStamp.concat(physicsSealId);
+		}
+		
+		postData.StampCount = $('.seal_number').val();
+		// postData. = $('.seal_require').val();
+		postData.Template = processId;
+		issubmit = true;
+		common.promise()
+		.then(function() {
+			postData.lstFile = fileList;
+			console.log(postData)
+			var url = '/api/BusinessManage/SaveHTSP';
+			return request.post(url,postData).then(function(res) {
+				console.log(res);
+				issubmit = false;
+				if(res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast(res.msg)
+				}
+			})
+		})
+	}
+	//保存
+	mui('.footer_submit_three').on('tap','.btn_save',function() {
+		if(issubmit) return;
+		submit(false);
+	})
+	//提交
+	mui('.footer_submit_three').on('tap','.btn_submit',function() {
+		if(issubmit) return;
+		submit(true);
+	})
+	
+	//选择盖章列表
+	mui('.list_content_seal').on('tap', '.electron_seal', function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		isShowElec = true;
+		$('.show_elec').show();
+		$('.show_phy').hide();
+		$(".meau_list").animate({right:0});
+		$('body').css('overflow','hidden');
+		// newElecId = newElecId.concat(electronSealId);
+		// newElecName = newElecName.concat(elecName);
+		getSealData(sealData,0);
+		slideDetail(electronSealId);
+		
+	});
+	mui('.list_content_seal').on('tap', '.physics_seal', function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		isShowElec = false;
+		$('.show_phy').show();
+		$('.show_elec').hide();
+		$(".meau_list").animate({right:0});
+		$('body').css('overflow','hidden');
+		getSealData(sealData,1);
+		slideDetail(physicsSealId);
+		// newPhyId = newPhyId.concat(physicsSealId);
+		// newPhyname = newPhyname.concat(phyName);
+	});
+	
+	function slideDetail(idArr) {
+		var list = $('.list_table span');
+		for(var i=0;i<idArr.length;i++) {
+			for(var j=0;j<list.length;j++) {
+				if(idArr[i] == $(list[j]).attr('Id')) {
+					$(list[j]).addClass('active');
+				}
+			}
+		}
+	}
+	
+
+		mui('.list_table').on('tap', 'span', function() {
+			input.blur();
+			textarea.blur();
+			var this_id = $(this).attr('id');
+			var this_name = $(this).html();
+			if($(this).parents('.show_elec').length > 0) {
+				if($(this).hasClass('active')) {
+					$(this).removeClass('active');
+					electronSealId.splice(electronSealId.indexOf(this_id),1); 
+					elecName.splice(elecName.indexOf(this_name),1); 
+				}else {
+					$(this).addClass('active');
+					electronSealId.push(this_id);
+					elecName.push(this_name);
+				}
+			} else {
+				console.log(123)
+				if($(this).hasClass('active')) {
+					$(this).removeClass('active');
+					physicsSealId.splice(physicsSealId.indexOf(this_id),1); 
+					phyName.splice(phyName.indexOf(this_name),1); 
+				}else {
+					$(this).addClass('active');
+					physicsSealId.push(this_id);
+					phyName.push(this_name);
+				}
+			}
+		});
+
+	
+	var btn = document.getElementById("meau_box");
+	btn.addEventListener('tap',function(e) {
+		input.blur();
+		textarea.blur();
+		if($(e.target).hasClass('spans')) {
+			return
+		}
+		$(".meau_list").animate({right:'-100%'});
+		$('body').css('overflow','auto');
+	})
+	mui('.btn_box_meau').on('tap', 'button', function() {
+		input.blur();
+		textarea.blur();
+		$(".meau_list").animate({right:'-100%'});
+		$('body').css('overflow','auto');
+		if(!$(this).hasClass('meau_cancel')) {
+			getMealStr()
+		}
+	});
+	
+	function getMealStr() {
+		if(isShowElec) {
+			if(elecName.length > 0) {
+				$('.electron_seal').find('a').html(elecName.join(','));
+			}else {
+				$('.electron_seal').find('a').html('电子章');
+			}
+			
+		}else {
+			console.log(phyName)
+			if(phyName.length > 0) {
+				$('.physics_seal').find('a').html(phyName.join(','));
+			}else {
+				$('.physics_seal').find('a').html('物理章');
+			}
+			
+		}
+
+	}
+	
+</script>
+
+
+

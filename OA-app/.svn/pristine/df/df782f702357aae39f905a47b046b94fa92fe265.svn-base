@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/contract.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">合同管理</h1>
+		</header>
+		<div class="mui-content">
+			<div class="title_box">
+				<div class="title_background"></div>
+				<div class="title_lists">
+					<ul>
+						<li index='0'>
+							<img src="../../img/hetongshenqing.png" >
+							<p>合同申请</p>
+						</li>
+						<li index='1'>
+							<img src="../../img/htguidang.png" >
+							<p>合同归档</p>
+						</li>
+						<li index='2'>
+							<img src="../../img/hetongqingdan.png" >
+							<p>合同清单</p>
+						</li>
+					</ul>
+				</div>
+				<p class="title_btn"><span>创建合同</span></p>
+			</div>
+			<div class="content_title">
+				<span></span>待收合同提醒
+			</div>
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<p class="up_fress data-loading-icon">
+					<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+				</p>
+				<div class="mui-scroll">
+					<div class="message_content">
+						<ul class="revene_all">
+							
+						</ul>
+						<div class="detail_info detail_info_no_data bid_no_data">
+							<img src="../../img/no_data.png" >
+							<p>还未有数据！</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<p class="down_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+			</p>
+		</div>
+	</body>
+</html>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var height = 44 + $('.title_box').height() + 30 + 16;
+	console.log(height)
+	$('#pullrefresh').css('top',height + 'px');
+	var page = 1;
+	
+	clickInit();
+	
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios?0.003:0.0009
+	});
+	var isfresh = false;
+	document.querySelector('#pullrefresh').addEventListener('scroll', function(e) {
+		if(isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('display', 'block');
+				$('.up_fress').css('opacity', '1');
+				page = 1;
+				getList(true).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('display', 'none');
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -40) {
+			var liLength = $('.revene_all li').length;
+			if (liLength % 10 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt( liLength / 10) + 1;
+			getList(false).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+	
+	common.promise().then(() => {
+		mui.showLoading('加载中...');
+		return;
+	}).then(() => {
+		return getList(true);
+	}).then(() => {
+		mui.hideLoading()
+	})
+	
+	function getList(flag) {
+		var url = '/api/ContractManage/GetList';
+		var postData = {
+			IsFiling: 0,
+			page: page,
+			limit: 10
+		}
+		
+		return request.post(url,postData).then(res => {
+			console.log(res)
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					html += '<li id='+ item.Id +'><div class="img_box"><img src="../../img/list_contract.png" >'+
+									'</div><div class="text_box">'+
+									'<p>'+ item.ProjectName +'</p>'+
+									'<p><span>合同编号：'+ item.ContractNumber +'</span><span>负责人员：'+ item.CreateUser +'</span></p>'+
+									'</div></li>';
+				}
+				if(flag) {
+					$('.revene_all').html(html);
+				}else {
+					$('.revene_all').append(html);
+				}
+				console.log($('revene_all').find('li'))
+				if($('.revene_all').find('li').length == 0) {
+					$('.bid_no_data').show();
+				}else {
+					$('.bid_no_data').hide();
+				}
+			}else {
+				mui.toast('获取失败！'+ res.msg)
+			}
+		}) 
+	}
+	
+	function clickInit() {
+		//创建合同
+		mui('.title_btn').on('tap','span',function() {
+			window.location.href = './add_apply.html';
+		});
+		
+		mui('.title_lists').on('tap','li',function() {
+			var index = $(this).attr('index');
+			switch (index){
+				case '0':
+					window.location.href = './apply.html';
+					break;
+				case '1':
+					window.location.href = './document.html';
+					break;
+				case '2':
+					window.location.href = './list.html';
+					break;
+				default:
+					break;
+			}
+			
+		})
+	}
+	
+</script>
+
+
+

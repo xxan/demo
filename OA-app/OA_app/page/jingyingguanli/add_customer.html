@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+		<style type="text/css">
+			b {
+				color:#FE7171
+			}
+			.mui-content {
+				padding-bottom: 70px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加客户</h1>
+		</header>
+		<div class="mui-content">
+			<div class="company_info this_company">
+				<p><span class="class_name">企业名称<b>*</b></span><input type="text" name="" id="" placeholder="请填写" class="company_name"/></p>
+				<p class="choose company_types"><span class="class_name">企业类型<b>*</b></span><input type="text" name="" id="" placeholder="请填写" class="company_type"/><span class="up_btn"></span></p>
+				<div class="type_other" style="display: none;">
+					<p><span class="class_name">其他企业类型<b>*</b></span><input type="text" name="" id="" placeholder="请填写" class="company_type_other"/></p>
+				</div>
+				<div class="more_list">
+					<p><span class="class_name">公司网址</span><input type="text" name="" id="" placeholder="请填写" class="company_intelnet"/></p>
+					<p><span class="class_name">公司地址</span><input type="text" name="" id="" placeholder="请填写" class="company_address"/></p>
+					<p><span class="class_name">邮编</span><input type="text" name="" id="" placeholder="请填写" class="company_zip"/></p>
+					<p><span class="class_name">传真</span><input type="text" name="" id="" placeholder="请填写" class="company_fax"/></p>
+					<p><span class="class_name">乘车路线</span><input type="text" name="" id="" placeholder="请填写" class="company_route"/></p>
+					<p><span class="class_name">经营范围</span><input type="text" name="" id="" placeholder="请填写" class="company_range"/></p>
+					<p><span class="class_name">公司备注</span><input type="text" name="" id="" placeholder="请填写" class="company_remark"/></p>
+				</div>
+				<div class="btn_show">
+					展开<span></span>
+				</div>
+			</div>
+			<hr >
+			<div class="company_info user_info">
+				<p><span class="class_name">联系人姓名<b>*</b></span><input type="text" name="" id="" placeholder="请填写" class="contact_name"/></p>
+				<p><span class="class_name">联系方式<b>*</b></span><input type="number" name="" id="" placeholder="请填写" class="contact_tel"/></p>
+				<p class="choose choose_mit"><span class="class_name">所在省份</span><input type="text" name="" id="" placeholder="请填写" class="contact_mit"/><span class="up_btn"></span></p>
+				<p class="choose choose_sex"><span class="class_name">性别</span><input type="text" name="" id="" value="男" placeholder="请填写" class="contact_six"/><span class="up_btn"></span></p>
+				<p><span class="class_name">部门</span><input type="text" name="" id="" placeholder="请填写" class="contact_class"/></p>
+				<p><span class="class_name">岗位</span><input type="text" name="" id="" placeholder="请填写" class="contact_post"/></p>
+				<div class="more_list">
+					<p><span class="class_name">生日</span><input type="text" name="" id="" placeholder="请填写" class="contact_birth"/></p>
+					<p><span class="class_name">传真</span><input type="text" name="" id="" placeholder="请填写" class="contact_fax"/></p>
+					<p><span class="class_name">QQ</span><input type="text" name="" id="" placeholder="请填写" class="contact_qq"/></p>
+					<p><span class="class_name">家庭地址</span><input type="text" name="" id="" placeholder="请填写" class="contact_address"/></p>
+					<p><span class="class_name">个人爱好</span><input type="text" name="" id="" placeholder="请填写" class="contact_hobby"/></p>
+					<p><span class="class_name">联系人备注</span><input type="text" name="" id="" placeholder="请填写" class="contact_remark"/></p>
+					<p class="choose buy_types"><span class="class_name">购买意向</span><input type="text" name="" id="" placeholder="请填写" class="contact_inten"/><span class="up_btn"></span></p>
+				</div>
+				<div class="btn_show">
+					展开<span></span>
+				</div>
+			</div>
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	mui.init();
+	
+	var typeArr = [];
+	var typeId;
+	var buyArr = [];
+	var buyId = [];
+	var isOther = false;
+	
+	var id = common.getQueryUrl('id');
+	
+	common.promise().then(function() {
+		return getType();
+	}).then(function() {
+		return buy();
+	}).then(function() {
+		if(id) {
+			$('.mui-title').html('修改客户');
+			getDetail()
+		}
+	})
+	
+	function getDetail() {
+		var url = '/api/BusinessManage/FillContacter';
+		return request.post(url,{id: id}).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				console.log(res.data);
+				var company = res.data.Company;
+				$('.company_name').val(company.Name);
+				$('.company_type').val(common.getKeyValue(typeArr,company.CompanyTypeID));
+				if(common.getKeyValue(typeArr,company.CompanyTypeID) == '其他') {
+					$('.type_other').show();
+					$('.company_type_other').val(company.CompanyTypeIDText);
+				}
+				if(company.CompanyTypeID >= 0 ) {
+					typeId = company.CompanyTypeID;
+				}
+				$('.company_intelnet').val(company.WZ);
+				$('.company_address').val(company.Address);
+				$('.company_zip').val(company.PostCode);
+				$('.company_fax').val(company.CZ);
+				$('.company_route').val(company.BusLines);
+				$('.company_range').val(company.JYFW);
+				$('.company_remark').val(company.BZ);
+				var contact = res.data.model;
+				$('.contact_name').val(contact.Name);
+				$('.contact_tel').val(contact.Phone);
+				$('.contact_mit').val(contact.dropSF);
+				$('.contact_six').val(contact.Sex ? '男' : '女');
+				$('.contact_class').val(contact.Depart);
+				$('.contact_post').val(contact.Post);
+				$('.contact_birth').val(contact.SR);
+				$('.contact_fax').val(contact.FAX);
+				$('.contact_qq').val(contact.QQ);
+				$('.contact_address').val(contact.Address);
+				$('.contact_hobby').val(contact.AH);
+				$('.contact_remark').val(contact.Note);
+				var html = ''
+				for(var i=0;i<res.data.Relation.length;i++) {
+					var item = res.data.Relation[i].Id;
+					buyId.push(item);
+					if(html.length > 0) {
+						html+= ',';
+					}
+					html += common.getKeyValue(buyArr,item);
+				}
+				$('.contact_inten').val(html);
+			}
+		})
+	}
+	
+	//获取企业类型
+	function getType() {
+		var url = '/api/BusinessManage/CompanyTypeConfigSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {};
+					obj.value = res.data[i].SUB_ID;
+					obj.text = res.data[i].SUB_NM;
+					typeArr.push(obj)
+				}
+			} 
+			return;
+		})
+	}
+	
+	//获取购买意向
+	function buy() {
+		var url = '/api/BusinessManage/ProductsSelect';
+		return request.post(url).then(function(res) {
+			console.log('购买意向',res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {};
+					obj.value = res.data[i].ID;
+					obj.text = res.data[i].Name;
+					buyArr.push(obj)
+				}
+			} 
+			return;
+		})
+	}
+	
+	
+	//
+	function submit() {
+		if(!$('.company_name').val()) {
+			mui.toast('请输入企业名称！');
+			return;
+		}
+		if(!typeId) {
+			mui.toast('请选择企业类型！');
+			return;
+		}
+		if(isOther) {
+			if(!$('.company_type_other').val()) {
+				mui.toast('请输入其他类型！');
+				return;
+			}
+		}
+		if(!$('.contact_name').val()) {
+			mui.toast('请输入联系人姓名！');
+			return;
+		}
+		if(!$('.contact_tel').val()) {
+			mui.toast('请输入联系方式！');
+			return;
+		}
+		var postData = {};
+		var company = {};
+		company.Name = $('.company_name').val();
+		company.CompanyTypeID = typeId;
+		if(isOther) {
+			company.CompanyTypeIDText = $('.company_type_other').val();
+		}
+		company.WZ = $('.company_intelnet').val();
+		company.Address = $('.company_address').val();
+		company.PostCode = $('.company_zip').val();
+		company.CZ = $('.company_fax').val();
+		company.BusLines = $('.company_route').val();
+		company.JYFW = $('.company_range').val();
+		company.BZ = $('.company_remark').val();
+		var contact = {};
+		contact.Name = $('.contact_name').val();
+		contact.Phone = $('.contact_tel').val();
+		contact.dropSF = $('.contact_mit').val();
+		contact.Sex = $('.contact_six').val() == '男' ? true : false;
+		contact.Depart = $('.contact_class').val();
+		contact.Post = $('.contact_post').val();
+		contact.SR = $('.contact_birth').val();
+		contact.FAX = $('.contact_fax').val();
+		contact.QQ = $('.contact_qq').val();
+		contact.Address = $('.contact_address').val();
+		contact.AH = $('.contact_hobby').val();
+		contact.Note = $('.contact_remark').val();
+		postData.Company = company;
+		postData.Contacter = contact;
+		postData.products = buyId;
+		
+		console.log(postData)
+		
+		var url = '/api/BusinessManage/SaveContacter';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast(res.msg);
+			}
+		})
+		
+	}
+	
+	mui('.this_company').on('tap','.btn_show',function() {
+		$("input").blur();
+		if($('.this_company .more_list').css('display') == 'none') {
+			$(this).html('收起<i></i>');
+		}else {
+			$(this).html('展开<span></span>');
+		}
+		$('.this_company .more_list').toggle(200);
+	});
+	
+	mui('.user_info').on('tap','.btn_show',function() {
+		$("input").blur();
+		if($('.user_info .more_list').css('display') == 'none') {
+			$(this).html('收起<i></i>');
+		}else {
+			$(this).html('展开<span></span>');
+		}
+		$('.user_info .more_list').toggle(200);
+	});
+
+	//点击保存
+		mui('.footer_submit_one').on('tap','.btn_save', function() {
+			submit(true);
+		});
+	
+	(function(mui) {
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).html(rs.text + '<span></span>');
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text + '<span></span>');
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.choose');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					var _this = this;
+					if($(this).hasClass('company_types')) {
+						userPicker.setData(typeArr);
+						userPicker.show(function(items) {
+							$('.company_type').val(items[0].text);
+							if(items[0].text == '其他') {
+								$('.type_other').show();
+								isOther = true;
+							}else {
+								$('.type_other').hide();
+								isOther = false;
+							}
+							typeId = items[0].value;
+						});
+					}
+					if($(this).hasClass('buy_types')) {
+						userPicker.setData(buyArr);
+						userPicker.show(function(items) {
+							$('.contact_inten').val(($('.contact_inten').val() ? ($('.contact_inten').val()+ ',') : '') + items[0].text);
+							buyId.push(items[0].value);
+							console.log(buyId)
+						});
+					}
+					if($(this).hasClass('choose_sex')) {
+						userPicker.setData([{value: 1,text: '男'},{value: 2,text: '女'}]);
+						userPicker.show(function(items) {
+							$('.contact_six').val(items[0].text);
+						});
+					}
+					if($(this).hasClass('choose_mit')) {
+						userPicker.setData(addressList);
+						userPicker.show(function(items) {
+							$('.contact_mit').val(items[0].text);
+						});
+					}
+				}, false);
+			});
+		});	
+	})(mui);
+</script>
+
+
+

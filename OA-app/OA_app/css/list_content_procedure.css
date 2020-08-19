@@ -1,0 +1,105 @@
+.list_content_procedure {
+	width: 100%;
+	background: white;
+	margin: 0;
+}
+
+.list_content_procedure li {
+	border: none;
+	overflow: hidden;
+	min-height: 50px;
+	/* line-height: 50px; */
+}
+
+.list_content_procedure .procedure_left,
+.list_content_procedure .procedure_right {
+	display: inline-block;
+	box-sizing: border-box;
+	position: relative;
+}
+
+.list_content_procedure .procedure_left {
+	width: 30%;
+	float: left;
+	text-align: center;
+	border-right: solid 1px #E9E6EA;
+	position: relative;
+}
+
+.list_content_procedure .procedure_left span {
+	padding: 3px 5px;
+	background: #3B9CFF;
+	border-radius: 5px;
+	font-size: 14px;
+	color: white;
+	position: relative;
+	top: 15px;
+}
+
+.list_content_procedure .procedure_left i {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	background: #3B9CFF;
+	border-radius: 50%;
+	position: absolute;
+	right: -8px;
+	top: 20px;
+}
+
+.list_content_procedure .procedure_right {
+	width: 70%;
+	position: relative;
+}
+
+.list_content_procedure .procedure_right p {
+	margin-bottom: 0px;
+	padding-left: 5%;
+	color: #333333;
+}
+
+.list_content_procedure .procedure_right p.start_check {
+	margin-top: 15px;
+}
+
+.list_content_procedure .procedure_right .opa_time {
+	font-size: 12px;
+	display: inline-block;
+	height: 20px;
+	line-height: 20px;
+	padding-left: 5%;
+}
+
+.list_content_procedure .procedure_right p.contents {
+	line-height: 20px;
+	padding-right: 20px;
+	border-left: solid 1px #E9E6EA;
+	margin-left: -1px;
+	overflow: hidden;
+	word-break: break-word;
+	margin-top: 10px;
+}
+
+.list_content_procedure .procedure_right img {
+	width: 50px;
+	height: 50px;
+	vertical-align: top;
+	/* border: solid 1px #999999; */
+	padding: 5px;
+}
+
+.list_content_procedure .procedure_right p span {
+	color: #999999;
+}
+
+.list_content_procedure .procedure_right p span.green {
+	color: #46CC8E;
+}
+
+.list_content_procedure .procedure_right p span.orange {
+	color: #FE9B26;
+}
+
+.list_content_procedure .procedure_right p span.red {
+	color: #FF6060;
+}

@@ -1,0 +1,372 @@
+#pullrefresh {
+	top: 114px;
+}
+
+.mui-bar-nav~.mui-content .mui-pull-top-pocket {
+	top: 10px !important;
+}
+
+.message_title {
+	width: 100%;
+	height: 70px;
+	background: rgba(255, 255, 255, 1);
+	box-shadow: 0px 3px 6px 0px rgba(5, 4, 6, 0.2);
+	position: relative;
+	z-index: 99;
+}
+
+.mui-input-row {
+	width: 94%;
+	margin: 0 auto;
+	top: 15px;
+}
+
+.revene_all {
+	width: 90%;
+	margin: 0 auto;
+}
+
+.revene_all li {
+	width: 100%;
+	background: rgba(255, 255, 255, 1);
+	box-shadow: 3px 5px 12px 0px rgba(0, 0, 0, 0.1);
+	border-radius: 20px;
+	margin-top: 20px;
+}
+
+.revene_all_top {
+	width: 100%;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	height: 40px;
+	line-height: 40px;
+	text-indent: 20px;
+	color: #fff;
+	font-size: 16px;
+	font-weight: bold;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	padding-right: 20px;
+}
+
+.revene_all_content {
+	width: 100%;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	background: #fff;
+	padding: 20px 0px;
+}
+
+.revene_all_content_part1 {
+	width: 100%;
+}
+
+.revene_all_content_part1 div {
+	margin: 0;
+	width: 32%;
+	display: inline-block;
+	height: 50px;
+	border-right: 1px solid rgba(237, 237, 237, 1);
+	text-align: center;
+}
+
+.revene_all_content_part1 div:nth-last-child(1) {
+	border: none;
+}
+
+.revene_all_content_part1 div span {
+	width: 100%;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	display: inline-block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.revene_all_content_part1 div p {
+	margin: 0;
+	font-size: 13px;
+	color: #666666;
+}
+
+.revene_all_content_part1>p {
+	padding: 0 20px;
+	margin: 0;
+	color: #666666;
+}
+.revene_all_content_part1>p:last-child {
+	margin-top: 5px;
+}
+.revene_all_content_part1>p span {
+	color: #999999;
+	margin-right: 30px;
+}
+
+.revenue_blue .revene_all_top {
+	background: #3B9CFF;
+}
+
+.revene_all_btn {
+	width: 100%;
+	text-align: center;
+}
+
+.revene_all_btn a {
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	font-size: 13px;
+	color: #fff;
+	margin-top: 15px;
+}
+
+.revene_all_btn_one {
+	width: 45vw;
+	border-radius: 5px;
+}
+.revene_all_btn_cancel,
+.revene_all_btn_examine,
+.revene_all_btn_again {
+	width: 20vw;
+	border-radius: 5px;
+	margin-right: 10px;
+}
+
+.revenue_blue .revene_all_top,
+.revenue_blue .revene_all_btn_one,
+.revene_all_btn_cancel,
+.revene_all_btn_again{
+	background: #3B9CFF;
+}
+
+.revenue_blue .revene_all_content_part1 div span {
+	color: #3B9CFF;
+}
+
+.revenue_green .revene_all_top,
+.revenue_green .revene_all_btn_one {
+	background: #46CC8E;
+}
+
+.revenue_green .revene_all_content_part1 div span {
+	color: #46CC8E;
+}
+
+.revenue_orange .revene_all_top,
+.revenue_orange .revene_all_btn_one,
+.revenue_orange .revene_all_btn_examine{
+	background: #FE9B26;
+}
+
+.revenue_orange .revene_all_content_part1 div span {
+	color: #FE9B26;
+}
+
+.revenue_red .revene_all_top,
+.revenue_red .revene_all_btn_one {
+	background: #FF6060;
+}
+
+.revenue_red .revene_all_content_part1 div span {
+	color: #FF6060;
+}
+
+.revene_all_btn_sc {
+	display: inline-block;
+	width: 20vw;
+	background: #FF6060;
+	border-radius: 5px;
+	margin-left: 2vw;
+	margin-right: 2vw;
+}
+
+.revene_all_btn_tj {
+	display: inline-block;
+	width: 20vw;
+	background: #3B9CFF;
+	border-radius: 5px;
+	margin-left: 2vw;
+	margin-right: 2vw;
+}
+
+.revene_all_content_part2 div {
+	width: 25%;
+}
+
+.revene_all_content_part2 div:nth-child(2) {
+	width: 30%;
+}
+
+.revene_all_content_part2 div:last-child {
+	width: 20%;
+}
+
+/*收入管理*/
+.income_top {
+	width: 100%;
+	position: relative;
+	background: rgba(242, 242, 242, 1);
+	border-bottom: 1px solid rgba(230, 230, 230, 1);
+}
+
+.income_top_part1 {
+	width: 100%;
+	height: 85px;
+	background: url(../img/income_top_bg.png) no-repeat;
+	background-size: 100% 100%;
+	font-size: 16px;
+	font-weight: bold;
+	color: #fff;
+	line-height: 55px;
+	text-indent: 15px;
+}
+
+.income_top_part2 {
+	width: 100%;
+	text-align: center;
+	position: relative;
+	margin-top: -29px;
+	margin-bottom: 30px;
+}
+
+.income_top_part2 li {
+	display: inline-block;
+	background: url(../img/income_top_part2_li_bg.png) no-repeat;
+	background-size: 100% 100%;
+	height: 60px;
+	width: 28vw;
+	margin-left: 1vw;
+	margin-right: 1vw;
+}
+
+.income_top_part2 li p {
+	width: 100%;
+	text-align: center;
+	font-size: 16px;
+	color: #3B9CFF;
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 0;
+}
+
+.income_top_part2 li p span {
+	color: #3B9CFF;
+}
+
+.income_top_part2 li span {
+	color: #999999;
+	font-size: 14px;
+}
+
+
+.project_detail_list .detail_info p {
+	margin: 0;
+	padding-left: 10%;
+	color: #000000;
+	font-family: "MicrosoftYaHei-Bold";
+}
+
+.project_task_point p {
+	position: relative;
+}
+
+.project_detail_list .detail_info {
+	padding: 10px 0px;
+}
+
+.bid_no_data {
+	text-align: center;
+	padding: 20px;
+}
+
+.bid_no_data img {
+	width: 100px !important;
+}
+
+.bid_no_data p {
+	width: 100%;
+	padding: 0 !important;
+	color: #999999 !important;
+}
+
+.record_list ul li {
+	background: white;
+}
+
+.record_list ul li.list_no_data div.detail_info_no_data p {
+	padding: 0 !important;
+	color: #999999 !important;
+}
+
+.record_list_right_box .detail_info p span {
+	color: #999999 !important;
+}
+
+.search_box {
+	width: 100%;
+	height: 70px;
+}
+
+.search_box div {
+	height: 70px;
+	line-height: 70px;
+	text-align: center;
+	position: relative;
+	top: 0px;
+}
+
+.search_box div input {
+	width: 96%;
+	background: #F2F2F2;
+	border-radius: 30px;
+	font-size: 14px;
+	padding-right: 10%;
+}
+
+.photo_search {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	position: absolute;
+	background: url(../img/search.png) no-repeat center;
+	background-size: cover;
+	right: 8%;
+	top: 40%;
+	z-index: 99;
+}
+
+.up_fress {
+	top: 0;
+	opacity: 0;
+}
+
+.up_fress {
+	top: 0px;
+	background: #F2F2F2;
+	opacity: 0;
+}
+.down_fress {
+	background: #F2F2F2;
+}
+
+.revene_all li{
+	position: relative;
+} 			
+#middlePopover {
+	width: 100%;
+	height: 100%;
+	background: rgba(0,0,0,0.5);
+	top: 0;
+	left: 0;
+}
+
+#middlePopover button {
+	width: 20%;
+	margin: 0;
+	margin-top: 20%;
+	background: white;
+	border: solid 1px #3B9CFF;
+}

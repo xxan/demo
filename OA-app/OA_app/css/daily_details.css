@@ -1,0 +1,73 @@
+.details_top{
+	height: 43px;
+	line-height: 43px;
+	width: 100%;
+	background:rgba(255,255,255,1);
+	box-shadow:0px 3px 6px 0px rgba(5,4,6,0.2);
+}
+.details_top span{
+	display: inline-block;
+	width: 50%;
+	text-align: center;
+	height: 43px;
+	line-height: 43px;
+	font-size: 14px;
+	font-weight: bold;
+}
+.details_part{
+	width: 100%;
+}
+.details_title{
+	height: 40px;
+	font-size: 14px;
+	color: #999999;
+	line-height: 40px;
+	text-indent: 15px;
+	margin: 0;
+}
+.details_part_all{
+	width: 100%;
+	background:rgba(255,255,255,1);
+	border:1px solid rgba(229,229,229,1);
+}
+.details_part_nr{
+	border-bottom: 1px solid #CCCCCC;
+	padding: 15px;
+}
+.details_part_my{
+	padding: 15px;
+}
+.details_part_l{
+	display: inline-block;
+	width: 50px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+	color: #fff;
+	border-radius: 8px;
+	text-align: center;
+	vertical-align: top;
+}
+.details_part_r{
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 65px);
+	margin: 0;
+	margin-left: 5px;
+}
+.details_part_r li{
+	line-height: 20px;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+.details_part_r li span{
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.details_part_r li textarea {
+	height: auto;
+	margin-top: 10px;
+	border:none;
+	margin-bottom: 0;
+}

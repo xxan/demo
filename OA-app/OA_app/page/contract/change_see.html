@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/contract.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/change_constrat.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+	</head>
+
+	<body style="background: #F2F2F2;">
+		
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">变更查看</h1>
+			<span class="mui-nav-more">
+				<img src="../../img/more_know.png">
+			</span>
+		</header>
+		<div class="mui-nav-more_nr_t">
+			<div class="mui-nav-more_nr one_title">
+				<p style="margin-top: 5px;">
+					<span style="color: #333;">新增变更</span>
+				</p>
+			</div>
+		</div>
+		<div class="mui-content">
+			<ul class="see_list">
+				<!-- <li>
+					<p><i></i>变更时间：2020-05-06 <span>查看审批表</span></p>
+					<div class="change_list">
+						<ul class="change_ul_list">
+							<li>
+								<div class="li_item">
+									<span>变更事项：</span><p>手机端咖啡豆是</p>
+								</div>
+								<div class="li_item">
+									<span>变更前：</span><p>手机端咖啡上岛咖啡卡萨丁行高上岛咖啡老师的分手快乐大概端开发老地方豆是</p>
+								</div>
+								<div class="li_item">
+									<span>变更后：</span><p>手机端咖啡豆是</p>
+								</div>
+							</li>
+							<li>
+								<div class="li_item">
+									<span>变更事项：</span><p>手机端咖啡豆是</p>
+								</div>
+								<div class="li_item">
+									<span>变更前：</span><p>手机端咖啡上岛咖啡卡萨丁行高上岛咖啡老师的分手快乐大概端开发老地方豆是</p>
+								</div>
+								<div class="li_item">
+									<span>变更后：</span><p>手机端咖啡豆是</p>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</li> -->
+			</ul>
+			
+		</div>
+		
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	console.log(id);
+	
+	clickInit();
+	
+	function clickInit() {
+		//点击头部更多
+		mui('.header_box').on('tap','.mui-nav-more',function() {
+			$('.mui-nav-more_nr_t').show();
+		})
+		mui('.mui-nav-more_nr_t')[0].addEventListener('tap',function() {
+			$('.mui-nav-more_nr_t').hide();
+		})
+		
+		//查看审批表
+		mui('.see_list').on('tap','.check_table',function() {
+			var this_id = $(this).parents('li').attr('id');
+			window.location.href = 'contract_change.html?id=' + id + '&changeid='+ this_id+'&is_see=true';
+		})
+	}
+	
+	function getList() {
+		var url = '/api/ContractManage/AlterationRecordQuery';
+		return request.post(url,{ContractId: id}).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				var html = '';
+				if(res.data.length > 0) {
+					for(var i=0;i<res.data.length;i++) {
+						var item = res.data[i];
+					  html+= '<li id="'+ item.ID +'">'+
+									'<p><i></i>变更时间：'+ item.AlterationTime +' <span class="check_table">查看审批表</span></p>'+
+									'<div class="change_list"><ul class="change_ul_list">';
+						for(var j=0;j<item.AlterationRecords.length;j++) {
+							var li_item = item.AlterationRecords[j];
+							html+= '<li>'+
+										'<div class="li_item">'+
+										'<span>变更事项：</span><p>'+ li_item.AlterationType +'</p>'+
+										'</div><div class="li_item">'+
+										'<span>变更前：</span><p>'+ li_item.AlterationBefore +'</p>'+
+										'</div><div class="li_item">'+
+										'<span>变更后：</span><p>'+ li_item.AlterationLater +'</p>'+
+										'</div></li>';
+						}			
+						
+									
+						html += '</ul></div></li>';
+						
+						$('.see_list').html(html);
+					}
+				}
+			}
+		})
+	}
+	
+	
+	common.promise().then(function() {
+		mui.showLoading();
+		return
+	}).then(function() {
+		return getList()
+	}).then(function() {
+		mui.hideLoading()
+	})
+	
+
+</script>

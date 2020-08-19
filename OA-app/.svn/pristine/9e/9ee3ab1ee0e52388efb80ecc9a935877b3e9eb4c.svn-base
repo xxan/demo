@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <link href="../../css/mui.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/add_task_point.css" />
+    <script src="../../js/mui.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../css/task.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript">
+        mui.init()
+    </script>
+</head>
+
+<body>
+    <header class="mui-bar mui-bar-nav header_box">
+        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+        <h1 class="mui-title">任务接收</h1>
+    </header>
+    <div class="mui-content">
+        <ul class="task_all">
+            <!--<li><span>项目名称</span></li>
+            <li><p>海淀区亮甲店保障房智慧工地项目海淀区亮甲店保障房智慧工地项目海淀区亮甲店保障房智慧工地项目海淀区亮甲店保障房智慧工地项目海淀区亮甲店保障房智慧工地项目海淀区亮甲店保障房智慧工地项目</p></li>
+            <li><span>建设单位</span></li>
+            <li><p>北京北排集团</p></li>
+            <li><span>业务类型</span></li>
+            <li><p>智慧建造</p></li>
+            <li><span>接收人</span></li>
+            <li><p>李晓明</p></li>-->
+        </ul>
+    </div>
+    <div class="footer_submit" style="display: none;">
+        <span class="btn_save">确认</span>
+    </div>
+</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+
+    mui('.footer_submit').on('tap', '.btn_save', function () {
+        SaveTaskReceive();
+    });
+
+    var fid = common.getQueryUrl("fid");
+    var ftype = parseInt(common.getQueryUrl("ftype"));
+
+    var url = '/api/SystemManage/TaskReceiveDetail';
+    request.post(url, {
+        fid: fid,
+        ftype: ftype,
+    }).then(function (res) {
+        console.log(res)
+        if (res.code == 200) {
+            var data = res.data;
+            //data.State 0未接收，1已接收
+            var html = "";
+            switch (ftype) {
+                case 901: //任务接收_任务单_接收人
+                    html += row("项目名称：", data.ProjectName);
+                    html += row("项目编号：", data.ProjectNumber);
+                    html += row("建设单位：", data.ConstructionUnit);
+                    html += row("执行时间：", data.BeginTime + "至" + data.EndTime);
+                    html += row("项目接收人：", data.Receiver);
+                    html += row("工作内容：", data.Contents);
+                    html += row("工作要求：", data.WorkRequire);
+                    break;
+                case 902://任务接收_项目进度_负责人
+                case 903://任务接收_项目进度_主要人
+                    html += row("项目名称：", data.ProjectName);
+                    html += row("项目编号：", data.ProjectNumber);
+                    html += row("业务类型：", data.YWLX);
+                    html += row("客户名称：", data.ConstructionUnit);
+                    html += row("接收人：", data.Receiver);
+                    break;
+                case 904://任务接收_项目进度_参与人
+                    html += row("项目名称：", data.ProjectName);
+                    html += row("项目编号：", data.ProjectNumber);
+                    html += row("任务名称：", data.ScheduleName);
+                    html += row("计划时间：", data.StartTime + "至" + data.EndTime);
+                    html += row("接收人：", data.Receiver);
+                    html += row("备注：", data.State);
+                    break;
+                case 905: //任务接收_投标申请_负责人
+                case 906: //任务接收_投标申请_主要人员
+                    html += row("项目名称", data.ProjectName);
+                    html += row("业务类型", data.YWLX);
+                    html += row("派发人", data.PFR);
+                    html += row("接收人", data.JSR);
+                    break;
+            }
+            $(".task_all").html(html);
+            if (data.State == 0) {
+                $(".footer_submit").show();
+            } else {
+                $(".footer_submit").hide();
+            }
+        }
+    });
+
+    function row(title, content) {
+        return "<li><span>" + title + "</span></li><li><p>" + content + "</p></li>";
+    }
+
+    function SaveTaskReceive() {
+        var url = '/api/SystemManage/SaveTaskReceive';
+        request.post(url, {
+            fid: fid,
+            ftype: ftype,
+        }).then(function (res) {
+            console.log(res)
+            if (res.code == 200) {
+                $(".footer_submit").hide();
+            }
+        });
+    }
+</script>

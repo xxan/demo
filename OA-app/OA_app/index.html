@@ -220,7 +220,7 @@
 								<div class="mui-media-body">日报管理</div>
 							</a>
 						</li>
-						<!-- <li class="to_my_daily">
+				<!-- 		<li class="to_my_daily">
 							<a href="#">
 								<img class="mui-media-object" src="./img/rb.png">
 								<div class="mui-media-body">我的日报</div>
@@ -362,13 +362,37 @@
 										<img src="img/tocar.png">
 										<div class="mui-media-body">车辆借用</div>
 									</a>
-								</li> -->
-								<!-- <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
 									<a href="#">
 										<img src="img/zizhi.png">
 										<div class="mui-media-body">资质管理</div>
 									</a>
 								</li> -->
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">考勤打卡</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">请假管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">外勤管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">加班管理</div>
+									</a>
+								</li>
 								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
 									<a href="#">
 										<img src="img/yongzhang.png">
@@ -668,8 +692,23 @@
 							$(lis[i]).addClass('hide_modle');
 						}
 						break;
-					case '车辆借用':
-						if (!getModuleName('CarApplyRecord')) {
+					case '考勤打卡':
+						if (!getModuleName('CarManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '请假管理':
+						if (!getModuleName('LeaveManagement')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '外勤管理':
+						if (!getModuleName('FieldManagement')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '加班管理':
+						if (!getModuleName('OvertimeManagement')) {
 							$(lis[i]).addClass('hide_modle');
 						}
 						break;
@@ -1188,6 +1227,19 @@
 				case '销售管理':
 					window.location.href = './page/financial/sale_manage/sale.html?tabId=' + this_tab;
 					break;
+				case '考勤打卡':
+					window.location.href = './page/check/check_date.html?tabId=' + this_tab;
+					break;
+				case '请假管理':
+					window.location.href = './page/leave/list.html?tabId=' + this_tab;
+					break;
+				case '外勤管理':
+					window.location.href = './page/outsidework/list.html?tabId=' + this_tab;
+					break;
+				case '加班管理':
+					window.location.href = './page/overtimework/list.html?tabId=' + this_tab;
+					break;
+					
 				default:
 					break;
 			}

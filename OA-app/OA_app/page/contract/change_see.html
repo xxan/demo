@@ -94,6 +94,11 @@
 			var this_id = $(this).parents('li').attr('id');
 			window.location.href = 'contract_change.html?id=' + id + '&changeid='+ this_id+'&is_see=true';
 		})
+		//变更审批(审批中/审批通过)
+		mui('.see_list').on('tap','li',function() {
+			var this_id = $(this).parents('li').attr('id');
+			window.location.href = 'contract_see_auditing.html?id=' + id + '&changeid='+ this_id+'&is_see=true';
+		})
 	}
 	
 	function getList() {

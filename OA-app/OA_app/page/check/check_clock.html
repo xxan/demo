@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/index.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/menu.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/check_calendar.css"/>
+		
+		<style type="text/css">
+			
+		</style>
+	</head>
+
+	<body class="this_body" style="background: #fff !important;">
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">考勤打卡</h1>
+		 
+		</header>
+		 
+		<div class="mui-content clock_content">
+			 <img src="" >
+				<p>您已在打卡范围内</p>
+				<div class="circle">
+					<div class="c_time">
+						08:24
+					</div>
+					<div class="c_desc">
+						上班打卡
+					</div>
+				</div>
+		</div>
+		
+	</body>
+</html> 
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	//打卡 clock 
+	
+	$('.circle').click(function(){ 
+		clock();
+	})
+	function clock() {
+		var url = '/api/Resource/ClockIn';
+		return request.post(url).then(function(res) {
+			if(res.code == 200) {
+				const d = new Date();
+				d.getHours()//获取当前小时
+				
+				d.getMinutes()//获取当前分
+				$('.c_time').html(d.getHours()+':'+d.getMinutes() )
+				mui.toast('打卡成功',{ duration:'long', type:'div' });
+				 console.log(res)
+			}
+			return res;
+		})
+	}
+</script>

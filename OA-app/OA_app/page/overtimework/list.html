@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/leave.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style type="text/css">
+			.offcas {
+				height: 80%;
+				overflow: hidden;
+			}
+			
+			.footer_btn {
+				background: white;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<!-- 主界面不动、菜单移动 -->
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in ">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right meau_list" id="offCanvasSide">
+				<h5>筛选</h5>
+				<div class="mui-scroll offcas">
+					<div class="search_content">
+						<!-- <p>请假类型</p> -->
+						<div class="choose_task_status" style="display: none;">
+					
+						</div>
+						<hr >
+					 
+						<p>加班时间</p>
+						<div class="plan_time">
+							<span class="choose_time start_times plan_timess">开始时间</span> — <span class="choose_time end_times plan_timess">结束时间</span>
+						</div> 
+						 
+					 
+					</div>
+				</div>
+				
+				<div class="footer_btn spans">
+					<span class="btn_reset spans">重置</span><span class="btn_submit spans">确定</span>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">加班管理</h1>
+					<span class="mui-nav-more">
+						<img src="../../img/more_know.png">
+					</span>
+				</header>
+				<div class="mui-nav-more_nr_t">
+					<div class="mui-nav-more_nr one_title">
+						<p>
+							<img class="add_invoice" src="../../img/constract_shaixuan.png"><span>请假申请</span>
+						</p>
+					</div>
+				</div>
+				<div class="mui-content">
+					<div class="message_title">
+						<div class="search_box">
+							<div class="mui-input-row mui-search">
+								<input id="search_input" type="text" class="" placeholder="搜索员工姓名">
+								<span class="photo_search" index='item1'></span>
+								<span class="filter_list">筛选</span>
+							</div>
+						</div>
+					</div>
+					<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+						<p class="up_fress data-loading-icon">
+							<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+						</p>
+						<div class="mui-scroll">
+							<div class="message_content">
+								<ul class="contract_list">
+									
+									<!--  -->
+									<li class="list_item">
+										
+										<h4>张三 <span class="type">年假</span></h4>
+										<p>请假天数：<span>1</span></p>
+										<p>开始时间：<span>2020-05-10 09:00</span></p>
+										<p>结束时间：<span>2020-05-10 09:00</span></p>
+										<div class="check_status">
+											2020-05-07 <span class="btn_status">审核通过</span>
+										</div>
+									</li>
+									<!--  -->
+									<li style="display: none;">
+										<h5 class="background_green">海淀区亮甲店保障房智慧工地项目</h5>
+										<div class="text_info">
+											<div class="user_name">
+												<p class="color_green">张晓明</p>
+												<span>申请人员</span>
+											</div>
+											<div class="date_box">
+												<p class="color_green">张晓明</p>
+												<span>申请日期</span>
+											</div>
+											<div class="constract_number">
+												<p class="color_green">HT-123123</p>
+												<span>合同编号</span>
+											</div>
+											<div class="constract_price">
+												<p class="color_green">50.00万</p>
+												<span>合同金额</span>
+											</div>
+										</div>
+										<div class="company_box">
+											<span class="company_name">对方单位：北京北排集团有限公司</span>
+											<div class="status_span">
+												<span class="success_pass">审核通过</span>
+												<span class="success_pass">已盖章</span>
+											</div>
+										</div>
+										<div class="btn_list">
+											<span class="background_green">导出申请表</span>
+											<span class="background_blue">盖章确认</span>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<p class="down_fress data-loading-icon">
+						<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+					</p>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	// var height = 44 + $('.title_box').height() + 30 + 16;
+	// console.log(height)
+	// $('#pullrefresh').css('top',height + 'px');
+	var page = 1;
+	var searchText = '';
+	var searchObjs;
+	var minPrice = '',maxPrice = '',startTime = '',endTime = '';
+	var startTimes = '',endTimes = '';
+	var getMinPrice = '',getMaxPrice = '';
+	var toMinPrice = '',toMaxPrice = '';
+	var input = $("input");
+	clickInit();
+	mui('.offcas').scroll()
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios?0.003:0.0009
+	});
+	var isfresh = false;
+	document.querySelector('#pullrefresh').addEventListener('scroll', function(e) {
+		if(isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('display', 'block');
+				$('.up_fress').css('opacity', '1');
+				page = 1;
+				searchObj = null;
+				getList(true).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('display', 'none');
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		 
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -40) {
+			var liLength = $('.contract_list li').length;
+			if (liLength % 10 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt( liLength / 10) + 1;
+			getList(false,searchText,searchObjs).then(function(res) {
+				console.log(res,'下拉拉拉阿拉了啦')
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+
+	function clickInit() {
+		input.blur();
+		//点击头部更多
+		mui('.header_box').on('tap','.mui-nav-more',function() {
+			input.blur();
+			$('.mui-nav-more_nr_t').show();
+		})
+		
+		mui('.mui-nav-more_nr_t')[0].addEventListener('tap',function() {
+			$('.mui-nav-more_nr_t').hide();
+		})
+		mui('.search_box').on('tap','.filter_list',function() {
+		 
+				mui('.mui-off-canvas-wrap').offCanvas().show();
+	
+		})
+		
+		
+		mui('.mui-nav-more_nr').on('tap','p',function() {
+		 
+				window.location.href = 'leave_apply.html';
+		 
+		})
+		
+		mui('.choose_task_status').on('tap', 'span', function() {
+			input.blur();
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+		
+	 
+		
+		mui('.choose_task_document').on('tap', 'span', function() {
+			input.blur();
+			$(this).addClass('active');
+			$(this).siblings().removeClass('active');
+		})
+		
+		mui('.footer_btn').on('tap', 'span', function() {
+			if ($(this).hasClass('btn_reset')) {
+				minPrice = '';maxPrice = '';
+				getMinPrice = '';getMaxPrice = '';
+				toMinPrice = '';toMaxPrice = '';
+				startTime = '';endTime = '';
+				startTimes = '';endTimes = '';
+				$('.search_content').find('span').removeClass('active');
+				$('.start_times').html('开始时间');
+				$('.end_times').html('结束时间');
+	
+				// $('.constract_prices').find('input').val('');
+			} else { //筛选重置请假列表
+				var obj = {}; 
+				
+				if ($('.choose_task_status').find('.active').length > 0) {
+					obj.LeaveType = Number($('.choose_task_status').find('.active').attr('id'));
+				} 
+				// if($('.choose_task_document').find('.active').length > 0) {
+				// 	obj.IsFiling = $('.choose_task_document').find('.active').hasClass('middle_status') ? 0 : 1;
+				// }
+				
+				if(minPrice && maxPrice) {
+					obj.MinReceivablePrice = minPrice;
+					obj.MaxReceivablePrice = maxPrice;
+				}
+				if(getMinPrice && getMaxPrice) {
+					obj.MinReceivedPrice = getMinPrice;
+					obj.MaxReceivedPrice = getMaxPrice;
+				}
+				if(toMinPrice && toMaxPrice) {
+					obj.MinBalancePrice = toMinPrice;
+					obj.MaxBalancePrice = toMaxPrice;
+				}
+				
+				if (startTime && endTime) {
+					obj.MinSignDate = startTime;
+					obj.MaxSignDate = endTime;
+				}
+				if (startTimes && endTimes) {
+					obj.BeginTime = startTimes;
+					obj.EndTime = endTimes;
+				} else {
+					// mui.toast('请选择请假时间');
+					// return;
+				}
+				searchObjs = obj; 
+				page = 1; 
+				getList(true, searchText, obj).then(() => {
+					 mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,500);
+				})
+				mui('.mui-off-canvas-wrap').offCanvas().close();
+			}
+		})
+		
+		mui('.search_box').on('tap', '.photo_search', function() {
+			page = 1;
+			searchText = $('#search_input').val();
+			console.log(searchText)
+			getList(true, searchText).then(function() {
+				mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 500);
+			})
+		})
+		// mui('.contract_list').on('tap','li',function(e) {
+		// 	localStorage.setItem('documentscrolltop',JSON.stringify({page: page,scroll: scroll.y}))
+		// 	if($(e.target).hasClass('btn_delete') || 
+		// 	$(e.target).hasClass('btn_sub') ||
+		// 	$(e.target).hasClass('get_table') ||
+		// 	$(e.target).hasClass('get_img')
+		// 	) {
+		// 		return;
+		// 	}
+		// 	var id = $(this).attr('id');
+		// 	if(!id) return;
+ 	// 		window.location.href = 'add_apply.html?id=' + id + '&check=true'
+		// });
+		// mui('.contract_list').on('tap','.get_table',function(e) {
+		// 	var id = $(this).attr('geturl');
+		// 	if(!id) {
+		// 		mui.toast('还未生成');
+		// 		return;
+		// 	}
+		// 	var link = document.createElement('a');
+		// 	link.setAttribute("download", $(this).parents('li').find('h5').html() + '.pdf');
+		// 	link.href = baseUrl + id;
+		// 	link.download = $(this).parents('li').find('h5').html() + '.pdf';
+		// 	link.click();
+		// 	// delete link;
+		// });
+		// mui('.contract_list').on('tap','.get_img',function(e) {
+		// 	var id = $(this).attr('path');
+		// 	var link = document.createElement('a');
+		// 	link.setAttribute("download", '');
+		// 	console.log(baseUrl + id)
+		// 	link.href = baseUrl + id;
+		// 	link.click();
+		// });
+	}
+	
+
+	common.promise().then(() => {
+		mui.showLoading('加载中...');
+		return;
+	}).then(() => {
+		return getLeaveType();
+	})
+	.then(res => {
+		if (res.code == 200) {
+			var html = '';
+			var num = 0;
+			for (var i = 0; i < res.data.length; i++) {
+				var item = res.data[i];
+				num++;
+				if (num == 2) {
+					html += '<span id=' + item.SUB_ID + ' class="middle_status">' + item.SUB_NM + '</span>';
+				} else {
+					html += '<span id=' + item.SUB_ID + '>' + item.SUB_NM + '</span>';
+				}
+				if (num == 3) {
+					num = 0;
+				}
+			}
+			$('.choose_task_status').html(html);
+		}
+		return;
+	})
+	.then(() => {
+		return getPayType();
+	}) 
+	.then(() => {
+		var obj = JSON.parse(localStorage.getItem('documentscrolltop'));
+		console.log(obj)
+		if(obj) {
+			if(obj.page > 1) {
+				return getList(true,searchText,searchObjs,obj.page * 10).then(() => {
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0,obj.scroll+100,100);
+					localStorage.removeItem('documentscrolltop')
+				})
+			}else {
+				return getList(true,searchText,searchObjs).then(() => {
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0,obj.scroll+100,100);
+					localStorage.removeItem('documentscrolltop')
+				})
+			}
+		}else {
+			return getList(true);
+		}
+	}).then(() => {
+		mui.hideLoading();
+	})
+
+	//获取列表
+	function getList(flag,searchText,searchObj) {
+		var postData = {
+			page: page,
+			limit: 10,
+			StaffName:'',//请假人名称
+			LeaveType:'',//请假类型
+			BeginTime:'',
+			EndTime:''
+			// IsFiling: 1
+		}
+		if(searchText) {
+			postData.StaffName = searchText;
+		}
+		if(searchObj) {
+		 
+			postData.BeginTime = searchObj.BeginTime;
+			postData.EndTime = searchObj.EndTime;
+			postData.LeaveType = searchObj.LeaveType;
+		 
+		}
+		console.log(postData)
+		// var url = '/api/ContractManage/GetList';
+		var url = '/api/Resource/LeaveManagementQuery';
+		return request.post(url, postData).then(res => {
+			console.log(res)
+			if (res.code == 200) {
+				console.log(300);
+				console.log(res);
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					var backColor = '';
+					var textColor = '';
+					var statusSpan = '';
+					var btnSpan = '';
+					
+					// if(item.IsStamp == '是') {
+						
+					// }else {
+					// 	btnSpan += '<span class="background_blue">导出申请表</span>';
+					// }
+					btnSpan += ' <span class="background_blue get_table" geturl='+ item.HTSQBfile +'>导出申请表</span>';
+					
+					// if(item.IsFiling == "已归档") {
+						
+					// }else{
+					// 	backColor = 'background_red';
+					// 	textColor = 'color_red';
+					// 	btnSpan += ' <span class="background_red">归档</span>';
+					// }
+					
+					
+					// backColor = 'background_green';
+					// textColor = 'color_green';
+					// var path = '';
+					// if(item.ScanFile.FilePath) {
+					// 	path = item.ScanFile.FilePath;
+					// }
+					// btnSpan += ' <span class="background_green get_img" path='+ path +'>导出扫描件</span>';
+					
+					
+					
+					var price = item.ContractPrice;
+					if(Number(item.ContractPrice) > 10000) {
+						price = (Number(item.ContractPrice) / 10000).toFixed(2) + '万';
+					}
+					
+				
+					html += '<li class="list_item">' +
+						
+						'<h4>'+item.StaffName+'<span class="type">'+item.LeaveType+'</span></h4>' +
+						'<p>加班天数：<span>'+item.Days+'</span></p>' +
+						'<p>开始时间：<span>'+item.BeginTime+'</span></p>' +
+						'<p>结束时间：<span>'+item.EndTime+'</span></p>' +
+						'<div class="check_status">'+item.CreateTime;
+						// '<span class="btn_status">'
+						// + item.Status + '</span></div></li>';
+					switch (item.Status){
+						case '审核通过':
+						html += '<span class="btn_status blue">';
+							break;
+						case '审核中':
+						html += '<span class="btn_status orange">';
+							break;
+						case '驳回':
+						html += '<span class="btn_status red">';
+							break;
+						case '未提交':
+						html += '<span class="btn_status gray">';
+							break;
+						default:
+							break;
+					}
+					html += item.Status + '</span></div></li>';
+				 
+					// html += '<li id='+ item.Id +'>'+
+					// 					'<h5 class='+ backColor +'>'+ item.ProjectName +'</h5>'+
+					// 					'<div class="text_info">'+
+					// 						'<div class="user_name"><p class='+ textColor +'>'+ item.CreateUser +'</p><span>申请人员</span></div>'+
+					// 						'<div class="date_box"><p class='+ textColor +'>'+ item.CreateTime +'</p><span>申请日期</span></div>'+
+					// 						'<div class="constract_number"><p class='+ textColor +'>'+ item.ContractNumber +'</p><span>合同编号</span></div>'+
+					// 						'<div class="constract_price"><p class='+ textColor +'>'+ price +'</p><span>合同金额</span></div>'+
+					// 					'</div>'+
+					// 					'<div class="company_box">'+
+					// 						'<span class="company_name">对方单位：'+ item.ConstructionUnit +'</span>'+
+					// 						// '<div class="status_span">'+ statusSpan +'</div>'+
+					// 					'</div>'+
+					// 					'<div class="btn_list">'+ btnSpan +'</div>'+
+					// 				'</li>';
+				} 
+				if(flag) {
+					$('.contract_list').html(html);
+				}else {
+					$('.contract_list').append(html);
+				}
+				
+				if ($('.contract_list li').length == 0) {
+					html = '<li class="is_node_data"><div class="detail_info detail_info_no_data" style="padding-bottom: 20px">' +
+						'<img src="../../img/no_data.png" ><p>还未有数据！</p></div></li>';
+					$('.contract_list').html(html);
+				}
+				
+			} else {
+				mui.toast('获取失败！' + res.msg);
+			}
+		})
+	}
+
+ 
+	
+	//付款方式
+	function getPayType() {
+		var url = '/api/ContractManage/SFFSSelect';
+		return request.post(url).then(res => {
+			console.log(res);
+			return res;
+		})
+	}
+	//获取请假类型
+	function getLeaveType() {
+		var url = '/api/Resource/LeaveTypeSelect';
+		return request.post(url).then(function(res) {
+			if(res.code == 200) {
+				console.log('请假')
+				console.log(res) 
+			}
+			return res;
+		})
+	}
+	
+	 
+	 
+	//选择器
+	(function(mui) {
+		//时间选择
+		var btns = mui('.choose_time');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+						 
+						if($(_self).hasClass('plan_timess')) {
+							if ($(_self).hasClass('start_times')) {
+								startTimes = rs.text;
+							}
+							if ($(_self).hasClass('end_times')) {
+								endTimes = rs.text;
+							}
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					 
+					if($(_self).hasClass('plan_timess')) {
+						if ($(_self).hasClass('end_times') && startTimes) {
+							options.beginDate = new Date(startTimes);
+						}
+						if ($(_self).hasClass('start_times') && endTimes) {
+							options.endDate = new Date(endTimes);
+						}
+					}
+						
+					_self.picker = new mui.DtPicker(options);
+	
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+						 
+						if($(_self).hasClass('plan_timess')) {
+							if ($(_self).hasClass('start_times')) {
+								startTimes = rs.text;
+							}
+							if ($(_self).hasClass('end_times')) {
+								endTimes = rs.text;
+							}
+						}
+						
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+	})(mui);
+
+
+</script>

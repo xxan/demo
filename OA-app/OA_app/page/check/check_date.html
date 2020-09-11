@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/Finance.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/index.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/menu.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/check_calendar.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/calendar_base.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/showcase.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/calendar_base_week.css" />
+		<style type="text/css">
+			
+		</style>
+	</head>
+
+	<body class="this_body" style="background: #fff !important;">
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">考勤日历</h1>
+			<img src="../../img/add.png" class="mui-nav-more">
+		</header>
+		<div class="mui-nav-more_nr_t">
+			<div class="mui-nav-more_nr">
+				<img class="add_invoice" src="../../img/fixed_asse.png"><span>添加固定资产</span>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="message_title">
+				<!--  -->
+				<div class="search_box" style="display: none;">
+					<div class="mui-input-row mui-search">
+						<input id="search_input" type="text" class="" placeholder="搜索资产名称、领用人、资产编号">
+						<span class="photo_search" index='item1'></span>
+					</div>
+				</div>
+				<div class="check_name">
+						<div class="name_rect">
+							小明
+						</div>
+						<div class="name_desc">
+							李小明（标准定额事业部）
+						</div>
+						<div class="name_toggle">
+							切换
+						</div>
+				</div>
+			</div>
+			<div class="mui-content">
+				<div class="em-journal-title">
+					<div class="em-per-block pre">
+						<span class="mui-icon mui-icon-arrowleft"></span>
+					</div>
+					<div class="em-per-block mid">
+						<span>...</span>
+					</div>
+					<div class="em-per-block next">
+						<span class="mui-icon mui-icon-arrowright"></span>
+					</div>
+				</div>
+				<div id="calendar" class="em-journal-pad">
+			
+				</div>
+				<div class="mui-scroll-wrapper" id="date_list">
+					<div class="mui-scroll">
+						<div class="no_data">
+							<img src="../../img/no_day.png">
+							<p>无日程安排</p>
+						</div>
+						<ul class="day_list"  >
+							<li class="numbers">
+								今日打卡<span>1</span>次
+							</li>
+							<li class="today">
+								<p class="date_title"><span class="date_point">
+								<!-- <img src="../../img/gou.png"> -->
+								 上 
+								</span>打卡时间 08:55</p>
+								<div class="date_list_right">
+									<ul>
+										<li>
+											<div class="show_content">
+												<p class="list_title">绿都中央广场.云谷(顺与路)</p>
+												<span>正常</span>
+											</div>
+										<!-- 	<div class="oparetion_left">
+												<span>取消</span><span>完成</span>
+											</div> -->
+										</li>
+									</ul>
+								</div>
+							</li>
+							<li>
+								<p class="date_title"><span class="date_point">
+								下
+								
+								</span>未打卡</p>
+								<!-- <div class="date_list_right">
+									<ul>
+										<li> 
+			
+											<p class="list_title">OA系统经营管理模块</p>
+											<span>8:00-9:00</span>
+										</li>
+									</ul>
+								</div> -->
+							</li>
+							<div class="go_clock">
+								打卡
+							</div>
+						</ul>
+					</div>
+				</div>
+			
+			</div>
+			<!-- <div class="count_box">
+				<p>固定资产总量：<span class="count">100</span> <span class="filter_list">筛选</span></p>
+			</div> -->
+		 
+			<p class="down_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+			</p>
+			
+		</div>
+		
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<!-- 日历引用 -->
+<script src="../../js/mustache.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/calendar_base.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/calendar_base_week.js" type="text/javascript" charset="utf-8"></script>
+	<!--当前日期模板-->
+	<script type="text/template" id="template">
+		<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template_red">
+		<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template1">
+		<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}</span>
+		</li>
+	</script>
+	<!--大于当前日期模板-->
+	<!-- 无日历 -->
+	<script type="text/template" id="template2">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}</span>
+		</li>
+	</script>
+	<!-- 有日历 -->
+	<script type="text/template" id="template22">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template22_red">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+	<!--小于当前日期模板-->
+	<!-- 有日历 -->
+	<script type="text/template" id="template3">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template3_red">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+	<!-- 无日历 -->
+	<script type="text/template" id="template4">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}</span>
+		</li>
+	</script>
+<script type="text/javascript">
+	var page = 1;
+	var searchText = '';
+	var type,source,state;
+	var isfirst = true;
+	//获取列表
+	mui.init({
+		gestureConfig: {
+			tap: true, //默认为true
+			doubletap: true, //默认为false
+			longtap: true, //默认为false
+			swipe: true, //默认为true
+			drag: true, //默认为true
+			hold: true, //默认为false，不监听
+			release: false //默认为false，不监听
+		},
+	});
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios?0.003:0.0009
+	});
+	var isfresh = false;
+	
+	var isCreate = true,isUpdate = true, isDelete = true;
+	if(getModuleName('AssetsManage')) {
+		if(operationArr.length > 0) {
+			for(var i=0;i<operationArr.length;i++) {
+				if(operationArr[i].KeyCode == 'Create') {
+					if(!operationArr[i].IsValid) {
+						isCreate = false;
+					}
+				}
+				if(operationArr[i].KeyCode == 'Update') {
+					if(!operationArr[i].IsValid) {
+						isUpdate = false;
+					}
+				}
+				if(operationArr[i].KeyCode == 'Delete') {
+					if(!operationArr[i].IsValid) {
+						isDelete = false;
+					}
+				}
+			}
+		}
+	}
+	
+	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+		if(isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('opacity', '1'); 
+				page = 1;
+				getList(true,searchText,type,source,state).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -50) {
+			var liLength = $('.revene_all li').length;
+			if (liLength % 10 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt( liLength / 10) + 1;
+			getList(false,searchText,type,source,state).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+	mui.showLoading('正在加载中...');
+	common.promise()
+	// .then(function() {
+		
+	// })
+	.then(getList(true))
+	.then(function() {
+		return getType();
+	})
+	.then(function() {
+		return getSource();
+	})
+	.then(function() {
+		return getStatus();
+	})
+	.then(function() {
+		mui.hideLoading();
+	})
+	
+	function getList(flag,text,cate,source,state) {
+		var url = '/api/Resource/FixedAssetsData';
+		var postData = {
+			Page: page,
+			Limit: 10,
+			Name: text,
+			Category: cate,
+			Source: source,
+			State: state
+		}
+		console.log(postData)
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				$('.count').html(res.count);
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var data = res.data[i];
+					var color = '';
+					var operation = '';
+					if(data.State == '正常') {
+						color = 'green';
+					}else if(data.State == '维修') {
+						color = 'orange';
+						
+					}else if(data.State == '报废') {
+						color = 'red';
+						
+					}
+					html += '<li id='+ data.Id +'>'+
+									'<div class="list_top">资产编号 '+ common.getNotNullData(data.No)  +
+									' <span class="'+ color +'">'+ data.State +'</span></div>'+
+									'<div class="list_detail">'+
+									'<p>资产类别：<span>'+ common.getNotNullData(data.Category) +'</span></p>'+
+									'<p>资产名称：<span>'+ common.getNotNullData(data.Name)  +'</span></p>'+
+									'<p>资产规格：<span>'+ common.getNotNullData(data.Specs)  +'</span></p>'+
+									'<p>领用人员：<span>'+ common.getNotNullData(data.InUser)  +'</span></p>'+
+									'<p>管理人员：<span>'+ common.getNotNullData(data.Manage)  +'</span></p>'+
+									'</div></li>';
+				}
+				if(res.data.length == 0 && page == 1) {
+					html = '<div class="detail_info detail_info_no_data bid_no_data">'+
+					'<img src="../../img/no_data.png" ><p>还未有数据！</p></div>';
+				}
+				
+				if(flag) {
+					$('.revene_all').html(html)
+				}else {
+					if(res.data.length > 0) {
+						$('.revene_all').append(html)
+					}
+				}
+				return;
+			}
+		})
+	}
+	//获取打卡
+	getClock();
+	function getClock(){
+		var url = '/api/Resource/ClockIn';
+		request.post(url).then((res)=>{
+			console.log('打卡次数')
+			console.log(res)
+			if (res.code == 200) {
+				$('.list_title').html(res.data.Address)
+			}
+		})
+	}
+	//获取日程
+	function getDay(year, day) {
+		var url = '/api/Home/NotepadShow';
+		var postData = {
+			YearMonth: year ? year : getTime('yearAndMonth'),
+			Day: day ? day : getTime('day')
+		}
+		return request.post(url, postData).then(function(res) {
+			console.log('日程：', res)
+			if (res.code == 200) {
+				common.arrSort(res.data, 'NotepadState', -1);
+				if (res.data.length == 0) {
+					$('#page2 .no_data').css('display', 'block');
+					$('#page2 .day_list').css('display', 'none');
+				} else {
+					$('#page2 .no_data').css('display', 'none');
+					$('#page2 .day_list').css('display', 'block');
+					var html = '';
+					var endhtml1 = '</ul></div></li>';
+					var itemArrObj = {};
+					for (var i = 0; i < res.data.length; i++) {
+						var item = res.data[i].StartTime;
+						if (itemArrObj.hasOwnProperty(getTime('year', item))) {
+							itemArrObj[getTime('year', item)].push(res.data[i]);
+						} else {
+							itemArrObj[getTime('year', item)] = [res.data[i]];
+						}
+					}
+					var keys = Object.keys(itemArrObj);
+					notDoneCount = 0;
+	
+					function getDetailListItem(itemss) {
+						var listItem = ''
+						for (var j = 0; j < itemss.length; j++) {
+							var statusHtml = '';
+							if (itemss[j].NotepadState == -1) {
+								statusHtml = '<div class="day_status">已取消</div>';
+							} else if (itemss[j].NotepadState == 1) {
+								statusHtml = '<div class="day_status day_status_done">已完成</div>';
+							} else {
+								notDoneCount++;
+							}
+							listItem += '<li day_id=' + itemss[j].ID + ' NotepadState=' + itemss[j].NotepadState +
+								'><div class="show_content"><p class="list_title">' +
+								itemss[j].JobContent + '</p><span>' +
+								itemss[j].StartTime.split(' ')[0].substr(-5) + ' ' + itemss[j].StartTime.split(' ')[1] +
+								' - ' + itemss[j].EndTime.split(' ')[0].substr(-5) + ' ' + itemss[j].EndTime.split(' ')[1] +
+								'</span></div><div class="oparetion_left"><span class="day_cancel">取消</span>' +
+								'<span class="day_done">完成</span></div>' + statusHtml + '</li>';
+						}
+						return listItem
+					}
+					// console.log(keys)
+					for (var i = 0; i < keys.length; i++) {
+						if (keys[i] == getTime('year')) {
+							var item = itemArrObj[keys[i]];
+							var html1 = '<li class="today">' +
+								'<p class="date_title"><span class="date_point"><img src="img/gou.png" ></span>今天 ' + getTime('week', keys[i]) +
+								'</p>' +
+								'<div class="date_list_right"><ul>';
+							var str = getDetailListItem(item);
+							html += html1 + str + endhtml1;
+						} else {
+							var item = itemArrObj[keys[i]];
+							var html1 = '<li class="">' +
+								'<p class="date_title"><span class="date_point"><img src="img/gou.png" ></span>' +
+								getTime('chartoday', keys[i]) + ' ' + getTime('week', keys[i]) + '</p>' +
+								'<div class="date_list_right"><ul>';
+							var str = getDetailListItem(item);
+							html += html1 + str + endhtml1;
+						}
+					}
+					$('#page2 .day_list').html(html);
+					mui('.mui-scroll-wrapper').scroll()[0].scrollTo(0, 0, 100)
+				}
+			}
+		})
+	}
+	$('#search_input').on('change',function() {
+		searchText = $(this).val();
+		page = 1;
+		getList(true,searchText)
+	})
+	
+	//获取资产类别
+	function getType() {
+		var url = '/api/Resource/CategorySelect';
+		return request.post(url).then(function(res) {
+			console.log('类别:',res);
+			if(res.code == 200) {
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					html += '<span class="spans" this_id='+ res.data[i].Value +'>'+ res.data[i].Text +'</span>'
+				}
+				$('.asset_type').html(html)
+			}
+		})
+	}
+	//获取资产来源
+	function getSource() {
+		var url = '/api/Resource/SourceSelect';
+		return request.post(url).then(function(res) {
+			console.log('来源:',res);
+			if(res.code == 200) {
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					html += '<span class="spans" this_id='+ res.data[i].Value +'>'+ res.data[i].Text +'</span>'
+				}
+				$('.asset_source').html(html)
+			}
+		})
+	}
+	
+	//获取资产状态
+	function getStatus() {
+		var url = '/api/Resource/StatusSelect';
+		return request.post(url).then(function(res) {
+			console.log('状态:',res);
+			if(res.code == 200) {
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					html += '<span class="spans" this_id='+ res.data[i].Value +'>'+ res.data[i].Text +'</span>'
+				}
+				$('.asset_status').html(html)
+			}
+		})
+	}
+	
+	
+	//删除
+	mui('#pullrefresh').on('tap','.delete_this_btn',function() {
+		if(!isDelete) {
+			mui.toast('没有权限！');
+			return;
+		}
+		var thisId = $(this).parents('li').attr('id');
+		deleteLi(thisId,this);
+	})
+	
+	function deleteLi(Id,self) {
+		var url = '/api//Resource/DelAssets';
+		request.post(url,{Ids: Id}).then(function(res) {
+			if(res.code == 200) {
+				$(self).parents('li').remove();
+				$('.count').html($('.count').html() - 1);
+				mui.toast('删除成功！')
+			}
+		})
+	}
+	
+	//点击详情
+	mui('.message_content').on('tap','li',function(e) {
+		if($(e.target).hasClass('mui-popover')) {
+			$('#middlePopover').hide();
+			return;
+		}
+		if($(e.target).hasClass('mui-btn')) {
+			$('#middlePopover').hide();
+			return;
+		}
+		if($(e.target).hasClass('revene_all_btn_tj') || 
+		$(e.target).hasClass('revene_all_btn_sc') || 
+		$(e.target).hasClass('record_info') || 
+		$(e.target).hasClass('examine_in') || 
+		$(e.target).hasClass('update_in_info') || 
+		$(e.target).hasClass('submit_again')) {
+			return;
+		}
+		var thisId = $(this).attr('id');
+		if(isUpdate) {
+			window.location.href = './new.html?id=' + thisId + '&check=true';
+		}else {
+			window.location.href = './new.html?id=' + thisId + '&onlysee=true';
+		}
+	})
+	//考勤打卡
+	mui('.day_list').on('tap','.go_clock' ,function() {
+		window.location.href = './check_clock.html';
+	});
+	//添加
+	mui('.mui-nav-more_nr_t').on('tap','.mui-nav-more_nr',function() {
+		if(isCreate) {
+			window.location.href = './new.html';
+		}else {
+			mui.toast('没有权限！');
+		}
+	})
+	//点击头部更多
+	mui('.header_box').on('tap','.mui-nav-more',function() {
+		$('.mui-nav-more_nr_t').show();
+	})
+	
+	mui('.mui-nav-more_nr_t')[0].addEventListener('tap',function() {
+		$('.mui-nav-more_nr_t').hide();
+	})
+	
+	mui('.count_box').on('tap','.filter_list',function() {
+		$(".meau_list").animate({right:0});
+	})
+	
+	mui('.this_body').on('tap','.meau_list',function(e) {
+		if($(e.target).hasClass('spans')) return;
+		$(".meau_list").animate({right:'-100%'});
+	})
+	
+	mui('.list_table').on('tap','span',function() {
+		$(this).addClass('active');
+		$(this).siblings().removeClass('active');
+	})
+	mui('.footer_btn').on('tap','.btn_reset',function() {
+		$('.list_table').find('.active').removeClass('active');
+		page = 1;
+		type = null;source = null;state = null;
+		getList(true,null,type,source,state);
+		$(".meau_list").animate({right:'-100%'});
+		 mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 500);
+	})
+	mui('.footer_btn').on('tap','.btn_submit',function() {
+		if($('.asset_type').find('.active').length > 0) {
+			type = $('.asset_type').find('.active').attr('this_id');
+		}
+		if($('.asset_source').find('.active').length > 0) {
+			source = $('.asset_source').find('.active').attr('this_id');
+		}
+		if($('.asset_status').find('.active').length > 0) {
+			state = $('.asset_status').find('.active').attr('this_id');
+		}
+		page = 1;
+		console.log(type,source,state)
+		getList(true,null,type,source,state);
+		$(".meau_list").animate({right:'-100%'});
+	})
+	
+</script>
+<script src="../../js/delete.js" type="text/javascript" charset="utf-8"></script>
+<!-- 日历相关信息 -->
+	<script type="text/javascript">
+		var customBiz = {
+			init: function() {
+				var self = this;
+				// 初始化日历
+
+				var calendar = new Calendar({
+					// swiper滑动容器
+					container: "#calendar",
+					// 上一月节点
+					pre: ".pre",
+					minDate: new Date(),
+					// 下一月节点
+					next: ".next",
+					// 业务数据改变
+					dataRequest: function(currdate, callback, _this) {
+						// 无日程安排
+						console.log(currdate)
+						var data = [{
+							"date": "2019-10-11"
+						}];
+						callback && callback(data);
+					},
+					// 点击日期事件
+					onItemClick: function(item) {
+						console.log(123)
+						var defaultDate = item.date;
+						// 设置标题
+						setTitle(defaultDate);
+					},
+					// 滑动回调
+					swipeCallback: function(item) {
+						var defaultDate = item.date;
+						// 设置标题
+						setTitle(defaultDate);
+						// 动态新增点击样式
+						calendar.addActiveStyleFordate(defaultDate);
+
+					},
+					// 调试
+					isDebug: false
+				});
+				var titleNode = document.querySelector('.mid span');
+
+				function setTitle(date) {
+					// console.log(data)
+					titleNode.innerText = date.substr(0, 7);
+				}
+
+			},
+			initWeek: function() {
+				var titleNode = document.querySelector('.mid span');
+
+				function setTitle(date) {
+					// console.log(date)
+					titleNode.innerText = date.substr(0, 4) + '-' + date.substr(5, 2)
+				}
+
+				function getThisDay(year, day) {
+					var url = '/api/Home/NotepadShow';
+					var postData = {
+						YearMonth: year ? year : getTime('yearAndMonth'),
+						Day: day ? day : getTime('day')
+					}
+					return request.post(url, postData);
+				}
+
+				function getThisMOnth(yearmonth) {
+					var url = '/api/Home/NotepadDateShow';
+					var postData = {
+						YearMonth: yearmonth ? yearmonth : getTime('yearAndMonth'),
+					}
+					return request.post(url, postData);
+				}
+				
+				function getObj(data,value) {
+					for(var i=0;i<data.length;i++) {
+						if(data[i].Day == value) {
+							return data[i]
+						}
+					}
+				}
+
+				var thisMonths = '';
+				var nextMonths = '';
+				var thisMonthData = [];
+				var nextMonthData = [];
+				var MonthDataList = {};
+
+				var weekcalendar = new CalendarWeek({
+					// 默认周历组件容器
+					container: "#calendar",
+					// 上一月节点
+					pre: ".pre",
+					minDate: new Date(),
+					// 下一月节点
+					next: ".next",
+					template: function(value, currdate, key) {
+				 
+						// setTitle(currdate);
+						value.week_frame = value.week_frame.substr(2);
+						// console.log('currdate:', currdate);
+						// console.log('this_value:',value);
+						var thisMonth = value.date_frame.substr(0, 7);
+						// console.log('thisMonth',thisMonth);
+						var template;
+						// console.log('thismonths',thisMonths)
+						var data = MonthDataList[thisMonth];
+						var newdata = [];
+						for (var i = 0; i < data.length; i++) {
+							newdata.push(data[i].Day);
+						} 
+						// console.log('update-data:',data,Number(value.day_frame))
+						var this_data = getObj(data, Number(value.day_frame));
+						if (value.date_frame == currdate) {
+							
+							// console.log(thisMonthData.indexOf(value.day_frame))
+							if (newdata.indexOf(Number(value.day_frame)) != -1) {
+								if (this_data.Count > 0) {
+									template = document.getElementById("template_red").innerHTML.trim();
+								} else {
+									template = document.getElementById("template").innerHTML.trim();
+								}
+							} else {
+								template = document.getElementById("template1").innerHTML.trim();
+							}
+							setTitle(currdate);
+						} else {
+							if (value.date_frame < currdate) {
+								// console.log(newdata,this_data)
+								if (newdata.indexOf(Number(value.day_frame)) != -1) {
+									if (this_data.Count > 0) {
+										template = document.getElementById("template3_red").innerHTML.trim();
+									} else {
+										template = document.getElementById("template3").innerHTML.trim();
+									}
+								} else {
+									template = document.getElementById("template4").innerHTML.trim();
+								}
+							} else {
+								if (newdata.indexOf(Number(value.day_frame)) != -1) {
+									if (this_data.Count > 0) {
+										template = document.getElementById("template22_red").innerHTML.trim();
+									} else {
+										template = document.getElementById("template22").innerHTML.trim();
+									}
+								} else {
+									template = document.getElementById("template2").innerHTML.trim();
+								}
+							}
+						}
+						// console.log(template)
+						return template;
+					},
+					// 业务数据改变
+					dataRequest: function(callback, _this, range) {
+						var from = range.from; //开始时间
+						var to = range.to; //结束时间
+						// console.log("切换日期区间：" + JSON.stringify(range) + "用于刷新业务接口", _this);
+						thisMonths = from.substr(0, 7);
+						nextMonths = to.substr(0, 7);
+						var data = [
+							// 	{
+							// 	"title": "1",
+							// 	"date1": "2019-12-02",
+							// },
+						];
+						if (thisMonths == nextMonths) {
+							getThisMOnth(thisMonths).then(function(res) {
+								thisMonthData = res.data;
+								MonthDataList[thisMonths] = res.data;
+								callback(data || []);
+							})
+						} else {
+							getThisMOnth(thisMonths).then(function(res) {
+								thisMonthData = res.data;
+								MonthDataList[thisMonths] = res.data;
+								return getThisMOnth(nextMonths)
+							}).then(function(res) {
+								nextMonthData = res.data;
+								MonthDataList[nextMonths] = res.data;
+								callback(data || []);
+							})
+						}
+
+						// console.log(data)
+
+					},
+					"preEvent": function(month) {
+						// console.log("上周：" + month);
+						setTitle(month);
+					},
+					"nextEvent": function(month) {
+						// console.log("下周：" + month);
+						setTitle(month);
+
+					},
+					// 点击日期事件
+					"onItemClick": function(item) {
+						// getDay(year,day)
+						// console.log(123)
+						// this.querySelector('.status').style.display = 'block';
+						// console.log(item.date + " " + item.week);
+						clickData = item.date;
+						var year = item.date.split('-')[0] + '-' + item.date.split('-')[1];
+						var day = item.date.split('-')[2];
+						thisNowYearMonth = year;
+						thisNowDay = day;
+						getDay(year, day)
+						setTitle(item.date);
+					},
+					"success": function(date, range) {
+						// console.log(range)
+						document.querySelector('.mid span').innerText = date.substr(0, 4) + '-' + date.substr(5, 2);
+
+					},
+					isDebug: false
+				});
+			}
+		}
+		customBiz.initWeek();
+		// mui('.table_back').on('tap','a',function(e) {
+
+		// 	var page = $(this).attr('href');
+		// 	if(page.substr(5) == 2) {
+		// 		// 初始化
+		// 		customBiz.initWeek();
+		// 	}else if(page.substr(5) == 5) {
+		// 		// var userInfo = localStorage.getItem()
+		// 	}
+		// })
+	</script>

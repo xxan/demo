@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css" />
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+		<style type="text/css">
+			hr {
+				height: 10px;
+			}
+			.this_examine,.in_time_info {
+				display: none;
+			}
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 70%;
+			}
+			
+			.task_time p a b {
+				color:#FE7171;
+			}
+			.small_title {
+				margin: 0;
+			}
+			.small_title span{
+				float: right;
+				color: #3B9CFF;
+			}
+			.plan_time {
+				overflow: hidden;
+			}
+			.plan_time input {
+				display: inline-block;
+				width: 20%;
+				height: 45px !important;
+				line-height: 45px !important;
+				position: absolute;
+				padding: 0;
+				opacity: 0;
+				z-index: 999;
+			}
+			.other_type {
+				display: none;
+			}
+			.check_radio label {
+				font-size: 12px;
+				color: #999999;
+			}
+			.mui-radio input[type='radio']:before {
+				font-size: 16px;
+				position: relative;
+				top: 10px;
+			}
+			
+			.mui-radio.mui-left label{
+				padding-left: 40px;
+			}
+			
+			.check_radio .radio_input {
+				display: inline-block;
+				width: 25%;
+				height: 24px;
+				border: solid 1px #F2F2F2;
+				margin: 0 3%;
+				font-size: 12px;
+				color: #333333;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">报销申请</h1>
+		</header>
+		<div class="mui-content">
+			<h5>报销方式<span>*</span></h5>
+			<div class="task_time">
+				<p class="get_manager pay_type"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<div class="task_time other_type">
+				<p><input type="text" name="" id="" placeholder="请填写" class="other_type_text" /></p>
+			</div>
+			<div class="cx_type">
+				<h5>借款流程</h5>
+				<div class="task_time">
+					<p class="get_manager pay_process_type"><a>请选择</a><span class="choose_img"></span></p>
+					<div class="check_radio">
+						<div class="mui-input-row mui-radio mui-left">
+							
+							<label for="">冲借款<input type="number" class="radio_input loan_price1"/>元，报销<input type="number" class="radio_input re_price"/>元</label>
+							<input name="radio1" type="radio" id="radio1" checked value="0">
+							
+						</div> 
+						<div class="mui-input-row mui-radio mui-left">
+							
+							<label for="">冲借款<input type="number" class="radio_input loan_price2"/>元，退回<input type="number" class="radio_input back_price"/>元</label>
+							<input name="radio1" type="radio" id="radio2" value="1">
+							
+						</div> 
+					</div>
+				</div>
+			</div>
+			<h5>领款人<span>*</span></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="get_user" /></p>
+			</div>
+			<h5>报销事由<span>*</span></h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="get_price_detail" placeholder="请填写"></textarea>
+			</div>
+			<h5>费用明细<span>*</span></h5>
+			
+			<div class="expense_detail">
+				<div class="detail_list">
+					
+				</div>
+				
+				<div class="add_detail_box choose_img">
+					<span>添加明细</span>
+				</div>
+			</div>
+			
+			<h5>审批流程</h5>
+			<div class="list_box_content">
+				<div class="task_time">
+					<p class="get_manager approval_process"><a>选择流程</a><span class="choose_img"></span></p>
+					<hr>
+				</div>
+				<ul class="list_content_procedure">
+
+				</ul>
+			</div>
+
+			<div class="content_bottom">
+
+			</div>
+		</div>
+		
+		<!-- 弹框开始 -->
+		<div class="htsp_modal htsp_modal_jj">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认拒绝<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinioncancel" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认拒绝</span></div>
+		    </div>
+		</div>
+		<div class="htsp_modal htsp_modal_ty">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认同意<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinionok" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认同意</span></div>
+		    </div>
+		</div>
+		
+		<div class="htsp_modal sign_modal">
+			<div class="content_box">
+				<div class="mui-modal_all_title">添加签名<span class="mui-icon mui-icon-close"></span></div>
+				<div class="canvas_box">
+					<canvas id="canvas"></canvas>
+				</div>
+				<div class="canvas_btn">
+					<span class="canvas_reset">重置</span><span class="canvas_save">保存</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer_submit this_update">
+			<span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+		<div class="footer_submit this_examine">
+			<span class="btn_refuse">拒绝</span><span class="btn_agree">同意</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script type="text/javascript">
+	mui.init();
+</script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<!-- <script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script> -->
+<!-- <script src="../../../js/mui.poppicker.js" type="text/javascript" charset="utf-8"></script> -->
+<script src="../../../js/mui.picker.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/mui.dtpicker.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="../../../js/mui.poppicker.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/process_view.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	var id = common.getQueryUrl('id');
+	var isFlag = common.getQueryUrl('isExamine');
+	var isOperation = common.getQueryUrl('isOperation');
+	var showbottom = common.getQueryUrl('showbottom');
+	var ischeck = common.getQueryUrl('check');
+	var onlysee = common.getQueryUrl('onlysee');
+	if(isFlag) {
+		$('.this_update').css('display','none');
+		$('.this_examine').css('display','block');
+	}
+	
+	var input = $('input');
+	input.blur();
+	
+	var payType = [];
+	var payTypeId;
+	var costType = [];
+	var costTypeId;
+	var processList = [];
+	var processId;
+	var startTime,endTime,reimTime;
+	var loanList = [];
+	var loanId;
+	var fileList = [];
+	var num = 0;
+
+	var isShowAngree = false;
+	var isUpdate = false;
+	mui.showLoading();
+	common.promise().then(getPayType)
+		.then(function() {
+			return getCostType();
+		})
+		.then(function() {
+			return getLoan();
+		})
+		.then(function(res) {
+			return approvalProcess('财务管理');
+		}).then(function(res) {
+			console.log(res)
+			processList = res;
+			if(id) {
+				return getDetail()
+			}
+		}).then(function() {
+			mui.hideLoading();
+		})	
+		
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/ReimbursementDetail';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				if(res.data.Way >= 0) {
+					payTypeId = res.data.Way;
+					$('.pay_type a').html(common.getKeyValue(payType,payTypeId));
+					if(common.getKeyValue(payType,payTypeId) == '冲销借款') {
+						$('.cx_type').show();
+						loanId = res.data.ExplainId;
+						$('.pay_process_type a').html(common.getKeyValue(loanList,loanId));
+						$('input:radio').eq(res.data.CJKType).attr('checked', 'true');
+						if(res.data.CJKType == 0) {
+							$('.loan_price1').val(res.data.CjkPrice.toFixed(2));
+							$('.re_price').val(res.data.BxPrice.toFixed(2));
+						}else {
+							$('.loan_price2').val(res.data.CjkPrice.toFixed(2));
+							$('.back_price').val(res.data.ThPrice.toFixed(2));
+						}
+					}
+					if(common.getKeyValue(payType,payTypeId) == '其他') {
+						$('.other_type').show();
+						$('.other_type_text').val(res.data.WayRests);
+					}
+				}
+				if(res.data.Payee) $('.get_user').val(res.data.Payee);
+				if(res.data.CauseMatter){
+					$('.get_price_detail').val(res.data.CauseMatter);
+					$('.get_price_detail').css('height',$('.get_price_detail')[0].scrollHeight + 'px');
+				} 
+				
+				
+				if(res.data.Template > 0 && res.data.State != -1) {
+					processId = res.data.Template;
+					$('.approval_process').find('a').html(common.getKeyValue(processList,processId));
+					processDetail(processId);
+					$('.this_update').hide();
+					
+					if(showbottom) {
+						$('.this_update').show();
+					}else {
+						if(!isOperation) {
+							isUpdate = true;
+							common.disbledForm();
+							$('.choose_img').hide()
+						}
+					}
+				}
+				
+				
+				if(ischeck) {
+					if(res.data.State == -1 || res.data.State == 1 || res.data.State == 2) {
+						$('.mui-title').html('报销申请详情');
+					}
+				}
+				if(onlysee) {
+					isUpdate = true;
+					common.disbledForm();
+					$('.choose_img').hide()
+						$('.footer_submit').hide();
+				}
+				var list = res.data.DetailsList;
+				for(var i=0;i<list.length;i++) {
+					var date = (new Date()).valueOf();
+					$('.detail_list').append(getAppend(date));
+					var li = $('.detail_list_box').eq(i);
+					$(li).attr('liid',list[i].ID);
+					if(list[i].CostTime) $(li).find('.expect_time a').html(list[i].CostTime);
+					if(list[i].CostType){
+						$(li).find('.cost_type a').html(list[i].CostType);
+						// costTypeId = getValue(list[i].CostType);
+						$(li).find('.cost_type a').attr('costid',getValue(list[i].CostType))
+					}
+					$(li).find('.get_price').val(list[i].Amount);
+					$(li).find('.price_intro').val(list[i].CostExplain);
+					var names = '';
+					for(var j=0;j<list[i].lstFile.length;j++) {
+						var lists = list[i].lstFile[j];
+						lists.Type = "代收代退保证金(财务管理)--代收保证金";
+						lists.item = 'add_file_title_' + date;
+						fileList.push(lists);
+						var deStr = '删除';
+						if(isUpdate) {
+							deStr = '';
+							common.disbledForm();
+							$('.choose_img').hide()
+						}
+						var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+							names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + doc +
+							'</span><span class="file_list_delete hide_span" onclick="thisClick(this)">'+ deStr +'</span></li>';
+					}
+					console.log(lists)
+					$(li).find('.file_head').html(names);
+				}
+				preview();
+				
+			}
+		})
+	}
+	
+	function getValue(text) {
+		for(var i=0;i<costType.length;i++) {
+			if(costType[i].text == text) {
+				return costType[i].value
+			}
+		}
+	}
+	//获取报销方式
+	function getPayType(id) {
+		var url = '/api/Finance/ReimbursementWayList';
+		return request.post(url).then(function(res) {
+			console.log('报销方式：', res);
+			if (res.code == 200) {
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					}
+					payType.push(obj);
+				}
+			}
+		})
+	}
+	
+	//获取费用科目
+	function getCostType(id) {
+		var url = '/api/Finance/CostTypeList';
+		return request.post(url).then(function(res) {
+			console.log('费用科目：', res);
+			if (res.code == 200) {
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					}
+					costType.push(obj);
+				}
+			}
+		})
+	}
+	
+	//获取借款流程
+	function getLoan() {
+		var url = '/api/Finance/ExplainList';
+		return request.post(url).then(function(res) {
+			console.log('借款流程：', res);
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {
+						value: res.data[i].Id,
+						text: '借款单编号：'+(res.data[i].BCode ? res.data[i].BCode : '无') + ','+res.data[i].Reason + ',' + res.data[i].Total + '元'
+					}
+					loanList.push(obj);
+				}
+			}
+		})
+	}
+	
+	
+	function upload(formData, lists, index,itemIndex) {
+		var url = '/api/BusinessManage/UploadFile?Type=BillPathUpload';
+		return request.upload(url, formData).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": "代收代退保证金(财务管理)--代收保证金",
+					"item": index,
+					"itemIndex": itemIndex
+				}
+				if (lists.length > 0) {
+					console.log(lists, data)
+					for (var i = 0; i < lists.length; i++) {
+						if (lists[i].FileName == data.FileName && lists[i].Extension == data.Extension) {
+							lists.splice(i, 1);
+						}
+					}
+				}
+				lists.push(data)
+				return;
+			}
+		})
+	}
+
+	function submit(flag) {
+		var postData = {};
+		if(!payTypeId && payTypeId != 0) {
+			mui.alert('请选择报销方式');
+			return;
+		}
+		if($('.pay_type').find('a').html() == '其他') {
+			if(!$('.other_type_text').val()) {
+				mui.alert('请输入其他报销方式');
+				return;
+			}
+			postData.WayRests = $('.other_type_text').val();
+		}
+		if(!$('.get_user').val()) {
+			mui.alert('请输入领款人');
+			return;
+		}
+		if(!$('.get_price_detail').val()) {
+			mui.alert('请输入报销事由');
+			return;
+		}
+		var length = $('.detail_list_box').length;
+		if(length < 1) {
+			mui.alert('请添加费用明细');
+			return;
+		}
+		if(id) {
+			postData.Id = id;
+		}
+		if(flag) {
+			if(!processId && processId != 0) {
+				mui.alert('请选择审批流程');
+				return;
+			}
+		}
+		
+		postData.IsSubmit = flag;
+		if(processId) postData.Template = processId;
+		
+		postData.Payee = $('.get_user').val() || '';
+		postData.CauseMatter = $('.get_price_detail').val();
+		if(payTypeId >= 0) {
+			postData.Way = payTypeId;
+		}
+		
+		if(payTypeId == 1 && loanId >= 0) {
+			postData.ExplainId = loanId;
+		}
+		if($('.pay_type').find('a').html() == '冲销借款') {
+			var radioType = Number($("input[type='radio']:checked").val());
+			postData.CJKType = radioType;
+			
+			if(radioType == 0) {
+				if(!$('.loan_price1').val()) {
+					mui.alert('请输入冲借款');
+					return;
+				}
+				if(!$('.re_price').val()) {
+					mui.alert('请输入报销金额');
+					return;
+				}
+				postData.CjkPrice = $('.loan_price1').val();
+				postData.BxPrice = $('.re_price').val();
+			}else {
+				if(!$('.loan_price2').val()) {
+					mui.alert('请输入冲借款');
+					return;
+				}
+				if(!$('.back_price').val()) {
+					mui.alert('请输入退回金额');
+					return;
+				}
+				postData.CjkPrice = $('.loan_price2').val();
+				postData.ThPrice = $('.back_price').val();
+			}
+		}
+		
+		var length = $('.detail_list_box').length;
+		var list = [];
+		var fileArr = {};
+		for(var i=0;i<length;i++) {
+			var _this = $('.detail_list_box').eq(i);
+			var time = $(_this).find('.expect_time a').html().indexOf('费用日期') != -1 ? '' : $(_this).find('.expect_time a').html();
+			var obj = {
+				ReimbursementId: id,
+				CostTime: time,
+				Amount: $(_this).find('.get_price').val() || 0,
+				CostExplain: $(_this).find('.price_intro').val() || '',
+			}
+			if($(_this).attr('liid')) {
+				obj.Id = $(_this).attr('liid');
+			}
+			// if(costTypeId >= 0) {
+				obj.CostType =  $(_this).find('.cost_type a').attr('costId');
+			// }
+			obj.LstFile = [];
+			console.log(fileList)
+			var thisInputId = $(_this).find('.input_box').attr('id');
+			for(var j=0;j<fileList.length;j++) {
+				if(fileList[j].item == thisInputId) {
+					obj.LstFile.push(fileList[j])
+				}
+			}
+			list.push(obj);
+		}
+		
+		postData.ReimbursementDetailsList = list;
+		
+		for(var i=0;i<postData.ReimbursementDetailsList.length;i++) {
+			var lists = postData.ReimbursementDetailsList[i];
+			console.log(lists)
+			if(!lists.CostTime) {
+				mui.alert('请添加费用日期');
+				return;
+			}
+			if(!lists.CostType && lists.CostType != 0) {
+				mui.alert('请添加费用科目');
+				return;
+			}
+			if(!lists.Amount) {
+				mui.alert('请添加费用金额');
+				return;
+			}
+		}
+		console.log(postData)
+		var url = '/api/Finance/SaveReimbursement';
+		
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				console.log(123)
+				// mui.back();
+				window.history.back()
+			}else {
+				mui.alert(res.msg);
+			}
+		})
+		
+	}
+	
+	mui('.header_box').on('tap','a',function() {
+		window.location.href = 'reimbursement.html';
+	})
+
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(false);
+	});
+	mui('.footer_submit').on('tap', '.btn_submit', function() {
+		submit(true);
+	});
+	
+	function getAppend(id) {
+		var defaultLi = '<div class="detail_list_box"><div class="task_time"><p class="checktime expect_time"><a>费用日期<b>*</b></a><span class="choose_img"></span></p></div><div class="task_time"><p class="get_manager cost_type"><a>费用科目<b>*</b></a><span class="choose_img"></span></p></div><div class="task_time"><p><input type="number" name="" id="" placeholder="金额（元）" class="get_price" oninput="getNumber(this)" onpropertychange="getNumber(this)"/></p></div><div class="task_time"><p><input type="text" name="" id="" placeholder="费用说明" class="price_intro" /></p></div><div class="plan_time file_upload"><span><b>票据上传</b></span><input type="file" onchange="thisChange(this)" class="input_box" id="add_file_title_'+id+'" multiple /><label for="add_file_title" class="choose_img">添加</label></div><ul class="file_tendering_list file_head"></ul><div class="delete_detail_box"><span class="choose_img" onclick="deleteList(this)">删除明细</span></div></div>';
+		return defaultLi;
+	}
+	
+	// //添加删除明细add_detail_box
+	mui('.add_detail_box').on('tap', 'span', function() {
+		if(isUpdate) return;
+		$('.detail_list').append(getAppend((new Date()).valueOf()));
+		getThisTime(mui);
+		// mui('.expense_detail .delete_detail_box').on('tap', 'span', function(e) {
+		// 	console.log(e.target)
+		// 	if(isUpdate) return;
+		// 	$(this).parents('.detail_list_box').remove();
+		// });
+		preview();
+	});
+	
+	function deleteList(self) {
+		if(isUpdate) return;
+		$(self).parents('.detail_list_box').remove();
+	}
+	
+	
+	function thisChange(self) {
+		var id = $(self).attr('id');
+		console.log(id)
+		var files = $(self)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			console.log(files[i])
+			formData.append("file",files[i]);
+			arr.push(upload(formData,fileList,id,files[i].lastModified))	
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name" indexid='+ id
+			+' item='+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete" onclick="thisClick(this)">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			if($(self).parents('.detail_list_box').find('.file_head li').length > 0) {
+				$(self).parents('.detail_list_box').find('.file_head').append(names)
+			}else {
+				$(self).parents('.detail_list_box').find('.file_head').html(names)
+			}
+		}
+		
+	}
+	
+	//预览
+	function preview() {
+		var btns = mui('.file_list_name');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function(e) {
+					mui.showLoading('加载中...');
+					var path = $(e.target).attr('path');
+					var index = $(e.target).attr('indexid');
+					if(index) {
+						for(var i=0;i<fileList.length;i++) {
+							if(index == fileList[i].item) {
+								openFile(baseUrl + fileList[i].FilePath)
+							}
+						}
+					}else {
+						openFile(baseUrl + path)
+					}
+			}, false);
+		});
+	}
+	
+	
+	
+	function thisClick(self) {
+		var id = $(self).parents('li').attr('id');
+		var item = $(self).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].itemIndex == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(self).parents('li').remove();
+	}
+	mui('.expense_detail .delete_detail_box').on('tap', 'span', function(e) {
+		console.log(e.target)
+		if(isUpdate) return;
+		$(this).parents('.detail_list_box').remove();
+	});
+
+	
+	canvasInit();
+	$('.get_small_price').on('blur', function() {
+		var text = common.smallToLarge($(this).val());
+		$('.get_big_price').html(text);
+	});
+	
+	
+	
+	function getNumber(self) {
+		$(self).val(NumberCheck($(self).val()))
+	}
+	
+	function NumberCheck(num) {
+      var str = num;
+      var len1 = str.substr(0, 1);
+      var len2 = str.substr(1, 1);
+      //如果第一位是0，第二位不是点，就用数字把点替换掉
+      if (str.length > 1 && len1 == 0 && len2 != ".") {
+        str = str.substr(1, 1);
+      }
+      //第一位不能是.
+      if (len1 == ".") {
+        str = "";
+      }
+      //限制只能输入一个小数点
+      if (str.indexOf(".") != -1) {
+        var str_ = str.substr(str.indexOf(".") + 1);
+        if (str_.indexOf(".") != -1) {
+          str = str.substr(0, str.indexOf(".") + str_.indexOf(".") + 1);
+        }
+      }
+      //正则替换，保留数字和小数点
+      str = str.replace(/[^\d^\.]+/g,'')
+      return str;
+    }
+
+function getThisTime(mui) {
+	var btns = mui('.checktime');
+	btns.each(function(i, btn) {
+		btn.addEventListener('tap', function() {
+			input.blur();
+			if(isUpdate) {
+				return;
+			}
+			var _self = this;
+			// if(_self.picker) {
+			// 		console.log(12)
+			// 		_self.picker.show(function (rs) {
+			// 			if($(_self).hasClass('expect_time')) {
+			// 				reimTime = rs.text;
+			// 			}
+			// 			$(_self).find('a').html(rs.text);
+			// 			_self.picker.dispose();
+			// 			_self.picker = null;
+			// 		});
+			// } else {
+				var optionsJson = this.getAttribute('data-options') || '{}';
+				var options = JSON.parse(optionsJson);
+				options.type = 'date';
+				var id = this.getAttribute('id');
+				_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('expect_time')) {
+							reimTime = rs.text;
+						}
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+			// }
+		}, false);
+	});
+}
+
+
+	(function(mui) {
+		//时间选择
+		getThisTime(mui);
+		//联系人选择
+
+		
+	})(mui);
+	
+	mui('body').on('tap','.mui-backdrop',function() {
+		console.log(123)
+		$('.mui-poppicker').remove();
+		$('.mui-dtpicker').remove();
+	})
+	
+	mui('.mui-content').on('tap','.pay_type',function() {
+		input.blur();
+		var userPicker = new mui.PopPicker();
+		if(isUpdate) {
+			return;
+		}
+		if($(".mui-poppicker").hasClass("mui-active")){
+			return;
+		}
+		var _this = this;
+		userPicker.setData(payType);
+		userPicker.show(function(items) {
+			$(_this).find('a').html(items[0].text);
+			userPicker.dispose()
+			if(items[0].text == '冲销借款') {
+				$('.cx_type').css('display','block');
+			}else {
+				$('.cx_type').css('display','none');
+			}
+			
+			if(items[0].text == '其他') {
+				$('.other_type').show();
+			}else {
+				$('.other_type').hide();
+			}
+			payTypeId = items[0].value;
+			
+		});
+	})
+	
+	mui('.mui-content').on('tap','.cost_type',function() {
+		input.blur();
+		var userPicker = new mui.PopPicker();
+		if(isUpdate) {
+			return;
+		}
+		if($(".mui-poppicker").hasClass("mui-active")){
+			return;
+		}
+		var _this = this;
+		userPicker.setData(costType);
+		userPicker.show(function(items) {
+			$(_this).find('a').html(items[0].text);
+			$(_this).find('a').attr('costId',items[0].value)
+			costTypeId = items[0].value;
+			userPicker.dispose()
+		});
+	})
+	
+	mui('.mui-content').on('tap','.pay_process_type',function() {
+		input.blur();
+		var userPicker = new mui.PopPicker();
+		if(isUpdate) {
+			return;
+		}
+		if($(".mui-poppicker").hasClass("mui-active")){
+			return;
+		}
+		var _this = this;
+		userPicker.setData(loanList);
+		userPicker.show(function(items) {
+			$(_this).find('a').html(items[0].text);
+			loanId = items[0].value;
+			userPicker.dispose()
+		});
+	})
+	
+	
+	mui('.mui-content').on('tap','.approval_process',function() {
+		input.blur();
+		var userPicker = new mui.PopPicker();
+		if(isUpdate) {
+			return;
+		}
+		if($(".mui-poppicker").hasClass("mui-active")){
+			return;
+		}
+		var _this = this;
+		userPicker.setData(processList);
+		userPicker.show(function(items) {
+			$(_this).find('a').html(items[0].text);
+			processId = items[0].value;
+			getProcessDetail(processId);
+			userPicker.dispose()
+		});
+	})
+	
+</script>

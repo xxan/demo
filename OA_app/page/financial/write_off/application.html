@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css" />
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+		<style type="text/css">
+			hr {
+				height: 10px;
+			}
+			.this_examine,.in_time_info {
+				display: none;
+			}
+			.file_upload label{
+				float: right;
+				margin-right: 20px;
+			}
+			/* .type1,
+			.type2 {
+				display: none;
+			} */
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">预付款核销申请</h1>
+		</header>
+		<div class="mui-content">
+			<h5>核销收款人<span>*</span></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="user_name" /></p>
+			</div>
+			<h5>核销金额（元）<span>*</span></h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="price" /></p>
+			</div>
+			<h5>核销内容</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="off_content" placeholder="请填写"></textarea>
+			</div>
+			<h5>备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="remarks" placeholder="请填写"></textarea>
+			</div>
+		
+			<h5>附件上传</h5>
+			<div class="plan_time file_upload">
+				<span></span>
+				<input type="file" name="" id="add_file_title" multiple /><label for="add_file_title" class="btn_add_title choose_img">添加</label>
+			</div>
+			<ul class="file_tendering_list">
+				<!-- <li><span class="file_list_name"></span><span class="file_list_delete">删除</span></li> -->
+			</ul>
+			<h5>审批流程</h5>
+			<div class="list_box_content">
+				<div class="task_time">
+					<p class="get_manager approval_process"><a>选择流程</a><span class="choose_img"></span></p>
+					<hr>
+				</div>
+				<ul class="list_content_procedure">
+
+				</ul>
+			</div>
+
+			<div class="content_bottom">
+
+			</div>
+		</div>
+		
+		<!-- 弹框开始 -->
+		<div class="htsp_modal htsp_modal_jj">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认拒绝<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinioncancel" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认拒绝</span></div>
+		    </div>
+		</div>
+		<div class="htsp_modal htsp_modal_ty">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认同意<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinionok" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认同意</span></div>
+		    </div>
+		</div>
+		
+		<div class="htsp_modal sign_modal">
+			<div class="content_box">
+				<div class="mui-modal_all_title">添加签名<span class="mui-icon mui-icon-close"></span></div>
+				<div class="canvas_box">
+					<canvas id="canvas"></canvas>
+				</div>
+				<div class="canvas_btn">
+					<span class="canvas_reset">重置</span><span class="canvas_save">保存</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer_submit this_update">
+			<span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+		<div class="footer_submit this_examine">
+			<span class="btn_refuse">拒绝</span><span class="btn_agree">同意</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/process_view.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	var isFlag = common.getQueryUrl('isExamine');
+	var isOperation = common.getQueryUrl('isOperation');
+	var showbottom = common.getQueryUrl('showbottom');
+	var ischeck = common.getQueryUrl('check');
+	var onlysee = common.getQueryUrl('onlysee');
+	if(isFlag) {
+		$('.this_update').css('display','none');
+		$('.this_examine').css('display','block');
+	}
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+
+	var processList = [];
+	var processId;
+	var fileList = [];
+	var newFile = [];
+	var isShowAngree = false;
+	
+	var isUpdate = false;
+	mui.showLoading();
+	common.promise()
+		.then(function(res) {
+			return approvalProcess('财务管理');
+		}).then(function(res) {
+			processList = res;
+			if(id) {
+				return getDetail()
+			}
+		}).then(function() {
+			mui.hideLoading();
+		})
+		
+		
+	//获取详情
+	function getDetail() {
+		var url = '/api/Finance/AdvanceOffMoneyDetail';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				
+				if(res.data.OffUser) $('.user_name').val(res.data.OffUser);
+				if(res.data.OffTotal) $('.price').val(res.data.OffTotal);
+				if(res.data.OffContent) $('.off_content').val(res.data.OffContent);
+				if(res.data.Remark) $('.remarks').val(res.data.Remark);
+				
+				if(res.data.Template > 0 && res.data.State != -1) {
+					processId = res.data.Template;
+					$('.approval_process').find('a').html(common.getKeyValue(processList,processId));
+					processDetail(processId);
+					$('.this_update').hide();
+					
+					if(showbottom) {
+						$('.this_update').show();
+					}else {
+						if(!isOperation) {
+							isUpdate = true;
+							common.disbledForm()
+						}
+					}
+				}
+				
+				if(ischeck) {
+					if(res.data.State == -1 || res.data.State == 1 || res.data.State == 2) {
+						$('.mui-title').html('核销申请详情');
+					}
+				}
+				if(onlysee) {
+					isUpdate = true;
+					common.disbledForm();
+					$('.choose_img').hide()
+						$('.footer_submit').hide();
+				}
+				
+				
+				if(isUpdate) {
+					$('.choose_img').hide()
+				}
+				
+				var names = '';
+				for(var i=0;i<res.data.lstFile.length;i++) {
+					var lists = res.data.lstFile[i];
+						var deStr = '删除';
+						if(isUpdate) {
+							deStr = '';
+						}
+						names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'
+						+ lists.FileName + lists.Extension +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+				}
+				fileList = fileList.concat(res.data.lstFile);
+				$('.file_tendering_list').html(names);
+			
+			}
+		})
+	}
+	
+	function getValue(text) {
+		for(var i=0;i<costType.length;i++) {
+			if(costType[i].text == text) {
+				return costType[i].value
+			}
+		}
+	}
+	
+
+	function submit(flag) {
+		var postData = {};
+		
+		if (!$('.user_name').val()) {
+			mui.toast('请输入收款人!');
+			return;
+		}
+		if (!$('.price').val()) {
+			mui.toast('请输入收款人!');
+			return;
+		}
+		if(flag) {
+			if(!processId && processId !=0) {
+				mui.toast('请选择审批流程!');
+				return;
+			}
+		}
+
+		if(id) {
+			postData.Id = id;
+		}
+		
+		postData.IsSubmit = flag;
+		if(processId) postData.Template = processId;
+		
+		postData.OffUser = $('.user_name').val() || '';
+		postData.OffTotal = $('.price').val() || 0;
+		postData.OffContent = $('.off_content').val() || '';
+		postData.Remark = $('.remarks').val() || '';
+mui.showLoading();
+		common.promise()
+		// .then(function() {
+		// 	if ($("#add_file_title")[0].files.length>0) {
+		// 		var files = $("#add_file_title")[0].files;
+		// 		var arr = []
+		// 		for(var i=0;i<files.length;i++) {
+		// 			if(files[i].deletetrue) {
+		// 				continue;
+		// 			}
+		// 			var formData = new FormData();
+		// 			formData.append("file",files[i]);
+		// 			arr.push(upload(formData))
+		// 		}
+		// 		return Promise.all(arr);
+		// 	} else {
+		// 		return;
+		// 	}
+		// })
+		.then(function() {
+			postData.lstFile = newFile;
+			console.log(postData);
+			var url = '/api/Finance/SaveAdvanceOffMoney';
+			return request.post(url,postData).then(function(res) {
+				console.log(res);
+				mui.hideLoading();
+				if(res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast(res.msg);
+				}
+			})
+		})
+	}
+	
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=AdvanceOffMoney';
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"tid": flag
+				}
+				newFile.push(data)
+				return;
+			}
+		})
+	}
+	
+	function deleteFile(ids) {
+		var url = '/api/Finance/DeleteBorrowMoneyFile';
+		return request.post(url,{Ids: ids}).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.toast('删除成功！')
+			}else {
+				mui.toast('删除失败！')
+			}
+		})
+	}
+	
+	//点击文件上传按钮
+	$("#add_file_title").on('change', function(e) {
+		
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='+ 
+			files[i].lastModified +'>' + files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	})
+	
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	})
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+					deleteFile(id)
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(newFile[i].tid == item) {
+					newFile.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(false);
+	});
+	mui('.footer_submit').on('tap', '.btn_submit', function() {
+		submit(true);
+	});
+	
+	
+	canvasInit();
+
+
+	$('.get_small_price').on('blur', function() {
+		var text = common.smallToLarge($(this).val());
+		$('.get_big_price').html(text);
+	});
+	
+
+function chooseList() {
+	var userPicker = new mui.PopPicker();
+	
+	var showUserPickerButton = mui('.get_manager');
+	showUserPickerButton.each(function(i, btn) {
+		btn.addEventListener('tap', function(event) {
+			input.blur();
+			textarea.blur();
+			if(isUpdate) {
+				return;
+			}
+			var _this = this;
+			if ($(this).hasClass('approval_process')) {
+				userPicker.setData(processList);
+				userPicker.show(function(items) {
+					$(_this).find('a').html(items[0].text);
+					processId = items[0].value;
+					getProcessDetail(processId);
+				});
+			}
+			
+		}, false);
+	});
+}
+
+	(function(mui) {
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			chooseList();
+		});
+	})(mui);
+</script>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/Finance.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/sale.css"/>
+		<script src="../../../js/mui.js"></script>
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">销售管理</h1>
+			<!-- <span class="mui-nav-more">...</span>			 -->
+			<img src="../../../img/shaixuan.png" >
+		</header>
+		<div class="mui-nav-more_nr_t">
+			<div class="mui-nav-more_nr">
+				<img src="../../../img/tjsk_img.png"><span>添加收款</span>
+			</div>
+		</div>
+		<div class="mui-content">
+			<div class="message_title">
+				<div class="search_box">
+					<div class="mui-input-row mui-search">
+						<input id="search_input" type="text" class="" placeholder="搜索订单">
+						<span class="photo_search" index='item1' onclick="searchCLick(this)"></span>
+					</div>
+				</div>
+			</div>
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<p class="up_fress data-loading-icon">
+					<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+				</p>
+				<div class="mui-scroll">
+					<div class="message_content">
+						<ul class="revene_all">
+							<li>
+								<p><img src="../../../img/company_sale.png" ><span class="company_name">是电饭阿斯顿发生锅第三方有限公司</span><span class="user_name_box">赵琳 2019-10-12</span></p>
+								<div class="order_info">
+									<div class="order_pro">
+										<span class="order_type">产品</span><span class="goods_name">上网呢么第三方公司</span><span class="goods_num">×1</span>
+									</div>
+									<div class="order_pro">
+										<span class="give_type">产品</span><span class="goods_name">上网呢么第三方公司</span><span class="goods_num">×1</span>
+									</div>
+									<div class="order_kits">
+										<div class="kits_left">
+											<span class="get_end">已开票</span><span class="get_no">未回款</span>
+										</div>
+										<div class="kits_right">
+											合计：￥2000.00
+										</div>
+									</div>
+									<div class="update_btn">
+										<span>编辑销售信息</span>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<p class="down_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+			</p>
+			
+			<div class="silder_box">
+				<div class="screen_box not_close">
+					<h5>筛选</h5>
+					<div class="silder_scroll not_close">
+						<div class="silder_content not_close">
+							<div class="sales not_close">
+								<p>销售员</p>
+								<div class="sales_list not_close">
+									<span>刘红</span><span class="between_span">刘红</span><span>刘红</span>
+								</div>
+								<div style="clear:both">
+									
+								</div>
+							</div>
+							<div class="type_class not_close">
+								<p>产品类别</p>
+								<div class="sales_list not_close">
+									<span>刘红</span><span class="between_span">刘红</span><span>刘红</span>
+								</div>
+								<div style="clear:both">
+									
+								</div>
+							</div>
+							<div class="is_kit not_close">
+								<p>是否已开票</p>
+								<div class="sales_list not_close">
+									<span>是</span><span class="between_span">否</span>
+								</div>
+								<div style="clear:both">
+									
+								</div>
+							</div>
+							<div class="is_money not_close">
+								<p>是否已回款</p>
+								<div class="sales_list not_close">
+									<span>是</span><span class="between_span">否</span>
+								</div>
+								<div style="clear:both">
+									
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="silder_footer_submit">
+						<span class="reset">重置</span><span class="sure">确定</span>
+					</div>
+				</div>
+			</div>
+			
+	   </div>	    
+	</body>
+</html>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	var thisPage = 1;
+	var searchText = '';
+	var isfirst = true;
+	
+	var isCreate = true,isUpdate = true, isDelete = true;
+	if(getModuleName('Sell')) {
+		if(operationArr.length > 0) {
+			for(var i=0;i<operationArr.length;i++) {
+				if(operationArr[i].KeyCode == 'Create') {
+					if(!operationArr[i].IsValid) {
+						isCreate = false;
+					}
+				}
+				if(operationArr[i].KeyCode == 'Update') {
+					if(!operationArr[i].IsValid) {
+						isUpdate = false;
+					}
+				}
+				if(operationArr[i].KeyCode == 'Delete') {
+					if(!operationArr[i].IsValid) {
+						isDelete = false;
+					}
+				}
+			}
+		}
+	}
+	
+	mui.init();
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios?0.003:0.0009
+	});
+	var isfresh = false;
+	clickInit()
+	
+	//点击时间集合
+	function clickInit() {
+		//打开侧边栏
+		mui('.header_box').on('tap','img',function() {
+			$('.silder_box').show().animate({right:"0"},500)
+		});
+		//关闭侧边栏
+		mui('body').on('tap','.silder_box',function(e) {
+			if($(e.target)[0].tagName == 'SPAN' || $(e.target)[0].tagName == 'P' ||
+				$(e.target).hasClass('reset') || $(e.target).hasClass('sure') ||
+				$(e.target).hasClass('screen_box') || $(e.target).hasClass('not_close')) {
+				return;
+			}
+			$('.silder_box').animate({right:"-100%"},500,function() {
+				$('.silder_box').hide()
+			})
+		});
+		
+		//点击选中
+		mui('.silder_content').on('tap','span',function() {
+			if($(this).parents('.sales').length > 0 || $(this).parents('.type_class').length > 0) {
+				if($(this).hasClass('active')) {
+					$(this).removeClass('active');
+				}else {
+					$(this).addClass('active');
+				}
+			}else {
+				if($(this).hasClass('active')) {
+					$(this).removeClass('active');
+				}else {
+					$(this).addClass('active');
+					$(this).siblings().removeClass('active');
+				}
+			}
+			
+		});
+		
+		//点击重置和确定
+		mui('.silder_footer_submit').on('tap','span',function() {
+			if($(this).hasClass('reset')) {
+				$('.silder_content').find('span').removeClass('active');
+			}else {
+				var searchObj = {};
+				var salesLength = $('.sales span').length;
+				var salesName = [];
+				for(var i=0;i<salesLength;i++) {
+					if($('.sales span').eq(i).hasClass('active')) {
+						salesName.push($('.sales span').eq(i).html());
+					}
+				}
+				if(salesName.length > 0) {
+					searchObj.searchName = salesName.join(',');
+				}
+				var typeLength = $('.type_class span').length;
+				var typeStr = [];
+				for(var i=0;i<typeLength;i++) {
+					if($('.type_class span').eq(i).hasClass('active')) {
+						typeStr.push($('.type_class span').eq(i).attr('span_id'))
+					}
+				}
+				if(typeStr.length > 0) {
+					searchObj.typeStr = typeStr.join(',');
+				}
+				var isKit = $('.is_kit span').length;
+				var isVoiceFlag = {
+					isFlag : false
+				};
+				for(var i=0;i<isKit;i++) {
+					if($('.is_kit span').eq(i).hasClass('active')) {
+						isVoiceFlag.isFlag = true;
+						if($('.is_kit span').eq(i).html() == '是') {
+							isVoiceFlag.boolKit = true;
+						}else {
+							isVoiceFlag.boolKit = false;
+						}
+					}
+				}
+				var isMoney = $('.is_money span').length;
+				var isMoneyFlag = {
+					isFlag : false
+				};
+				for(var i=0;i<isMoney;i++) {
+					if($('.is_money span').eq(i).hasClass('active')) {
+						isMoneyFlag.isFlag = true;
+						if($('.is_money span').eq(i).html() == '是') {
+							isMoneyFlag.boolKit = true;
+						}else {
+							isMoneyFlag.boolKit = false;
+						}
+					}
+				}
+					searchObj.isInvoice= isVoiceFlag;
+					searchObj.returnMoney= isMoneyFlag;
+				console.log(searchObj)
+				thisPage = 1;
+				getList(true,false,searchObj);
+				$('.silder_content').find('span').removeClass('active');
+				$('.silder_box').animate({right:"-100%"},500,function() {
+					$('.silder_box').hide()
+				})
+			}
+		})
+	
+		//编辑信息
+		mui('.revene_all').on('tap','.update_btn span',function() {
+			var this_id = $(this).attr('listid');
+			console.log(this_id);
+			if(!isUpdate) {
+				mui.toast('没有权限');
+				return;
+			}
+			window.location.href = 'application.html?id='+this_id;
+		})
+	}
+	
+	
+	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+		if(isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('opacity', '1');
+				$('#search_input').val('');
+				thisPage = 1;
+				getList(true,searchText).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -50) {
+			var liLength = $('.revene_all li').length;
+			if (liLength % 10 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			thisPage = parseInt( liLength / 10) + 1;
+			getList(false,searchText).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+	
+	common.promise(function() {
+		mui.showLoading('正在加载中...');
+		return;
+	}).then(function () {
+		return getList(true);
+	})
+	.then(function() {
+		return getSeals();
+	})
+	.then(function() {
+		return productType();
+	})
+	.then(function() {
+		mui.hideLoading();
+	})
+	
+	//获取销售员
+	function getSeals() {
+		var url = '/api/Finance/SalesmanSelect';
+		return request.post(url).then(function(res) {
+			console.log('销售员：',res);
+			if(res.code = 200) {
+				var html = '';
+				var m = 1;
+				for(var i=0;i<res.data.length;i++) {
+					
+					if(i == 3*m - 2) {
+						html += '<span class="between_span" span_id='+ res.data[i].Id +'>'+ 
+						res.data[i].RealName +'</span>';
+						m++;
+					}else {
+						html += '<span span_id='+ res.data[i].ID +'>'+ res.data[i].RealName +'</span>';
+					}
+				}
+				$('.sales .sales_list').html(html);
+			}
+		})
+	}
+	
+	//获取产品类型
+	function productType() {
+		var url = '/api/Finance/ProjectProductTypeSelect';
+		return request.post(url).then(function(res) {
+			console.log('产品类型：',res);
+			if(res.code = 200) {
+				var html = '';
+				var m = 1;
+				for(var i=0;i<res.data.length;i++) {
+					if(i == 3*m - 2) {
+						html += '<span class="between_span" span_id='+ res.data[i].ID +'>'+ 
+						res.data[i].Name +'</span>';
+						m++;
+					}else {
+						html += '<span span_id='+ res.data[i].ID +'>'+ res.data[i].Name +'</span>';
+					}
+				}
+				$('.type_class .sales_list').html(html);
+			}
+		})
+	}
+	
+	// //获取列表
+	function getList(flag,searchName,searchObj) {
+		var url = '/api/Finance/SellQuery';
+		var postData = {
+			Page: thisPage,
+			Limit: 10,
+			unitName: searchName ? searchName : '',
+			ProductType: ''
+		}
+		if(searchObj) {
+			if(searchObj.searchName) {
+				postData.unitName = searchObj.searchName;
+			}
+			if(searchObj.typeStr) {
+				postData.ProductType = searchObj.typeStr;
+			}
+			if(searchObj.isInvoice.isFlag) {
+				postData.IsInvoice = searchObj.isInvoice.boolKit;
+			}
+			if(searchObj.returnMoney.isFlag) {
+				postData.IsReturnedMoney = searchObj.returnMoney.boolKit;
+			}
+		}
+		console.log(postData)
+		return request.post(url,postData).then(function(res) {
+			console.log('列表',res);
+			if(res.code == 200) {
+				var item = res.data;
+				common.arrObjTrimAndNull(item);
+				var html = '';
+				for(var i=0;i<item.length;i++) {
+					var color = '';
+					if(item[i].IsInvoice) {
+						color = 'get_end';
+					}else {
+						color = 'get_no';
+					}
+					var colors = '';
+					if(item[i].IsReturnedMoney) {
+						colors = 'get_end';
+					}else {
+						colors = 'get_no';
+					}
+					html += '<li>'+
+									'<p><img src="../../../img/company_sale.png" >'+
+									'<span class="company_name">'+ item[i].CompanyName +'</span>'+
+									'<span class="user_name_box">'+ item[i].CreateBy +' '+ item[i].CreateTime +'</span>'+
+									'</p>'+
+									'<div class="order_info">'+
+									'<div class="order_pro">'+
+									'<span class="order_type">产品</span>'+
+									'<span class="goods_name">'+ item[i].ProhuctName +'</span>'+
+									'<span class="goods_num">×'+ item[i].Quantity +'</span></div>'+
+									'<div class="order_pro">'+
+									'<span class="give_type">赠品</span>'+
+									'<span class="goods_name">'+ (item[i].ComplimentaryName || '无') +'</span>'+
+									'<span class="goods_num">'+
+									(item[i].ComplimentaryName ? ('×'+ item[i].ComplimentarySum) : '') +'</span></div>'+
+									'<div class="order_kits"><div class="kits_left">'+
+									'<span class='+ color +'>'+ (item[i].IsInvoice ? '已开票' : "未开票") +
+									'</span><span class='+ colors +'>'+ (item[i].IsReturnedMoney ? '已回款' : "未回款") + 
+									'</span></div>'+
+									'<div class="kits_right">合计：￥'+
+									parseInt(item[i].ProductPrice)*(item[i].Quantity)+
+									'.00</div>'+
+									'</div><div class="update_btn"><span listid='+ item[i].ID +'>编辑销售信息</span>'+
+									'</div></div></li>'
+				}
+				
+				if(res.data.length == 0) {
+					html = '<li class="list_no_data"><div class="detail_info detail_info_no_data result_bid">'+
+					'<img src="../../../img/no_data.png"><p>没有信息</p></div></li>';
+				}
+				if(flag) {
+					$('.revene_all').html(html);
+					mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100)
+				} else {
+					if(res.data.length > 0) {
+						$('.revene_all').append(html)
+					}
+				}
+				return;
+			}else {
+				mui.toast('获取列表失败！' + res.msg);
+			}
+		})
+	}
+	
+	// $('#search_input').on('change',function() {
+	// 	searchText = $(this).val();
+	// 	thisPage = 1;
+	// 	getList(true,searchText)
+	// })
+	
+	function searchCLick(self) {
+		searchText = $(self).parents('.search_box').find('#search_input').val();
+		thisPage = 1;
+		getList(true,searchText).then(function() {
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0,500);
+		})
+	}
+	
+</script>
+
+
+

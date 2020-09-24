@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<style type="text/css">
+			.task_other{
+				display: none;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">新建项目</h1>
+		</header>
+		<div class="mui-content">
+			<h5>项目名称</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="project_names" placeholder="请填写" maxlength="40"></textarea>
+			</div>
+			<h5>项目编号</h5>
+			<div class="task_time project_num">
+				<p>项目提交后自动生成</p>
+			</div>
+			<h5>业务类型</h5>
+			<div class="task_time">
+				<p class="get_manager"><a>请选择</a><span></span></p>
+			</div>
+			<div class="task_time task_other">
+				<p><input type="text" name="" id="" placeholder="请填写其他业务类型" class="contacts_other"/></p>
+			</div>
+			<h5>客户需求</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="project_require" placeholder="请填写"></textarea>
+			</div>
+			<h5>客户名称</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="contacts_name"/></p>
+			</div>
+			<h5>联系人</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="contacts_peo"/></p>
+			</div>
+			<h5>联系电话</h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="contacts_phone" maxlength="11"/></p>
+			</div>
+			<div class="content_bottom">
+				
+			</div>
+		</div>
+		<div class="footer_submit_three ">
+			<span class="btn_cancel">取消</span><span class="class_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/request.js"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var businessList = [];
+	var url = window.location.href;
+	var getId = url.split('=')[1];
+	var businessId;
+	getBusinesslist().then(function() {
+		console.log(businessList);
+		if(getId) {
+			$('.mui-title').html('修改信息')
+			//获取项目详情
+			var getUrl = '/api/BusinessManage/Detail';
+			request.post(getUrl,{ProjectId: getId}).then(function(res) {
+				console.log(res);
+				if(res.code == 200) {
+						$('.project_names').val(res.data.Name);
+						$('.project_num p').html(res.data.Number);
+						$('.get_manager').find('a').html(res.data.YWLX);
+						businessId = res.data.YWLXId;
+						if(common.getKeyValue(businessList,res.data.YWLXId) == '其他'){
+							$('.task_other').show();
+							$('.contacts_other').val(res.data.BusinessTypeOther);
+						}
+						$('.project_require').val(res.data.CustomerRequirement);
+						$('.contacts_name').val(res.data.ConstructionUnit);
+						$('.contacts_peo').val(res.data.ConstructionUnitLinkMan);
+						$('.contacts_phone').val(res.data.ConstructionUnitTel);
+				}
+			})
+		}
+	})
+	
+	
+	//获取业务类型
+	function getBusinesslist() {
+		var url = '/api/BusinessManage/YWLXList';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					businessList.push({value: item.SUB_ID,text: item.SUB_NM})
+				}
+			}
+			return;
+		})
+	}
+	
+	//获取业务类型编号
+	function getBusinessType(text) {
+		for(var i=0;i<businessList.length;i++) {
+			if(businessList[i].text == text) {
+				return businessList[i].value;
+			}
+		}
+	}
+	
+
+	
+	
+	(function(mui,doc) {
+		
+		mui.init();
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					console.log(businessList);
+					userPicker.setData(businessList);
+					userPicker.show(function(items) {
+						$('.get_manager').find('a').html(items[0].text);
+						
+						businessId = items[0].value;
+						if(items[0].text == '其他') {
+							$('.task_other').show();
+						}else {
+							$('.task_other').hide();
+						}
+					});
+				}, false);
+			});
+		});	
+		
+		//取消
+		mui('.footer_submit_three').on('tap','.btn_cancel',function() {
+			mui.back();
+		})
+		
+		//提交数据
+		function submit(flag) {
+			// if($('.contacts_phone').val()) {
+			// 	var phone = common.isPhoneNumber($('.contacts_phone').val());
+			// 	if(!phone) {
+			// 		mui.toast('请正确输入手机号！');
+			// 		return;
+			// 	}
+			// }
+			
+			var postData = {
+				Id: getId,
+				Name: $('.project_names').val(),
+				YWLX: businessId,
+				CustomerRequirement: $('.project_require').val(),
+				ConstructionUnit: $('.contacts_name').val(),
+				ConstructionUnitLinkMan: $('.contacts_peo').val(),
+				ConstructionUnitTel: $('.contacts_phone').val(),
+				IsSubmit: flag
+			}
+			if(common.getKeyValue(businessList,businessId) == '其他'){
+				postData.BusinessTypeOther = $('.contacts_other').val() || '';
+			}
+			console.log(postData)
+			var saveUrl = '/api/BusinessManage/SaveProjectInfo';
+			request.post(saveUrl,postData).then(function(res){
+				console.log(res)
+				if(res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast('修改失败！' + res.msg);
+				}
+			})
+		}
+		
+		//保存
+		mui('.footer_submit_three').on('tap','.class_save',function() {
+			submit(false)
+		})
+		mui('.footer_submit_three').on('tap','.btn_submit',function() {
+			submit(true)
+		})
+		
+	})(mui,document);
+	
+</script>
+
+
+

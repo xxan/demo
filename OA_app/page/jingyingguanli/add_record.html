@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">跟踪记录</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>拜访时间<span>＊</span></h5>
+			<div class="task_time">
+				<p class="checktime start_time"><a>选择开始时间</a><span></span></p>
+				<p class="checktime end_time" style="display: none;"><a>选择结束时间</a><span></span></p>
+			</div>
+			<h5>拜访人<span>＊</span></h5>
+			<div class="task_time">
+				<p><input type="text" placeholder="请填写" onblur="changeInput(this)"  class="record_name"/><span class="choose_name"></span></p>
+			</div>
+			<h5>联系电话</h5>
+			<div class="task_time">
+				<p><input type="tel" name="" id="" placeholder="请填写" class="telphone" maxlength="11"/></p>
+			</div>
+			<h5>拜访目的</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="objective" placeholder="请填写"></textarea>
+			</div>
+			<h5>拜访结果</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="visit_result" placeholder="请填写"></textarea>
+			</div>
+			<h5>工时<span>＊</span></h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="work_hour"/></p>
+			</div>
+			
+			<div class="content_bottom">
+				
+			</div>
+		</div>
+		<div class="footer_submit_three">
+			<span class="btn_cancel">取消</span><span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	mui.init();
+	// var user = JSON.parse(localStorage.getItem('userInfo'));
+	// console.log(user)
+	// $('.record_name').val(user.RealName);
+	var getId = common.getQueryUrl('id');
+	var projectName = common.getQueryUrl('name');
+	var update = common.getQueryUrl('update');
+	var constractList = [];
+	var recordData = {};
+	var disabledCheck = false;
+	var startTime,endTime;
+	$('.point_title').html(projectName);
+	
+	if(update) {
+		getRecord();
+	}
+	
+	function getRecord() {
+		var getRecordUrl = '/api/BusinessManage/GetTrackRecord';
+		var postData = {
+			Id: getId
+		}
+		request.post(getRecordUrl,postData).then(function(res) {
+			if(res.code == 200) {
+				recordData = res.data;
+				$('.start_time a').html(recordData.TrackRecordDate + ' ' + recordData.TrackRecordTime.split(' ')[0]);
+				startTime = recordData.TrackRecordDate + ' ' + recordData.TrackRecordTime.split(' ')[0];
+				$('.end_time a').html(recordData.TrackRecordDate + ' ' + recordData.TrackRecordTime.split(' ')[2]);
+				$('.end_time').show();
+				endTime = recordData.TrackRecordDate + ' ' + recordData.TrackRecordTime.split(' ')[2]
+				$('.record_name').val(recordData.LinkMan);
+				$('.telphone').val(recordData.Tel);
+				$('.objective').val(recordData.PlanPurpose);
+				$('.visit_result').val(recordData.PlanResult);
+				$('.work_hour').val(recordData.WorkHours);
+				if(recordData.State == 1) {
+					disabledCheck = true;
+					common.disbledForm();
+					$('.footer_submit_three').css('display','none');
+				}
+			}
+		})
+	}
+	
+	function save(flag) {
+		if(recordData.State == 1) {
+			mui.back();
+		}
+		if(!$('.record_name').val()) {
+			mui.toast('填写拜访人！');
+			return;
+		}
+		console.log(startTime,endTime)
+		if(!startTime || !endTime) {
+			mui.toast('请选择时间！');
+			return;
+		}
+		if(startTime > endTime) {
+			mui.toast('请正确选择时间！开始时间应小于结束时间');
+			return;
+		}
+		if(!$('.work_hour').val()) {
+			mui.toast('请输入工时');
+			return;
+		}
+		// if(!common.isPhoneNumber($('.telphone').val())) {
+		// 	mui.toast('请正确输入手机号!');
+		// 	return;
+		// }
+		
+		if($('.start_time').html())
+		var url = '/api/BusinessManage/SaveTrackRecord';
+		var postData = {
+			Id: update ? recordData.Id : '',
+			ProjectId: getId,
+			// LinkMan: user.RealName,
+			// LinkManId: user.Id,
+			// Tel: $('.telphone').val(),
+			LinkMan: $('.record_name').val(),
+			// LinkManId: getConstractNum($('.record_name').val()).value,
+			Tel: $('.telphone').val(),
+			PlanPurpose: $('.objective').val(),
+			PlanResult: $('.visit_result').val(),
+			WorkHours: $('.work_hour').val(),
+			State: flag ? 0 : 1,
+			TrackRecord_Date: startTime.split(' ')[0],
+			TrackRecord_Time: startTime.split(' ')[1]+ '-' + endTime.split(' ')[1]
+		}
+		console.log(postData)
+		request.post(url,postData).then(function(res) {
+			if(res.code == 200) {
+				mui.toast('提交成功！');
+				mui.back();
+			}else {
+				mui.toast(res.msg)
+			}
+		})
+	}
+	
+	function getConstractNum(text) {
+		for(var i=0;i<constractList.length;i++) {
+			if(constractList[i].text == text) {
+				return constractList[i];
+			}
+		}
+	}
+	
+	function getTime(time) {
+		return time.substr(0,16);
+	}
+	
+	//获取拜访人
+	function getConstract() {
+		var url = '/api/BusinessManage/TrackRecordLinkManList';
+		return request.post(url).then(function(res) {
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					if(item.LinkManName) 
+					constractList.push({value: item.LinkManId,text: item.LinkManName,tel: item.LinkManTel})
+				}
+			}
+		})
+	}
+	
+	
+	function changeInput(self) {
+		var text = $(self).val();
+		console.log(text)
+	}
+	
+	(function(mui) {
+		//点击取消
+		mui('.footer_submit_three').on('tap','.btn_cancel', function() {
+			mui.back();
+		})
+		//点击保存
+		mui('.footer_submit_three').on('tap','.btn_save', function() {
+			save(true);
+		})
+		//点击提交
+		mui('.footer_submit_three').on('tap','.btn_submit', function() {
+			save();
+		})
+		
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				if(disabledCheck) {
+					return;
+				}
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+							$('.end_time').show();
+						}
+						if($(_self).hasClass('end_time')) {
+							console.log(123123)
+							endTime = rs.text
+						}
+						$(_self).find('a').html(rs.text);
+						
+						if(startTime && endTime && endTime >= startTime) {
+							 var date = new Date(endTime).getTime() - new Date(startTime).getTime(); 
+							 var leave1 = date % (24*3600*1000)
+							  var hours = Math.ceil(leave1/(3600*1000));
+								$('.work_hour').val(hours)
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					if($(_self).hasClass('end_time')) {
+						var yearMonth = startTime.split(' ')[0].split('-');
+						var minuts = startTime.split(' ')[1].split(':');
+						options.type = 'datetime';
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],minuts[0],minuts[1])
+					}
+					var id = this.getAttribute('id');
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+							$('.end_time').show();
+						}
+						if($(_self).hasClass('end_time')) {
+							console.log(123123)
+							endTime = rs.text
+						}
+						$(_self).find('a').html(rs.text);
+						
+						if(startTime && endTime && endTime >= startTime) {
+							 var date = new Date(endTime).getTime() - new Date(startTime).getTime(); 
+							 var leave1 = date % (24*3600*1000)
+							  var hours = Math.ceil(leave1/(3600*1000));
+								$('.work_hour').val(hours)
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			
+			getConstract().then(function() {
+				console.log(constractList)
+				userPicker.setData(constractList);
+			})
+			var showUserPickerButton = mui('.choose_name');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					userPicker.show(function(items) {
+						$('.record_name').val(items[0].text);
+						$('.telphone').val(items[0].tel);
+					});
+				}, false);
+			});
+		});	
+	})(mui);
+</script>
+
+
+

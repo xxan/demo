@@ -1,0 +1,1704 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="js/mui.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/comon.css" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="css/icons-extra.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="css/swiper.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/calendar_base.css" />
+		<link rel="stylesheet" type="text/css" href="css/showcase.css" />
+		<link rel="stylesheet" type="text/css" href="css/calendar_base_week.css" />
+		<script src="js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				keyEventBind: {
+					backbutton: true //开启back按键监听
+				},
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: false, //默认为false，不监听
+					release: false //默认为false，不监听
+				}
+			});
+		</script>
+		<style type="text/css">
+			.task_message_number,
+			.notification_number {
+				display: none;
+			}
+			
+			.content_box{
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+
+
+		<div class="mui-content content-box">
+			<div id="page1" class="mui-control-content mui-active pages">
+				<header class="mui-bar mui-bar-nav header_box">
+					<h1 class="mui-title">消息</h1>
+				</header>
+				<div class="mui-content">
+					<div class="mui-segmented-control" id="message_tab">
+						<a class="mui-control-item" href="#item1">待办<span class="mui-badge mui-badge-danger task_message_number">0</span></a>
+						<a class="mui-control-item" href="#item2">通知<span class="mui-badge mui-badge-danger notification_number">0</span></a>
+					</div>
+
+					<div id="scroll1">
+						<div id="slider" class="mui-slider mui-fullscreen">
+							<div class="mui-slider-group mui-scroll-wrapper">
+								<div class="mui-scroll">
+									<div class="content_info">
+										<div id="item1" class="mui-control-content mui-active">
+											<div class="todo_list">
+												<ul class="ul_list">
+													<!-- <li>
+														<div class="img_avatar">
+															<div class="img_box">
+																<img src="img/shenpi.png" >
+															</div>
+														</div>
+														<div class="text_intro">
+															<p><span class="data_time">2019-10-10</span> <span class="approve">待您审批</span></p>
+															<p class="todo_tips">张三提交的合同审批申请需要您审批。</p>
+														</div>
+													</li> -->
+												</ul>
+											</div>
+										</div>
+										<div id="item2" class="mui-control-content">
+											<div class="message_list">
+												<ul class="me_list">
+													<!-- <li>
+														<div class="img_avatar">
+															<div class="img_box">
+																<img src="img/gonggao.png" >
+															</div>
+														</div>
+														<div class="text_intro">
+															<p><span class="data_time">2019-10-10 09:35</span></p>
+															<p class="todo_tips">元旦放假通知</p>
+														</div>
+													</li>
+													<li>
+														<div class="img_avatar">
+															<div class="img_box">
+																<img src="img/shenpi.png" >
+															</div>
+														</div>
+														<div class="text_intro">
+															<p><span class="data_time">2019-10-10</span> <span class="refuse">审批拒绝</span></p>
+															<p class="todo_tips">您的合同审批已拒绝，请知晓</p>
+														</div>
+													</li>
+													<li>
+														<div class="img_avatar">
+															<div class="img_box">
+																<img src="img/shenpi.png" >
+															</div>
+														</div>
+														<div class="text_intro">
+															<p><span class="data_time">2019-10-10</span> <span class="pass">审批通过</span></p>
+															<p class="todo_tips">您的合同审批已通过，请知晓</p>
+														</div>
+													</li> -->
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			<div id="page2" class="mui-control-content pages">
+				<header class="mui-bar mui-bar-nav header_box">
+					<h1 class="mui-title">日程</h1>
+					<img src="./img/add.png" class="add_day">
+				</header>
+				<div class="mui-content">
+					<div class="em-journal-title">
+						<div class="em-per-block pre">
+							<span class="mui-icon mui-icon-arrowleft"></span>
+						</div>
+						<div class="em-per-block mid">
+							<span>...</span>
+						</div>
+						<div class="em-per-block next">
+							<span class="mui-icon mui-icon-arrowright"></span>
+						</div>
+					</div>
+					<div id="calendar" class="em-journal-pad">
+
+					</div>
+					<div class="mui-scroll-wrapper" id="date_list">
+						<div class="mui-scroll">
+							<div class="no_data">
+								<img src="img/no_day.png">
+								<p>无日程安排</p>
+							</div>
+							<ul class="day_list" style="display: none;">
+								<li class="today">
+									<p class="date_title"><span class="date_point"><img src="img/gou.png"></span>今天 星期日</p>
+									<div class="date_list_right">
+										<ul>
+											<li>
+												<div class="show_content">
+													<p class="list_title">OA系统经营管理模块</p>
+													<span>8:00-9:00</span>
+												</div>
+												<div class="oparetion_left">
+													<span>取消</span><span>完成</span>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</li>
+								<li>
+									<p class="date_title"><span class="date_point"></span>今天 星期日</p>
+									<div class="date_list_right">
+										<ul>
+											<li>
+
+												<p class="list_title">OA系统经营管理模块</p>
+												<span>8:00-9:00</span>
+											</li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+				</div>
+			</div>
+			<div id="page3" class="mui-control-content pages">
+				<div class="title_box">
+					<div class="title_text">
+						<span></span>
+						<p>北京建科研软件技术有限公司</p>
+						<!-- <i></i> -->
+					</div>
+					<ul class="title_tab">
+						<li class="todo_task">
+							<a href="#">
+								<img class="mui-media-object" src="./img/dbrw.png">
+								<div class="mui-media-body">待办任务</div>
+							</a>
+							<span class="mui-badge mui-btn-red todo_task_number">0</span>
+						</li>
+						<li class="done_task">
+							<a href="#">
+								<img class="mui-media-object" src="./img/yb.png">
+								<div class="mui-media-body">已办任务</div>
+							</a>
+							<span class="mui-badge mui-btn-red done_task_number">0</span>
+						</li>
+						<li class="to_project_task">
+							<a href="#">
+								<img class="mui-media-object" src="./img/project_img.png">
+								<div class="mui-media-body">项目任务</div>
+							</a>
+						</li>
+						<li class="to_my_daily">
+							<a href="#">
+								<img class="mui-media-object" src="./img/rb.png">
+								<div class="mui-media-body">日报管理</div>
+							</a>
+						</li>
+				<!-- 		<li class="to_my_daily">
+							<a href="#">
+								<img class="mui-media-object" src="./img/rb.png">
+								<div class="mui-media-body">我的日报</div>
+							</a>
+						</li>
+						<li class="to_search">
+							<a href="#">
+								<img class="mui-media-object" src="./img/RBCX.png">
+								<div class="mui-media-body">日报查询</div>
+							</a>
+						</li> -->
+					</ul>
+				</div>
+				<div id="menu_work">
+					<div class="samll_title">
+						<a class="work_list">业务管理 <span>收起</span></a>
+						<div class="btn_list">
+							<ul class="mui-table-view mui-grid-view mui-grid-9 ywgl">
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/jygl.png">
+										<div class="mui-media-body">经营管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/xmgl.png">
+										<div class="mui-media-body">项目管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/zhishiguanli.png">
+										<div class="mui-media-body">知识管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/hetongguanli.png">
+										<div class="mui-media-body">合同管理</div>
+									</a>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+					<div class="samll_title">
+						<a class="work_list">财务管理 <span>收起</span></a>
+						<div class="btn_list">
+							<ul class="mui-table-view mui-grid-view mui-grid-9">
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/shouru.png">
+										<div class="mui-media-body">收入管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/fapiao.png">
+										<div class="mui-media-body">发票管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/jiekuan.png">
+										<div class="mui-media-body">借款管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/baoxiao.png">
+										<div class="mui-media-body">报销管理</div>
+									</a>
+								</li>
+								<!-- <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/baozhengjin.png">
+										<div class="mui-media-body">保证金管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/baohan.png">
+										<div class="mui-media-body">保函管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/zhuanjia.png">
+										<div class="mui-media-body">专家费管理</div>
+									</a>
+								</li> -->
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/fukuan.png">
+										<div class="mui-media-body">付款管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/yufukuan.png">
+										<div class="mui-media-body">预付款管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/hexiao.png">
+										<div class="mui-media-body">预付款核销</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/sales.png">
+										<div class="mui-media-body">销售管理</div>
+									</a>
+								</li>
+								<!-- <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/hangxian.png">
+										<div class="mui-media-body">统计报表</div>
+									</a>
+								</li> -->
+							</ul>
+
+						</div>
+					</div>
+					<div class="samll_title">
+						<a class="work_list">行政管理 <span>收起</span></a>
+						<div class="btn_list">
+							<ul class="mui-table-view mui-grid-view mui-grid-9">
+								<!-- <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">车辆管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/tocar.png">
+										<div class="mui-media-body">车辆借用</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/zizhi.png">
+										<div class="mui-media-body">资质管理</div>
+									</a>
+								</li> -->
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">考勤打卡</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">请假管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">外勤管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/car_mana.png">
+										<div class="mui-media-body">加班管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/yongzhang.png">
+										<div class="mui-media-body">用章管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/gudingzi.png">
+										<div class="mui-media-body">固定资产管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/xunizi.png">
+										<div class="mui-media-body">虚拟资产管理</div>
+									</a>
+								</li>
+								<!-- <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/ziliaojie.png">
+										<div class="mui-media-body">资料借用管理</div>
+									</a>
+								</li>
+								<li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+									<a href="#">
+										<img src="img/tz.png">
+										<div class="mui-media-body">通知公告</div>
+									</a>
+								</li> -->
+							</ul>
+
+						</div>
+					</div>
+					<div class="no_content">
+
+					</div>
+				</div>
+
+			</div>
+			<div id="page4" class="mui-control-content pages">
+				<header class="mui-bar mui-bar-nav header_box">
+					<h1 class="mui-title">通讯录</h1>
+				</header>
+
+				<div class="mui-content">
+					<div class="search_box">
+						<div class="mui-input-row mui-search">
+							<input id="search_input" type="text" class="" placeholder="搜索">
+							<span class="photo_search" index='item1'></span>
+						</div>
+					</div>
+					<div class="company_title">
+						<div class="title_text">
+							<span></span>
+							<p>北京建科研软件技术有限公司</p>
+						</div>
+					</div>
+					<div class="framework">
+						<p class="framework_title">组织架构</p>
+						<ul class="mui-table-view people_list_tree">
+							<!-- <li class="mui-table-view-cell mui-collapse">
+								<a class="mui-navigate-right" href="#">面板1 <span></span></a>
+								<ul class="mui-table-view two_list_class">
+									<li class="mui-table-view-cell mui-collapse">
+										<a class="mui-navigate-right two_list_title" href="#">1面板1<span></span></a>
+										<div class="mui-collapse-content list_content framework_two_list">
+											<p>1面板1子内容</p>
+										</div>
+									</li>
+								</ul>
+							</li>
+							<li class="mui-table-view-cell mui-collapse">
+								<a class="mui-navigate-right" href="#">面板2 <span></span></a>
+								<div class="mui-collapse-content framework_two_list">
+									<p>面板2子内容</p>
+								</div>
+							</li>
+							<li class="mui-table-view-cell mui-collapse">
+								<a class="mui-navigate-right" href="#">面板3 <span></span></a>
+								<div class="mui-collapse-content framework_two_list">
+									<p>面板3子内容</p>
+								</div>
+							</li> -->
+						</ul>
+					</div>
+
+					<div class="contacts">
+						<p>最近联系人</p>
+						<ul>
+							<li>
+								<span></span>李四
+							</li>
+							<li>
+								<span></span>李四
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div id="page5" class="mui-control-content pages">
+				<header class="mui-bar mui-bar-nav header_box">
+					<h1 class="mui-title">我的</h1>
+				</header>
+				<div class="mui-content">
+					<div class="user_info_box">
+						<div class="user_info">
+							<div class="user_avatar">
+								<img src="img/avatar_de.png">
+							</div>
+							<div class="user_detail">
+								<p class="user_name">李晓明</p>
+								<p class="company_name">北京建科研软件技术有限公司</p>
+							</div>
+						</div>
+					</div>
+					<div class="update_pass">
+						<p>修改密码<span class="mui-icon mui-icon-arrowright"></span></p>
+					</div>
+					<div class="log_out">
+						<span>退出登录</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<nav class="mui-bar mui-bar-tab table_back" id="bottom_tab">
+			<a class="mui-tab-item mui-active" href="#page1">
+				<span class="mui-icon mui-icon mui-icon-chat"></span>
+				<span class="mui-tab-label">消息</span>
+				<span class="mui-badge mui-badge-danger tab_bottom"></span>
+			</a>
+			<a class="mui-tab-item" href="#page2">
+				<span class="mui-icon mui-icon-extra mui-icon-extra-regist"></span>
+				<span class="mui-tab-label">日程</span>
+			</a>
+			<a class="mui-tab-item" href="#page3">
+				<span class="mui-icon mui-icon-extra mui-icon-extra-class"></span>
+				<span class="mui-tab-label">工作</span>
+			</a>
+			<a class="mui-tab-item" href="#page4">
+				<span class="mui-icon mui-icon-person"></span>
+				<span class="mui-tab-label">通讯录</span>
+			</a>
+			<a class="mui-tab-item" href="#page5">
+				<span class="mui-icon mui-icon-bars"></span>
+				<span class="mui-tab-label">我的</span>
+			</a>
+		</nav>
+
+	</body>
+
+	<script type="text/javascript" src="./js/jquery.min.js"></script>
+	<script type="text/javascript" src="./js/request.js"></script>
+	<script src="js/swiper.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mustache.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/calendar_base.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/calendar_base_week.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.pullToRefresh.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/mui.pullToRefresh.material.js" type="text/javascript" charset="utf-8"></script>
+	<!--当前日期模板-->
+	<script type="text/template" id="template">
+		<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template_red">
+		<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template1">
+		<li class="em-active" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}</span>
+		</li>
+	</script>
+	<!--大于当前日期模板-->
+	<!-- 无日历 -->
+	<script type="text/template" id="template2">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}</span>
+		</li>
+	</script>
+	<!-- 有日历 -->
+	<script type="text/template" id="template22">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template22_red">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+	<!--小于当前日期模板-->
+	<!-- 有日历 -->
+	<script type="text/template" id="template3">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}<i></i></span>
+		</li>
+	</script>
+	<script type="text/template" id="template3_red">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}<i class="red"></i></span>
+		</li>
+	</script>
+	<!-- 无日历 -->
+	<script type="text/template" id="template4">
+		<li class="" date="{{date_frame}}">
+			<span class="week">{{week_frame}}</span><span class="day sumday">{{day_frame}}</span>
+		</li>
+	</script>
+
+	<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+	<script type="text/javascript">
+		localStorage.removeItem("jymanager");
+		localStorage.removeItem("jymanager_two");
+		localStorage.removeItem("jymanager_one");
+		localStorage.setItem('knowIndex',0);
+		localStorage.setItem('project_index',0);
+		localStorage.removeItem('scrollObj')
+		
+		addHtml()
+
+		function addHtml() {
+			if (!getModuleName('FinanceMenu')) {
+				$('.samll_title').eq(1).addClass('hide_modle');
+			}
+			if (!getModuleName('ResourceMenu')) {
+				$('.samll_title').eq(2).addClass('hide_modle');
+			}
+			var lis = $('#menu_work li');
+			for (var i = 0; i < lis.length; i++) {
+				var moduleName = $(lis[i]).find('.mui-media-body').html();
+				console.log(getModuleName('ManagementMenu'))
+				switch (moduleName) {
+					case '经营管理':
+						if (!getModuleName('ManagementMenu')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '项目管理':
+						if (!getModuleName('ConsultationMenu')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '知识管理':
+						if (!getModuleName('DataManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '合同管理':
+						if (!getModuleName('ContractManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '收入管理':
+						if (!getModuleName('InComeManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '发票管理':
+						if (!getModuleName('InvoiceManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '借款管理':
+						if (!getModuleName('BorrowMoneyManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '报销管理':
+						if (!getModuleName('Reimbursement')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '付款管理':
+						if (!getModuleName('PayMoney')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '预付款管理':
+						if (!getModuleName('AdvanceMoney')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '预付款核销':
+						if (!getModuleName('AdvanceOffMoney')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '车辆管理':
+						if (!getModuleName('CarManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '考勤打卡':
+						if (!getModuleName('CarManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '请假管理':
+						if (!getModuleName('LeaveManagement')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '外勤管理':
+						if (!getModuleName('FieldManagement')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '加班管理':
+						if (!getModuleName('OvertimeManagement')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '资质管理':
+						if (!getModuleName('CompanyHonor')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '用章管理':
+						if (!getModuleName('ResourceSealApplys')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '固定资产管理':
+						if (!getModuleName('AssetsManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '虚拟资产管理':
+						if (!getModuleName('AssetsVir')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '资料借用管理':
+						if (!getModuleName('DataBorrowManage')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '通知公告':
+						if (!getModuleName('NoticeMenu')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					case '销售管理':
+						if (!getModuleName('Sell')) {
+							$(lis[i]).addClass('hide_modle');
+						}
+						break;
+					default:
+						break;
+				}
+			}
+		}
+
+		var thisSelf;
+
+		var thisNowYearMonth;
+		var thisNowDay;
+		var notDoneCount = 0;
+		var clickData = '';
+		var tabNum = 0; //通知消息
+		var todoNumber = 0; //待办数
+		var todoIndex = 1; //待办页
+		var notificationPage = 1; //消息页
+		var this_tab = 0; //当前显示tab
+		var message_show = localStorage.getItem('message_show') || 0; //通知待办显示
+		console.log(message_show)
+		var oldPage = localStorage.getItem('this_page');
+		if (oldPage) {
+			this_tab = oldPage;
+		}
+		$('#message_tab a').eq(message_show).addClass('mui-active');
+
+		if (this_tab == 0) {
+			$('#bottom_tab').find('a').eq(message_show).siblings().removeClass('mui-active');
+			$('#page1 .content_info').find('.mui-control-content').eq(message_show).addClass('mui-active');
+			$('#page1 .content_info').find('.mui-control-content').eq(message_show).siblings().removeClass('mui-active');
+		}
+
+		changeTab(this_tab)
+		mui.showLoading();
+		getTodoList(true).then(function() {
+				getNotification(true)
+			})
+			.then(getDay)
+			.then(getMeilList)
+			.then(recentContacts)
+			.then(getTodoListNum)
+			.then(function() {
+				mui.hideLoading();
+			});
+
+		//消息 上拉下拉
+		(function($$) {
+			//阻尼系数
+			var deceleration = mui.os.ios ? 0.003 : 0.0009;
+			$$('#scroll1 .mui-scroll-wrapper').scroll({
+				bounce: true,
+				indicators: true, //是否显示滚动条
+				deceleration: deceleration
+			});
+			$$.ready(function() {
+				//循环初始化所有下拉刷新，上拉加载。
+				$$.each(document.querySelectorAll('#page1 .mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+					$$(pullRefreshEl).pullToRefresh({
+						down: {
+							callback: function() {
+								var self = this;
+								if ($('#page1 .content_info .mui-active').attr('id') == 'item1') {
+									todoIndex = 1;
+									getTodoList(true, self).then(function() {
+										self.endPullDownToRefresh();
+										self.refresh(true);
+									})
+								}
+								if ($('#page1 .content_info .mui-active').attr('id') == 'item2') {
+									notificationPage = 1;
+									getNotification(true).then(function() {
+										self.endPullDownToRefresh();
+										self.refresh(true);
+									})
+								}
+							}
+						},
+						up: {
+							callback: function() {
+								var self = this;
+								if ($('#page1 .content_info .mui-active').attr('id') == 'item1') {
+									var liLength = $('#page1 .content_info .mui-active').find('.ul_list li').length;
+									if (liLength % 10 != 0 || liLength == 0) {
+										self.endPullUpToRefresh(true);
+										return;
+									} else {
+										todoIndex = parseInt(liLength / 10) + 1;
+										getTodoList(false, self).then(function() {
+											self.endPullUpToRefresh();
+										})
+									}
+								}
+								if ($('#page1 .content_info .mui-active').attr('id') == 'item2') {
+									var liLength = $('#page1 .content_info .mui-active').find('.me_list li').length;
+									if (liLength % 10 != 0 || liLength == 0) {
+										self.endPullUpToRefresh(true);
+										return;
+									} else {
+										notificationPage = parseInt(liLength / 10) + 1;
+										getNotification(false).then(function() {
+											self.endPullUpToRefresh();
+										})
+									}
+								}
+							}
+						}
+					});
+				});
+			});
+		})(mui);
+
+
+		//获取通知公告显示总条数以及数据
+		function getNotification(flag) {
+			var notiUrl = '/api/Home/Notification';
+			return request.post(notiUrl, {
+				page: notificationPage,
+				limit: 10
+			}).then(function(res) {
+				console.log('消息：', res);
+				if (res.code == 200) {
+					tabNum = res.count;
+					$('.notification_number').html(tabNum);
+					if (tabNum == 0) {
+						$('.notification_number').hide()
+					} else {
+						$('.notification_number').show()
+					}
+					$('.tab_bottom').html(todoNumber + tabNum);
+					if ((todoNumber + tabNum) == 0) {
+						$('.tab_bottom').hide()
+					} else {
+						$('.tab_bottom').show()
+					}
+					var html = '';
+					for (var i = 0; i < res.data.length; i++) {
+						var data = res.data[i];
+						html += '<li id=' + data.Id + '><div class="img_avatar"><div class="img_box"><img src="img/gonggao.png" >' +
+							'</div></div><div class="text_intro">' +
+							'<p><span class="data_time">' + data.CreateTime + '</span></p>' +
+							'<p class="todo_tips">' + data.Headline + '</p></div></li>';
+					}
+					if (res.data.length == 0 && notificationPage == 1) {
+						html = '<div class="detail_info detail_info_no_data bid_no_data">' +
+							'<img src="./img/no_data.png" ><p>还未有数据！</p></div>'
+					}
+					if (flag) {
+						$('.me_list').html(html);
+					} else {
+						if (res.data.length > 0) {
+							$('.me_list').append(html);
+						}
+					}
+					return;
+				}
+			})
+		}
+		//获取待办任务显示总条数以及数据
+		function getTodoList(flag, self) {
+			var url = '/api/Home/ToDoTasks';
+			var postData = {
+				page: todoIndex,
+				limit: 10
+			}
+			return request.post(url, postData).then(function(res) {
+				console.log('xiaoxi1', res);
+				if (res.code == 200) {
+					todoNumber = res.count;
+					$('.to_task_number').html(todoNumber);
+					if (todoNumber == 0) {
+						$('.to_task_number').hide()
+						$('.task_message_number').hide();
+					} else {
+						$('.to_task_number').show();
+						$('.task_message_number').show();
+					}
+					$('.task_message_number').html(todoNumber);
+					var inner = '';
+					for (var i = 0; i < res.data.length; i++) {
+						var item = res.data[i];
+						//inner += '<li><div class="img_avatar"><div class="img_box"><img src="img/shenpi.png" ></div></div>' +
+						//						'<div class="text_intro"><p><span class="data_time">'+ item.FQSJ +'</span>' + 
+						//						'<span class="approve">'+ item.FStatus +'</span></p><p class="todo_tips">' + item.FQR +
+						//						item.Name + ' </p></div></li>';
+						inner += '<li fid="' + item.FId + '" ftype="' + item.Ftype + '">';
+						inner += '	<div class="img_avatar">';
+						inner += '		<div class="img_box">';
+						inner += '			<img src="img/shenpi.png" >';
+						inner += '		</div>';
+						inner += '	</div>';
+						inner += '	<div class="text_intro">';
+						inner += '		<p><span class="data_time">' + item.FQSJ + '</span> <span class="approve">' + item.FStatus +
+							'</span></p>';
+						inner += '		<p class="todo_tips">' + item.FQR + item.Name + '</p>';
+						inner += '	</div>';
+						inner += '</li>';
+					}
+					if (res.data.length == 0 && todoIndex == 1) {
+						inner = '<div class="detail_info detail_info_no_data bid_no_data">' +
+							'<img src="./img/no_data.png" ><p>还未有数据！</p></div>';
+						$('.ul_list').html(inner);
+						$('.mui-pull-bottom-wrapper').css('display', 'none');
+						return;
+					}
+					$('.mui-pull-bottom-wrapper').css('display', 'block');
+					if (flag) {
+						$('.ul_list').html(inner);
+					} else {
+						if (res.data.length > 0) {
+							$('.ul_list').append(inner);
+						}
+					}
+					return;
+				}
+			})
+		}
+
+
+		//工作_待办任务、已办任务数量
+		function getTodoListNum(flag, self) {
+			var url = '/api/MyTask/MyTaskMenu';
+			var postData = {
+				page: todoIndex,
+				limit: 10
+			}
+			return request.post(url, postData).then(function(res) {
+				// console.log(res);
+				if (res.code == 200) {
+					$(".todo_task_number").html(res.data.waitCount);
+					$(".done_task_number").html(res.data.doneCount);
+				}
+			})
+		}
+
+		//获取日程
+		function getDay(year, day) {
+			var url = '/api/Home/NotepadShow';
+			var postData = {
+				YearMonth: year ? year : getTime('yearAndMonth'),
+				Day: day ? day : getTime('day')
+			}
+			return request.post(url, postData).then(function(res) {
+				console.log('日程：', res)
+				if (res.code == 200) {
+					common.arrSort(res.data, 'NotepadState', -1);
+					if (res.data.length == 0) {
+						$('#page2 .no_data').css('display', 'block');
+						$('#page2 .day_list').css('display', 'none');
+					} else {
+						$('#page2 .no_data').css('display', 'none');
+						$('#page2 .day_list').css('display', 'block');
+						var html = '';
+						var endhtml1 = '</ul></div></li>';
+						var itemArrObj = {};
+						for (var i = 0; i < res.data.length; i++) {
+							var item = res.data[i].StartTime;
+							if (itemArrObj.hasOwnProperty(getTime('year', item))) {
+								itemArrObj[getTime('year', item)].push(res.data[i]);
+							} else {
+								itemArrObj[getTime('year', item)] = [res.data[i]];
+							}
+						}
+						var keys = Object.keys(itemArrObj);
+						notDoneCount = 0;
+
+						function getDetailListItem(itemss) {
+							var listItem = ''
+							for (var j = 0; j < itemss.length; j++) {
+								var statusHtml = '';
+								if (itemss[j].NotepadState == -1) {
+									statusHtml = '<div class="day_status">已取消</div>';
+								} else if (itemss[j].NotepadState == 1) {
+									statusHtml = '<div class="day_status day_status_done">已完成</div>';
+								} else {
+									notDoneCount++;
+								}
+								listItem += '<li day_id=' + itemss[j].ID + ' NotepadState=' + itemss[j].NotepadState +
+									'><div class="show_content"><p class="list_title">' +
+									itemss[j].JobContent + '</p><span>' +
+									itemss[j].StartTime.split(' ')[0].substr(-5) + ' ' + itemss[j].StartTime.split(' ')[1] +
+									' - ' + itemss[j].EndTime.split(' ')[0].substr(-5) + ' ' + itemss[j].EndTime.split(' ')[1] +
+									'</span></div><div class="oparetion_left"><span class="day_cancel">取消</span>' +
+									'<span class="day_done">完成</span></div>' + statusHtml + '</li>';
+							}
+							return listItem
+						}
+						// console.log(keys)
+						for (var i = 0; i < keys.length; i++) {
+							if (keys[i] == getTime('year')) {
+								var item = itemArrObj[keys[i]];
+								var html1 = '<li class="today">' +
+									'<p class="date_title"><span class="date_point"><img src="img/gou.png" ></span>今天 ' + getTime('week', keys[i]) +
+									'</p>' +
+									'<div class="date_list_right"><ul>';
+								var str = getDetailListItem(item);
+								html += html1 + str + endhtml1;
+							} else {
+								var item = itemArrObj[keys[i]];
+								var html1 = '<li class="">' +
+									'<p class="date_title"><span class="date_point"><img src="img/gou.png" ></span>' +
+									getTime('chartoday', keys[i]) + ' ' + getTime('week', keys[i]) + '</p>' +
+									'<div class="date_list_right"><ul>';
+								var str = getDetailListItem(item);
+								html += html1 + str + endhtml1;
+							}
+						}
+						$('#page2 .day_list').html(html);
+						mui('.mui-scroll-wrapper').scroll()[0].scrollTo(0, 0, 100)
+					}
+				}
+			})
+		}
+
+
+		//消息头部点击
+		mui('#message_tab').on('tap', 'a', function() {
+			mui('.mui-scroll-wrapper').scroll()[0].scrollTo(0, 0, 100)
+		})
+
+		//添加日程
+		mui('#page2').on('tap', '.add_day', function() {
+			window.location.href = './page/day/new_schedule.html?date='+ clickData;
+		});
+		//查看日程详情
+		mui('#page2').on('tap', '.date_list_right li', function(e) {
+			if ($(e.target).hasClass('day_cancel') || $(e.target).hasClass('day_done')) {
+				return;
+			}
+			var id = $(this).attr('day_id');
+			window.location.href = './page/day/new_schedule.html?id=' + id + '&check=true';
+		});
+
+		//日程左滑
+		mui('#date_list').on('swipeleft', '.date_list_right li', function() {
+			var id = $(this).attr('day_id');
+			$(this).find('.show_content').css('left', '-30%')
+		});
+		mui('#date_list').on('swiperight', '.date_list_right li', function() {
+			var id = $(this).attr('day_id');
+			$(this).find('.show_content').css('left', '0')
+		});
+
+		//修改日程状态
+		mui('#page2').on('tap', '.oparetion_left span', function() {
+			var _this = this;
+			var id = $(this).parents('li').attr('day_id');
+			console.log(id)
+			var state;
+			if ($(this).hasClass('day_cancel')) {
+				state = -1;
+			} else {
+				state = 1;
+			}
+			console.log(notDoneCount)
+			notDoneCount--;
+			if (notDoneCount <= 0) {
+				$('#calendar').find('.em-active i').removeClass('red');
+			}
+			var url = '/api/Home/EditNotepadState';
+			var data = {
+				ID: id,
+				NotepadState: state
+			}
+			request.post(url, data).then(function(res) {
+				if (res.code == 200) {
+					mui.toast('操作成功！');
+					$(_this).parents('li').find('.show_content').css('left', '0');
+					if (thisNowYearMonth && thisNowDay) {
+						getDay(thisNowYearMonth, thisNowDay);
+					} else {
+						getDay();
+					}
+
+				} else {
+					mui.toast('操作失败！');
+				}
+			})
+		});
+
+
+		mui('#page2 .mui-scroll-wrapper').scroll();
+
+		//当前显示第几个
+		function changeTab(num) {
+			$('#bottom_tab').find('a').eq(num).addClass('mui-active');
+			$('#bottom_tab').find('a').eq(num).siblings().removeClass('mui-active');
+			$('.mui-content').find('.pages').eq(num).addClass('mui-active');
+			$('.mui-content').find('.pages').eq(num).siblings().removeClass('mui-active');
+		}
+
+		//点击待办任务
+		mui('.title_tab').on('tap', '.todo_task', function() {
+			window.location.href = './page/task/to_do_task.html';
+		})
+
+		//点击已办任务
+		mui('.title_tab').on('tap', '.done_task', function() {
+			window.location.href = './page/task/done_task.html';
+		});
+
+		//我的日报
+		mui('.title_tab').on('tap', '.to_my_daily', function() {
+			window.location.href = './page/daily/mydaily.html'
+		})
+
+		//日报查询
+		mui('.title_tab').on('tap', '.to_project_task', function() {
+			window.location.href = './page/projectTask/project_task.html'
+		})
+
+		//底部选项卡点击事件
+		mui('#bottom_tab').on('tap', 'a', function() {
+			localStorage.setItem('scrollpage4',0);
+			localStorage.setItem('page4active','');
+			var index = $(this).attr('href').substr(-1) - 1;
+			this_tab = index;
+			localStorage.setItem('this_page', this_tab);
+		})
+		//工作面板折叠
+		mui('#menu_work').on('tap', '.work_list', function() {
+			console.log(123123)
+			var display = $(this).next().css('display') === 'none' ? false : true;
+			$(this).next().slideToggle();
+			if (display) {
+				$(this).find('span').html('展开');
+			} else {
+				$(this).find('span').html('收起');
+			}
+		})
+
+
+		//工作页面跳转
+		mui('#menu_work').on('tap', 'li', function() {
+			var innerHtml = $(this).find('.mui-media-body').html();
+			console.log(innerHtml);
+			switch (innerHtml) {
+				case '经营管理':
+					window.location.href = './page/jingyingguanli/jygl_xiangmulei.html?tabId=' + this_tab;
+					break
+				case '项目管理':
+					window.location.href = './page/xiangmuguanli/xiangmuguanli.html?tabId=' + this_tab;
+					break;
+				case '知识管理':
+					window.location.href = './page/konwmange/konw.html?tabId=' + this_tab;
+					break;
+				case '合同管理':
+					window.location.href = './page/contract/contract.html?tabId=' + this_tab;
+					break;
+				case '收入管理':
+					window.location.href = './page/financial/income_manage/revenue.html?tabId=' + this_tab;
+					break;
+				case '发票管理':
+					window.location.href = './page/financial/invoice_manage/invoice.html?tabId=' + this_tab;
+					break;
+				case '借款管理':
+					window.location.href = './page/financial/loan_manage/loan.html?tabId=' + this_tab;
+					break;
+				case '报销管理':
+					window.location.href = './page/financial/reimbursement/reimbursement.html?tabId=' + this_tab;
+					break;
+				case '付款管理':
+					window.location.href = './page/financial/payment/payment.html?tabId=' + this_tab;
+					break;
+				case '预付款管理':
+					window.location.href = './page/financial/advance_payment/payment.html?tabId=' + this_tab;
+					break;
+				case '预付款核销':
+					window.location.href = './page/financial/write_off/writeOff.html?tabId=' + this_tab;
+					break;
+				case '用章管理':
+					window.location.href = './page/administration/chapter/chapter.html?tabId=' + this_tab;
+					break;
+				case '固定资产管理':
+					window.location.href = './page/administration/fixed/fixed_assets.html?tabId=' + this_tab;
+					break;
+				case '虚拟资产管理':
+					window.location.href = './page/administration/fictitious/fictitious.html?tabId=' + this_tab;
+					break;
+				case '销售管理':
+					window.location.href = './page/financial/sale_manage/sale.html?tabId=' + this_tab;
+					break;
+				case '考勤打卡':
+					window.location.href = './page/check/check_date.html?tabId=' + this_tab;
+					break;
+				case '请假管理':
+					window.location.href = './page/leave/list.html?tabId=' + this_tab;
+					break;
+				case '外勤管理':
+					window.location.href = './page/outsidework/list.html?tabId=' + this_tab;
+					break;
+				case '加班管理':
+					window.location.href = './page/overtimework/list.html?tabId=' + this_tab;
+					break;
+				case '仓库管理':
+					window.location.href = './page/storage/store/store_manage.html?tabId=' + this_tab;
+					break;
+				case '产品管理':
+					window.location.href = './page/storage/product/product_manage.html?tabId=' + this_tab;
+					break;
+				case '产品入库':
+					window.location.href = './page/storage/productIn/product_in.html?tabId=' + this_tab;
+					break;
+				case '产品出库':
+					window.location.href = './page/storage/productOut/product_out.html?tabId=' + this_tab;
+					break;
+				case '库存调拨':
+					window.location.href = './page/storage/allot/store_allot.html?tabId=' + this_tab;
+					break;
+				case '发货管理':
+					window.location.href = './page/storage/deliver/deliver_manage.html?tabId=' + this_tab;
+					break;
+				case '库存盘点':
+					window.location.href = './page/storage/productCheck/product_check.html?tabId=' + this_tab;
+					break;
+				case '产品库存':
+					window.location.href = './page/storage/productStore/product_store.html?tabId=' + this_tab;
+					break;
+					
+				default:
+					break;
+			}
+		})
+
+		var user = JSON.parse(localStorage.getItem('userInfo'));
+		console.log(user)
+		$('.user_name').html(user.RealName);
+		$('.company_name').html(user.CompanyName);
+		var pluss;
+		mui.plusReady(function() {
+			pluss = plus;
+		})
+		//退出登录
+		mui('.log_out').on('tap', 'span', function() {
+			var token = localStorage.getItem('token');
+			var logOutUrl = '/api/Account/EndSystem';
+			request.post(logOutUrl).then(function(res) {
+				console.log(JSON.stringify(res))
+				if (res.code == 200) {
+					localStorage.setItem('token', '');
+					localStorage.setItem('auto_login', 'false');
+					window.location.href = './page/user/login.html';
+				} else {
+					mui.toast(res.msg)
+				}
+			})
+		})
+
+
+		//修改密码
+		mui('.update_pass').on('tap', 'p', function() {
+			window.location.href = './page/user/update_pass.html';
+		})
+
+		//公告详情
+		mui('#item2').on('tap', 'li', function() {
+			localStorage.setItem('message_show', 1)
+			window.location.href = './page/day/message.html?id=' + $(this).attr('id');
+		})
+
+		//待办详情
+		mui('#item1').on('tap', 'li', function() {
+			localStorage.setItem('message_show', 0)
+			var fid = $(this).attr("fid");
+			var ftype = parseInt($(this).attr("ftype"));
+			if (ftype < 900) {
+				if(ftype == 6 || ftype == 13 || ftype == 8 || ftype == 5 || ftype == 4) {
+					mui.alert('功能开发中');
+					return;
+				}
+				window.location.href = './page/day/details.html?fid=' + fid + '&' + 'ftype=' + ftype;
+			} else {
+				if(ftype == 913) {
+					mui.alert('功能开发中');
+					return;
+				}
+				window.location.href = './page/day/task.html?fid=' + fid + '&' + 'ftype=' + ftype;
+			}
+		})
+
+		//通讯录点击折叠面板
+		mui('.framework').on('tap', '.mui-collapse a', function(e) {
+			if (!$(this).parent('li').hasClass('mui-active')) {
+				$(this).find('span').css('background', 'url(./img/up.png) no-repeat');
+				$(this).find('span').css('backgroundSize', '10px');
+				var inner = $(this).parent('li').find('.two_list_title');
+				localStorage.setItem('page4active',inner[0].innerText);
+			} else {
+				$(this).find('span').css('background', 'url(./img/down.png) no-repeat');
+				$(this).find('span').css('backgroundSize', '10px');
+			}
+		})
+
+		mui('.framework').on('tap', '.two_list_class .mui-navigate-right', function() {
+			$(this).next().toggle();
+		})
+
+
+		//获取通讯录
+		function getMeilList() {
+			var url = '/api/AddressList/GetRoleList'
+			return request.post(url).then(function(res) {
+				console.log('通讯录：',res)
+				if (res.code == 200) {
+					var companyArr = [];
+					var calssArr = [];
+					var peopleArr = [];
+					var html = '';
+					for (var i = 0; i < res.data.length; i++) {
+						var list1 = res.data[i].data;
+						var active = '';
+						if(i==0) {
+							active = 'mui-active'
+						}
+						var html1 = '<li class="mui-table-view-cell mui-collapse '+ active +'">' +
+							'<a class="mui-navigate-right company_titles" href="#">' + res.data[i].Name + '<span></span></a>';
+						var html2 = '<ul class="mui-table-view two_list_class">'
+						var endHtml2 = '</ul>';
+						var endHtml1 = '</li>';
+						var html4 = '<div class="mui-collapse-content list_content framework_two_list">';
+						var endHtml4 = '</div>';
+						if (list1.length > 0) {
+							var twoHtml = '';
+							for (var j = 0; j < list1.length; j++) {
+								var list2 = list1[j].data;
+								var html3 = '<li class="mui-table-view-cell mui-collapse">' +
+									'<a class="mui-navigate-right two_list_title" href="#">' + list1[j].Name + '<span></span></a>'
+								if (list2.length > 0) {
+									var threeHtml = ''
+									for (var k = 0; k < list2.length; k++) {
+										threeHtml += '<p peopleId=' + list2[k].baseId + '>' + list2[k].Name + '</p>'
+									}
+									twoHtml += html3 + html4 + threeHtml + endHtml4 + endHtml1;
+								} else {
+									twoHtml += html3 + endHtml1
+								}
+							}
+							html += html1 + html2 + twoHtml + endHtml2 + endHtml1;
+						} else {
+							html += html1 + endHtml1;
+						}
+					}
+					$('.people_list_tree').html(html)
+					$('.company_titles').eq(0).find('span').css('background', 'url(./img/up.png) no-repeat');
+					$('.company_titles').find('span').css('backgroundSize', '10px');
+					if(this_tab == 3) {
+						$(window).scrollTop(Number(localStorage.getItem('scrollpage4')))
+					}
+					var getActive = localStorage.getItem('page4active');
+					var inner = $('.people_list_tree').find('.two_list_title').length;
+					for(var j=0;j<inner;j++) {
+						if($('.people_list_tree').find('.two_list_title').eq(j)[0].innerText == getActive) {
+							$('.people_list_tree').find('.two_list_title').eq(j).parent('li').addClass('mui-active').find('.framework_two_list').show()
+						}
+					}
+					
+				}
+			})
+		}
+		
+		//员工信息
+		mui('.people_list_tree').on('tap', 'p', function() {
+			var getTop = $(window).scrollTop();
+			localStorage.setItem('scrollpage4',getTop);
+			var this_id = $(this).attr('peopleId');
+			window.location.href = './page/user/peopel_detail.html?id=' + this_id;
+		})
+
+		mui('.contacts ul').on('tap', 'li', function() {
+			var this_id = $(this).attr('ids');
+			window.location.href = './page/user/peopel_detail.html?id=' + this_id;
+		})
+
+		//获取最近联系人
+		function recentContacts() {
+			var url = '/api/AddressList/NearestContactShow';
+			return request.post(url).then(function(res) {
+				// console.log('最近联系人',res)
+				if (res.code == 200) {
+					var html = '';
+					for (var i = 0; i < res.data.length; i++) {
+						var item = res.data[i];
+						html += '<li ids=' + item.NUserId + '><span></span>' + item.NCname + '</li>';
+					}
+					$('.contacts ul').html(html);
+				}
+			})
+		}
+
+		mui('#page4').on('tap', '.search_box', function() {
+			window.location.href = './page/user/search.html';
+		})
+
+		document.addEventListener('plusready', function() {
+			var first = null;
+			var webview = plus.webview.currentWebview();
+			plus.key.addEventListener('backbutton', function() {
+				webview.canBack(function(e) {
+					if (e.canBack) {
+						webview.back(); //这里不建议修改自己跳转的路径  
+					} else {
+						//首次按键，提示‘再按一次退出应用’  
+						if (!first) {
+							first = new Date().getTime(); //获取第一次点击的时间戳  
+							// console.log('再按一次退出应用');//用自定义toast提示最好  
+							// toast('双击返回键退出应用'); //调用自己写的吐丝提示 函数  
+							plus.nativeUI.toast("再按一次退出应用", {
+								duration: 'short'
+							}); //通过H5+ API 调用Android 上的toast 提示框  
+							setTimeout(function() {
+								first = null;
+							}, 1000);
+						} else {
+							if (new Date().getTime() - first < 1000) { //获取第二次点击的时间戳, 两次之差 小于 1000ms 说明1s点击了两次,  
+								plus.runtime.quit(); //退出应用  
+							}
+						}
+					}
+				})
+			});
+		});
+	</script>
+
+	<!-- 日历相关信息 -->
+	<script type="text/javascript">
+		var customBiz = {
+			init: function() {
+				var self = this;
+				// 初始化日历
+
+				var calendar = new Calendar({
+					// swiper滑动容器
+					container: "#calendar",
+					// 上一月节点
+					pre: ".pre",
+					minDate: new Date(),
+					// 下一月节点
+					next: ".next",
+					// 业务数据改变
+					dataRequest: function(currdate, callback, _this) {
+						// 无日程安排
+						console.log(currdate)
+						var data = [{
+							"date": "2019-10-11"
+						}];
+						callback && callback(data);
+					},
+					// 点击日期事件
+					onItemClick: function(item) {
+						console.log(123)
+						var defaultDate = item.date;
+						// 设置标题
+						setTitle(defaultDate);
+					},
+					// 滑动回调
+					swipeCallback: function(item) {
+						var defaultDate = item.date;
+						// 设置标题
+						setTitle(defaultDate);
+						// 动态新增点击样式
+						calendar.addActiveStyleFordate(defaultDate);
+
+					},
+					// 调试
+					isDebug: false
+				});
+				var titleNode = document.querySelector('.mid span');
+
+				function setTitle(date) {
+					// console.log(data)
+					titleNode.innerText = date.substr(0, 7);
+				}
+
+			},
+			initWeek: function() {
+				var titleNode = document.querySelector('.mid span');
+
+				function setTitle(date) {
+					// console.log(date)
+					titleNode.innerText = date.substr(0, 4) + '-' + date.substr(5, 2)
+				}
+
+				function getThisDay(year, day) {
+					var url = '/api/Home/NotepadShow';
+					var postData = {
+						YearMonth: year ? year : getTime('yearAndMonth'),
+						Day: day ? day : getTime('day')
+					}
+					return request.post(url, postData);
+				}
+
+				function getThisMOnth(yearmonth) {
+					var url = '/api/Home/NotepadDateShow';
+					var postData = {
+						YearMonth: yearmonth ? yearmonth : getTime('yearAndMonth'),
+					}
+					return request.post(url, postData);
+				}
+				
+				function getObj(data,value) {
+					for(var i=0;i<data.length;i++) {
+						if(data[i].Day == value) {
+							return data[i]
+						}
+					}
+				}
+
+				var thisMonths = '';
+				var nextMonths = '';
+				var thisMonthData = [];
+				var nextMonthData = [];
+				var MonthDataList = {};
+
+				var weekcalendar = new CalendarWeek({
+					// 默认周历组件容器
+					container: "#calendar",
+					// 上一月节点
+					pre: ".pre",
+					minDate: new Date(),
+					// 下一月节点
+					next: ".next",
+					template: function(value, currdate, key) {
+						// setTitle(currdate);
+						value.week_frame = value.week_frame.substr(2);
+						// console.log('currdate:', currdate);
+						// console.log('this_value:',value);
+						var thisMonth = value.date_frame.substr(0, 7);
+						// console.log('thisMonth',thisMonth);
+						var template;
+						// console.log('thismonths',thisMonths)
+						var data = MonthDataList[thisMonth];
+						var newdata = [];
+						for (var i = 0; i < data.length; i++) {
+							newdata.push(data[i].Day);
+						}
+
+						// console.log('update-data:',data,Number(value.day_frame))
+						var this_data = getObj(data, Number(value.day_frame));
+						if (value.date_frame == currdate) {
+							
+							// console.log(thisMonthData.indexOf(value.day_frame))
+							if (newdata.indexOf(Number(value.day_frame)) != -1) {
+								if (this_data.Count > 0) {
+									template = document.getElementById("template_red").innerHTML.trim();
+								} else {
+									template = document.getElementById("template").innerHTML.trim();
+								}
+							} else {
+								template = document.getElementById("template1").innerHTML.trim();
+							}
+							setTitle(currdate);
+						} else {
+							if (value.date_frame < currdate) {
+								// console.log(newdata,this_data)
+								if (newdata.indexOf(Number(value.day_frame)) != -1) {
+									if (this_data.Count > 0) {
+										template = document.getElementById("template3_red").innerHTML.trim();
+									} else {
+										template = document.getElementById("template3").innerHTML.trim();
+									}
+								} else {
+									template = document.getElementById("template4").innerHTML.trim();
+								}
+							} else {
+								if (newdata.indexOf(Number(value.day_frame)) != -1) {
+									if (this_data.Count > 0) {
+										template = document.getElementById("template22_red").innerHTML.trim();
+									} else {
+										template = document.getElementById("template22").innerHTML.trim();
+									}
+								} else {
+									template = document.getElementById("template2").innerHTML.trim();
+								}
+							}
+						}
+						// console.log(template)
+						return template;
+					},
+					// 业务数据改变
+					dataRequest: function(callback, _this, range) {
+						var from = range.from; //开始时间
+						var to = range.to; //结束时间
+						// console.log("切换日期区间：" + JSON.stringify(range) + "用于刷新业务接口", _this);
+						thisMonths = from.substr(0, 7);
+						nextMonths = to.substr(0, 7);
+						var data = [
+							// 	{
+							// 	"title": "1",
+							// 	"date1": "2019-12-02",
+							// },
+						];
+						if (thisMonths == nextMonths) {
+							getThisMOnth(thisMonths).then(function(res) {
+								thisMonthData = res.data;
+								MonthDataList[thisMonths] = res.data;
+								callback(data || []);
+							})
+						} else {
+							getThisMOnth(thisMonths).then(function(res) {
+								thisMonthData = res.data;
+								MonthDataList[thisMonths] = res.data;
+								return getThisMOnth(nextMonths)
+							}).then(function(res) {
+								nextMonthData = res.data;
+								MonthDataList[nextMonths] = res.data;
+								callback(data || []);
+							})
+						}
+
+						// console.log(data)
+
+					},
+					"preEvent": function(month) {
+						// console.log("上周：" + month);
+						setTitle(month);
+					},
+					"nextEvent": function(month) {
+						// console.log("下周：" + month);
+						setTitle(month);
+
+					},
+					// 点击日期事件
+					"onItemClick": function(item) {
+						// getDay(year,day)
+						// console.log(123)
+						// this.querySelector('.status').style.display = 'block';
+						// console.log(item.date + " " + item.week);
+						clickData = item.date;
+						var year = item.date.split('-')[0] + '-' + item.date.split('-')[1];
+						var day = item.date.split('-')[2];
+						thisNowYearMonth = year;
+						thisNowDay = day;
+						getDay(year, day)
+						setTitle(item.date);
+					},
+					"success": function(date, range) {
+						// console.log(range)
+						document.querySelector('.mid span').innerText = date.substr(0, 4) + '-' + date.substr(5, 2);
+
+					},
+					isDebug: false
+				});
+			}
+		}
+		customBiz.initWeek();
+		// mui('.table_back').on('tap','a',function(e) {
+
+		// 	var page = $(this).attr('href');
+		// 	if(page.substr(5) == 2) {
+		// 		// 初始化
+		// 		customBiz.initWeek();
+		// 	}else if(page.substr(5) == 5) {
+		// 		// var userInfo = localStorage.getItem()
+		// 	}
+		// })
+	</script>
+</html>

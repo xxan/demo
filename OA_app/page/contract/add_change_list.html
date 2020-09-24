@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link href="../../css/mui.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../css/mui.picker.min.css"
+    />
+    <link rel="stylesheet" type="text/css" href="../../css/Details.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../css/add_task_point.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../css/list_content_procedure.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../../css/contract_apply.css"
+    />
+    <script
+      src="../../js/polyfill.js"
+      type="text/javascript"
+      charset="utf-8"
+    ></script>
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <style type="text/css">
+      body {
+        background: #f2f2f2;
+      }
+      .mui-content {
+        height: 90%;
+      }
+      .get_time .start_time {
+        float: right;
+        display: inline-block;
+        height: 100%;
+        line-height: 48px;
+      }
+      input {
+        padding-right: 0 !important;
+      }
+      .company_info > p input {
+        right: 20px;
+      }
+
+      .first_no {
+        position: absolute;
+        top: 15px;
+        right: calc(55% + 22px);
+      }
+
+      .choose_box p {
+        height: 30px;
+        line-height: 30px;
+        margin: 0;
+      }
+
+      .choose_box input {
+        vertical-align: middle;
+      }
+      .input_show {
+        color: #999999;
+        display: none;
+      }
+      .input_show input {
+        width: 50%;
+        margin-top: 10px;
+        margin-left: 20px;
+        padding: 5px;
+        height: 30px;
+        line-height: 30px;
+        color: #666666;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="mui-bar mui-bar-nav header_box">
+      <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+      <h1 class="mui-title">添加变更事项</h1>
+    </header>
+    <div class="mui-content">
+      <div class="company_info this_company">
+        <h5>变更事项<b>*</b></h5>
+        <div class="task_time">
+          <p class="choose company_types get_manager">
+            <input
+              type="text"
+              name=""
+              id=""
+              placeholder="请选择"
+              class="company_type"
+            /><span class="up_btn"></span>
+          </p>
+          <p class="pay_type_other">
+            <input type="text" placeholder="请填写" class="type_other_name" />
+          </p>
+        </div>
+        <h5>变更前<b>*</b></h5>
+        <div class="task_name">
+          <textarea
+            rows=""
+            cols=""
+            class="abolish_reson abolish_before"
+            placeholder="请填写"
+            readonly
+          ></textarea>
+        </div>
+        <h5>变更后<b>*</b></h5>
+
+        <div class="task_name area_show">
+          <textarea
+            rows=""
+            cols=""
+            class="abolish_reson abolish_after"
+            placeholder="请填写"
+          ></textarea>
+        </div>
+
+        <div class="task_name input_show">
+          <input
+            type="number"
+            name=""
+            id=""
+            value=""
+            style=""
+            class="price_input"
+          />元
+        </div>
+
+        <div class="task_name choose_box" style="display: none;">
+          <p style="padding-left: 20px;">
+            <input type="radio" name="choose_time" id="has_time" value="0" />
+            有固定的期限
+          </p>
+          <p class="contract_work" style="display: none;">
+            <span class="cont_time start_time">开始时间</span>-<span
+              class="cont_time end_time"
+              >结束时间</span
+            >
+          </p>
+          <p style="padding-left: 20px;">
+            <input type="radio" name="choose_time" id="no_time" value="1" />
+            无固定的期限
+          </p>
+        </div>
+        <div></div>
+      </div>
+    </div>
+
+    <div class="footer_submit_one">
+      <span class="btn_save">保存</span>
+    </div>
+  </body>
+</html>
+<script src="../../js/mui.js"></script>
+<script
+  src="../../js/mui.picker.min.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../js/jquery.min.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../js/request.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../js/common.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script
+  src="../../js/loading.js"
+  type="text/javascript"
+  charset="utf-8"
+></script>
+<script type="text/javascript">
+  mui.init();
+  var input = $("input");
+  var textarea = $("textarea");
+  var selectList = [];
+  var selectTypeId;
+  var selectName;
+  var startTime, endTime;
+  var beforeStartTime, beforeEndTime;
+
+  var timeText;
+
+  var operationNum = 1;
+
+  var id = common.getQueryUrl("id");
+  var changId = common.getQueryUrl("changeid");
+  var isupdate = common.getQueryUrl("isupdate");
+  console.log(id);
+  if (isupdate) {
+    operationNum = 2;
+  }
+
+  function getDetail(type) {
+    var url = "/api/ContractManage/AddAlterationRecord";
+    return request
+      .post(url, {
+        ContractId: id,
+        AlterationId: changId || "",
+        AlterationType: type
+      })
+      .then(function(res) {
+        console.log(res);
+        if (res.code == 200) {
+          $(".abolish_before").val(res.data.AlterationBefore || "无");
+          if (type == 1) {
+            $(".abolish_before").val(
+              res.data.BeforeBeginTime + " - " + res.data.BeforeEndTime
+            );
+            beforeStartTime = res.data.BeforeBeginTime;
+            beforeEndTime = res.data.BeforeEndTime;
+          }
+        }
+      });
+  }
+
+  function getChangeSelect() {
+    var url = "/api/ContractManage/AlterationTypeSelect";
+    return request.post(url).then(function(res) {
+      console.log(res);
+      if (res.code == 200) {
+        for (var i = 0; i < res.data.length; i++) {
+          selectList.push({
+            text: res.data[i].SUB_NM,
+            value: res.data[i].SUB_ID
+          });
+        }
+      }
+    });
+  }
+
+  common
+    .promise()
+    .then(() => {
+      mui.showLoading("加载中...");
+      return;
+    })
+    .then(() => {
+      return getChangeSelect();
+    })
+    .then(() => {
+      mui.hideLoading();
+    });
+
+  function submit() {
+    console.log(selectTypeId);
+    if (!selectTypeId) {
+      mui.toast("请选择变更事项！");
+      return;
+    }
+
+    var arr = JSON.parse(localStorage.getItem("changeList"));
+    console.log(arr);
+    var postData = {};
+    postData.AlterationType = selectTypeId;
+    postData.typeText = selectName;
+
+    if (selectName == "合同工期") {
+      if (!timeText) {
+        mui.toast("请选择合同工期！");
+        return;
+      }
+      if (timeText == "有固定的工期") {
+        if (!startTime || !endTime) {
+          mui.toast("请选择工期时间！");
+          return;
+        }
+      }
+      postData.BeginTime = startTime;
+      postData.EndTime = endTime;
+      postData.BeforeBeginTime = beforeStartTime;
+      postData.BeforeEndTime = beforeEndTime;
+    } else if (selectName == "合同金额") {
+      if (!$(".price_input").val()) {
+        mui.toast("请输入金额！");
+        return;
+      }
+      postData.AlterationBefore = $(".abolish_before").val();
+      postData.AlterationLater = $(".price_input").val();
+    } else if (selectName == "其他") {
+      postData.Rests = $(".type_other_name").val();
+      if (!$(".type_other_name").val()) {
+        mui.toast("请输入其他内容！");
+        return;
+      }
+      postData.AlterationBefore = $(".abolish_before").val();
+      if (!$(".abolish_after").val()) {
+        mui.toast("请输入变更后内容！");
+        return;
+      }
+      postData.AlterationLater = $(".abolish_after").val();
+    } else {
+      if (!$(".abolish_after").val()) {
+        mui.toast("请输入变更后内容！");
+        return;
+      }
+      postData.AlterationBefore = $(".abolish_before").val();
+      postData.AlterationLater = $(".abolish_after").val();
+    }
+    postData.operate = operationNum;
+
+    console.log(postData);
+    arr.push(postData);
+    localStorage.setItem("changeList", JSON.stringify(arr));
+
+    mui.back();
+  }
+
+  mui(".footer_submit_one").on("tap", "span", function() {
+    submit();
+  });
+
+  $("input[type=radio][name=choose_time]").change(function() {
+    var myvalue = $(this).val();
+    console.log(myvalue);
+    if (myvalue == 0) {
+      $(".contract_work").show();
+      timeText = "有固定的工期";
+    } else {
+      $(".contract_work").hide();
+      timeText = "无固定工期";
+    }
+  });
+
+  (function(mui) {
+    //时间选择
+    var btns = mui(".cont_time");
+    btns.each(function(i, btn) {
+      btn.addEventListener(
+        "tap",
+        function() {
+          // if(isUpdate) return;
+          $("input").blur();
+          $("textarea").blur();
+          var _self = this;
+          if (_self.picker) {
+            _self.picker.show(function(rs) {
+              if ($(_self).hasClass("start_time")) {
+                startTime = rs.text;
+              }
+              if ($(_self).hasClass("end_time")) {
+                endTime = rs.text;
+              }
+              $(_self).html(rs.text);
+              _self.picker.dispose();
+              _self.picker = null;
+            });
+          } else {
+            var optionsJson = this.getAttribute("data-options") || "{}";
+            var options = JSON.parse(optionsJson);
+            var id = this.getAttribute("id");
+            options.type = "date";
+            if ($(_self).hasClass("end_time") && startTime) {
+              options.beginDate = new Date(startTime);
+            }
+            if ($(_self).hasClass("start_time") && endTime) {
+              options.endDate = new Date(endTime);
+            }
+            _self.picker = new mui.DtPicker(options);
+            _self.picker.show(function(rs) {
+              if ($(_self).hasClass("start_time")) {
+                startTime = rs.text;
+              }
+              if ($(_self).hasClass("end_time")) {
+                endTime = rs.text;
+              }
+              $(_self).html(rs.text);
+              _self.picker.dispose();
+              _self.picker = null;
+            });
+          }
+        },
+        false
+      );
+    });
+
+    //联系人选择
+    mui.ready(function() {
+      var _getParam = function(obj, param) {
+        return obj[param] || "";
+      };
+      var userPicker = new mui.PopPicker();
+
+      var showUserPickerButton = mui(".get_manager");
+      showUserPickerButton.each(function(i, btn) {
+        btn.addEventListener(
+          "tap",
+          function(event) {
+            input.blur();
+            textarea.blur();
+            // if(isUpdate) {
+            // 	return;
+            // }
+            var _this = this;
+            // selectList = [1,2,3,2,2,2]
+            userPicker.setData(selectList);
+            userPicker.show(function(items) {
+              // console.log(items)
+              $(_this)
+                .find("input")
+                .val(items[0].text);
+              selectTypeId = items[0].value;
+              selectName = items[0].text;
+              if (items[0].text == "其他") {
+                $(".pay_type_other").show();
+                $(".input_show").hide();
+                $(".choose_box").hide();
+                $(".area_show").show();
+              } else if (items[0].text == "合同工期") {
+                $(".choose_box").show();
+                $(".area_show").hide();
+                $(".input_show").hide();
+                $(".pay_type_other").hide();
+              } else if (items[0].text == "合同金额") {
+                $(".input_show").show();
+                $(".area_show").hide();
+                $(".choose_box").hide();
+                $(".pay_type_other").hide();
+              } else {
+                $(".input_show").hide();
+                $(".area_show").show();
+                $(".pay_type_other").hide();
+                $(".choose_box").hide();
+              }
+              getDetail(selectTypeId);
+            });
+          },
+          false
+        );
+      });
+    });
+  })(mui);
+</script>

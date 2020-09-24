@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/staff.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.footer_submit span {
+				width: 100%;
+			}
+		</style>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		</header>
+		<div class="mui-content">
+			<div class="staff_title">
+				<img src="../../img/avatar_de.png" >
+				<p class="user_name">某某</p>
+			</div>
+			<h5>员工信息</h5>
+			<div class="content_list">
+				<p>公司：<span>总公司</span></p>
+				<p>部门：<span>标准定额事业部</span></p>
+				<p>岗位：<span>部门经理</span></p>
+			</div>
+			<h5>联系方式</h5>
+			<div class="content_list">
+				<p>办公电话：<span>8000</span> <i class="tel_img"></i></p>
+				<p>手机号：<span>111111111</span> <i class="phone_img"></i></p>
+			</div>
+			
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	
+	mui('.footer_submit').on('tap','.btn_save',function() {
+		mui.back();
+	})
+	
+</script>
+
+
+

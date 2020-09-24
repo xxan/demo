@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/menu.css"/>
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js"></script>
+		<style type="text/css">
+			hr {
+				height: 10px;
+			}
+			.this_examine,.in_time_info {
+				display: none;
+			}
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 70%;
+			}
+			.enclosure_file {
+				display: none;
+			}
+			/* .type1,
+			.type2 {
+				display: none;
+			} */
+		
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">盖章申请</h1>
+		</header>
+		<div class="mui-content">
+			<h5>文件名称<span>*</span></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="file_name" /></p>
+			</div>
+			<h5>文件数量<span>*</span></h5>
+			<div class="task_time">
+				<p><input type="number" name="" id="" placeholder="请填写" class="file_num" /></p>
+			</div>
+			<h5>用章类型</h5>
+			<div class="task_time">
+				<p class="get_manager choose_seal"><a>请选择</a><span class="choose_img"></span></p>
+				<hr>
+			</div>
+			<h5>备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" class="remarks" placeholder="请填写"></textarea>
+			</div>
+		
+			<h5>附件上传</h5>
+			<div class="plan_time file_upload">
+				<span>附件上传</span>
+				<input type="file" name="" id="add_file_title" value="" multiple/><label for="add_file_title" class="btn_add_title choose_img">添加</label>
+			</div>
+			<ul class="file_tendering_list">
+				
+			</ul>
+			<h5>审批流程</h5>
+			<div class="list_box_content">
+				<div class="task_time">
+					<p class="get_manager approval_process"><a>选择流程</a><span class="choose_img"></span></p>
+					<hr>
+				</div>
+				<ul class="list_content_procedure">
+
+				</ul>
+			</div>
+			
+			<div class="enclosure_file">
+				<h5>扫描件上传</h5>
+				<div class="plan_time file_upload">
+					<span>扫描件上传</span>
+					<input type="file" name="" id="add_enclosure_file" value="" multiple/><label for="add_enclosure_file" class="add_enclosure_file choose_img">添加</label>
+				</div>
+				<ul class="enclosure_list">
+					
+				</ul>
+			</div>
+
+			<div class="content_bottom">
+
+			</div>
+		</div>
+		<div class="meau_list">
+			<div class="list_table">
+				<p>电子章</p>
+				<div class="ele_meal items">
+					
+				</div>
+				<p>物理章</p>
+				<div class="phy_meal items">
+					
+				</div>
+				
+				<p class="btn_box_meau">
+					<button type="button" class="mui-btn meau_cancel">取消</button>
+					<button type="button" class="mui-btn mui-btn-blue">确定</button>
+				</p>
+			</div>
+		</div>
+		<!-- 弹框开始 -->
+		<div class="htsp_modal htsp_modal_jj">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认拒绝<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinioncancel" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认拒绝</span></div>
+		    </div>
+		</div>
+		<div class="htsp_modal htsp_modal_ty">
+		    <div class="mui-modal_all">
+		        <div class="mui-modal_all_title">确认同意<span class="mui-icon mui-icon-close"></span></div>
+		        <div class="htsp_modal_nr"><textarea id="opinionok" autofocus></textarea></div>
+						<div class="sign_box">
+							<p>点击添加手写签名</p>
+							<div class="sign_img">
+								<img src="../../../img/add_sign.png" >
+							</div>
+						</div>
+		        <div class="modal_btn"><span class="modal_btn_qr btn_sure">确认同意</span></div>
+		    </div>
+		</div>
+		
+		<div class="htsp_modal sign_modal">
+			<div class="content_box">
+				<div class="mui-modal_all_title">添加签名<span class="mui-icon mui-icon-close"></span></div>
+				<div class="canvas_box">
+					<canvas id="canvas"></canvas>
+				</div>
+				<div class="canvas_btn">
+					<span class="canvas_reset">重置</span><span class="canvas_save">保存</span>
+				</div>
+			</div>
+		</div>
+		
+		<div class="footer_submit this_update">
+			<span class="btn_save">保存</span><span class="btn_submit">提交</span>
+		</div>
+		<div class="footer_submit this_examine">
+			<span class="btn_refuse">拒绝</span><span class="btn_agree">同意</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/process_view.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	var isFlag = common.getQueryUrl('isExamine');
+	var isOperation = common.getQueryUrl('isOperation');
+	var showbottom = common.getQueryUrl('showbottom');
+	var ischeck = common.getQueryUrl('check');
+	var isUpload = common.getQueryUrl('isUpload');
+	var onlysee = common.getQueryUrl('onlysee');
+	if(isFlag) {
+		$('.this_update').css('display','none');
+		$('.this_examine').css('display','block');
+	}
+	if(isUpload) {
+		$('.enclosure_file').show();
+		$('.this_update').css('display','none');
+	}
+	var isShowAngree = false;
+	var processList = [];
+	var processId;
+	var mealList = [];
+	var meal = [];//选中项
+	var fileList = [];
+	var assetList = [];
+
+	
+	var isUpdate = false;
+	mui.showLoading();
+	common.promise()
+		.then(function() {
+			return getSeal();
+		})
+		.then(function(res) {
+			return approvalProcess('行政管理');
+		}).then(function(res) {
+			processList = res;
+			if(id) {
+				return getDetail()
+			}
+		}).then(function() {
+			mui.hideLoading();
+		})
+		
+
+	//获取详情
+	function getDetail() {
+		var url = '/api/Resource/FillSealApply';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log('详情：',res);
+			if(res.code == 200) {
+				var data = res.data.modelRS;
+				if(data.Docment) $('.file_name').val(data.Docment);
+				if(data.DocNumber) $('.file_num').val(data.DocNumber);
+				if(data.Remark) $('.remarks').val(data.Remark);
+				if(data.Sealtype && data.Sealtype.split(',').length > 0) {
+					meal = data.Sealtype.split(',');
+					getMealStr()
+				}
+				if(data.Template > 0 && res.data.State != -1) {
+					processId = data.Template;
+					$('.approval_process').find('a').html(common.getKeyValue(processList,processId));
+					processDetail(processId);
+					$('.this_update').hide();
+					
+					if(showbottom) {
+						$('.this_update').show();
+					}else {
+						if(!isOperation) {
+							isUpdate = true;
+							common.disbledForm()
+						}
+						if(isUpload) {
+							isUpdate = true;
+							common.disbledForm();
+							$('#add_enclosure_file').removeAttr('disabled')
+						}
+					}
+				}
+				var names = '';
+				var filearr = [];
+				for(var i=0;i<res.data.lstFile.length;i++) {
+					var lists = res.data.lstFile[i];
+					lists.Type = '用章管理';
+					var data = {
+						"FileName": lists.Name,
+						"Extension": lists.FileFormat,
+						"FilePath": lists.FilePath,
+						"Type": lists.Type,
+						"Id": lists.Id
+					}
+					filearr.push(data);
+					var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+					var deStr = '删除';
+					if(isUpdate) {
+						deStr = '';
+					}
+					names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.Name + doc +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+					
+				}
+				fileList = filearr;
+				$('.file_tendering_list').html(names); 
+				var names1 = '';
+				var aarr= []
+				for(var i=0;i<res.data.lstFile_SealApplysFile.length;i++) {
+					var lists = res.data.lstFile_SealApplysFile[i];
+					lists.Type = '用章管理-扫描上传附件';
+					var data = {
+						"FileName": lists.Name,
+						"Extension": lists.FileFormat,
+						"FilePath": lists.FilePath,
+						"Type": lists.Type,
+						"Id": lists.Id
+					}
+					aarr.push(data)
+					var doc = lists.FileFormat ? lists.FileFormat : '.'+lists.FilePath.split('.')[1];
+					if(isUpload) {
+						names1 += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.Name + doc +
+						'</span><span class="file_list_delete hide_span">删除</span></li>';
+					}
+				}
+				assetList = aarr;
+				$('.enclosure_list').html(names1); 
+				
+				if(ischeck) {
+					if(data.State == -1 || data.State == 1 || data.State == 2) {
+						$('.mui-title').html('盖章申请详情');
+					}
+				}
+				
+				if(isUpdate) {
+					$('.choose_img').hide();
+				}
+				if(isUpload) {
+					$('.enclosure_file .choose_img').show();
+				}
+			
+			}
+			return;
+		})
+	}
+	
+	function getSeal() {
+		var url = '/api/Resource/GZSQSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				var html1 = '';
+				var html2 = '';
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					var obj = {};
+					obj.text = item.SUB_NM;
+					obj.value = item.SUB_ID;
+					if(item.ParentID == 1) {
+						html1 += '<span id='+ item.SUB_ID +'>'+ item.SUB_NM +'</span>';
+					}
+					if(item.ParentID == 2) {
+						html2 += '<span id='+ item.SUB_ID +'>'+ item.SUB_NM +'</span>'
+					}
+					mealList.push(obj);
+				}
+				$('.ele_meal').html(html1);
+				$('.phy_meal').html(html2);
+			}
+		})
+	}
+	
+	function getValue(text) {
+		for(var i=0;i<costType.length;i++) {
+			if(costType[i].text == text) {
+				return costType[i].value
+			}
+		}
+	}
+	
+
+	function submit(flag,isUpload) {
+		var postData = {};
+		
+		if(!$('.file_name').val()) {
+			mui.toast('请输入文件名！');
+			return;
+		}
+		if(!$('.file_num').val()) {
+			mui.toast('请输入文件数量！');
+			return;
+		}
+
+		if(id) {
+			postData.Id = id;
+		}
+		
+		postData.IsSubmit = flag;
+		if(processId) postData.Template = processId;
+		
+		postData.Docment = $('.file_name').val() || '';
+		postData.DocNumber = Number($('.file_num').val()) || 0;
+		postData.Remark = $('.remarks').val() || '';
+		postData.Sealtype = meal.join(',');
+		console.log(postData);
+		mui.showLoading('处理中...');
+		common.promise()
+		.then(function() {
+			postData.LstFile = fileList;
+			postData.lstFile_SealApplysFile = assetList;
+			console.log(postData);
+			var url = '/api/Resource/SaveSealApply';
+			return request.post(url,postData).then(function(res) {
+				console.log(res);
+				mui.hideLoading()
+				if(res.code == 200) {
+					if(isUpload >=0) {
+						if(isUpload == 1) {
+							mui.toast('添加成功');
+							getDetail();
+						}else if(isUpload == 0){
+							mui.toast('删除成功');
+							getDetail();
+						}
+					}else {
+						mui.back();
+					}
+				}else {
+					mui.toast(res.msg);
+				}
+			})
+		})
+	}
+	
+	function upload(formData, flag, index) {
+		var url = '/api/BusinessManage/UploadFile?Type=SealApplys';
+		// if (flag) {
+		// 	url = '/api/BusinessManage/UploadFile?Type=Bid';
+		// }
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": flag ? "用章管理" : "用章管理-扫描上传附件",
+					"tid": index
+				}
+				if(flag) {
+					if (fileList.length > 0) {
+						console.log(fileList, data)
+						for (var i = 0; i < fileList.length; i++) {
+							if (fileList[i].FileName == data.FileName && 
+							fileList[i].Extension == data.Extension &&
+							fileList[i].Type == data.Type) {
+								fileList.splice(i, 1);
+							}
+						}
+					}
+					fileList.push(data);
+					return;
+				}
+				if (assetList.length > 0) {
+					console.log(assetList, data)
+					for (var i = 0; i < assetList.length; i++) {
+						if (assetList[i].FileName == data.FileName && 
+						assetList[i].Extension == data.Extension && 
+						fileList[i].Type == data.Type) {
+							assetList.splice(i, 1);
+						}
+					}
+				}
+				console.log(data)
+				assetList.push(data);
+				return;
+			}
+		})
+	}
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		if(isUpdate) return;
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					console.log(fileList[i].Id,id)
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					console.log(fileList[i].tid,item)
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parents('li').remove();
+	})
+	
+	//点击文件上传按钮
+	$("#add_file_title").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,true,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	});
+	
+	//点击扫描件上传按钮
+	$("#add_enclosure_file").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,false,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		
+		if(files.length > 0) {
+			$('.enclosure_list').append(names);
+		}
+		Promise.all(arr).then(function() {
+			submit(true,1)
+		})
+	});
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		preview(this,fileList)
+	})
+	mui('.enclosure_list').on('tap','.file_list_name',function() {
+		preview(this,assetList)
+	})
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	
+	mui('.enclosure_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		console.log(id)
+		console.log(assetList)
+		if(id) {
+			for(var i=0;i<assetList.length;i++) {
+				if(assetList[i].Id == id) {
+					assetList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			var files = $("#add_enclosure_file")[0].files;
+			for(var i=0;i<files.length;i++) {
+				if(item == files[i].lastModified) {
+					 $("#add_enclosure_file")[0].files[i].deletetrue = true;
+				}
+			}
+		}
+		console.log(assetList)
+		$(this).parents('li').remove();
+		submit(true,0)
+	})	
+	
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(false);
+	});
+	mui('.footer_submit').on('tap', '.btn_submit', function() {
+		submit(true);
+	});
+	mui('.list_table').on('tap', 'span', function() {
+		var this_id = $(this).attr('id');
+		if($(this).hasClass('active')) {
+			$(this).removeClass('active');
+			meal.splice(meal.indexOf(this_id),1); 
+		}else {
+			$(this).addClass('active');
+			meal.push(this_id);
+		}
+	});
+	mui('.btn_box_meau').on('tap', 'button', function() {
+		$(".meau_list").animate({right:'-100%'});
+		if(!$(this).hasClass('meau_cancel')) {
+			getMealStr();
+		}
+	});
+	
+	function getMealStr() {
+		var str = '';
+		var strEle = '';
+		for(var i=0;i<meal.length;i++) {
+			if(i != meal.length - 1) {
+				if(meal[i] >= 200) {
+					str += common.getKeyValue(mealList,meal[i]) + ' ';
+				}else {
+					strEle += common.getKeyValue(mealList,meal[i]) + ' ';
+				}
+			}else {
+				if(meal[i] >= 200) {
+					str += common.getKeyValue(mealList,meal[i]);
+				}else {
+					strEle += common.getKeyValue(mealList,meal[i]);
+				}
+			}
+		}
+		var newStr = '';
+		if(str != '') {
+			newStr += '(物理章:' + str + ')';
+		}
+		if(strEle != '') {
+			newStr += '(电子章:' + strEle + ')';
+		}
+		if(newStr != '') {
+			$('.choose_seal a').html(newStr);
+		}
+	}
+	canvasInit();
+
+	$('.get_small_price').on('blur', function() {
+		var text = common.smallToLarge($(this).val());
+		$('.get_big_price').html(text);
+	});
+	
+	
+	function activeSpan(arr) {
+		var spans = $('.list_table span');
+		for(var i=0;i<spans.length;i++){
+			for(var j=0;j<arr.length;j++) {
+				if($('.list_table span').eq(i).attr('id') == arr[j]) {
+					$('.list_table span').eq(i).addClass('active');
+				}
+			}
+		}
+	}
+
+
+function chooseList() {
+	var userPicker = new mui.PopPicker();
+	
+	var showUserPickerButton = mui('.get_manager');
+	showUserPickerButton.each(function(i, btn) {
+		btn.addEventListener('tap', function(event) {
+			if(isUpdate) {
+				return;
+			}
+			var _this = this;
+			if ($(this).hasClass('approval_process')) {
+				userPicker.setData(processList);
+				userPicker.show(function(items) {
+					$(_this).find('a').html(items[0].text);
+					processId = items[0].value;
+					getProcessDetail(processId);
+				});
+			}
+			if ($(this).hasClass('choose_seal')) {
+				$(".meau_list").animate({right:0});
+				activeSpan(meal)
+			}
+		}, false);
+	});
+}
+
+	(function(mui) {
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			chooseList();
+		});
+	})(mui);
+</script>

@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/jygl_chengguowenjian.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+	</head>
+
+	<body>
+		<!-- 主界面不动、菜单移动 -->
+		<!-- 侧滑导航根容器 -->
+		<div class="mui-off-canvas-wrap mui-draggable mui-slide-in">
+			<!-- 菜单容器 -->
+			<aside class="mui-off-canvas-right" id="offCanvasSide">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<p class="silder_title">公司资质</p>
+						<!-- 菜单具体展示内容 -->
+						<ul id="slide_list">
+						</ul>
+					</div>
+					<div class="footer_submit">
+						<span class="btn_cancel_slide">取消</span><span class="btn_submit_slide">确定</span>
+					</div>
+				</div>
+			</aside>
+			<!-- 主页面容器 -->
+			<div class="mui-inner-wrap">
+				<!-- 主页面标题 -->
+				<header class="mui-bar mui-bar-nav header_box">
+					<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+					<h1 class="mui-title">投标申请</h1>
+				</header>
+				<div class="mui-content mui-scroll-wrapper">
+					<div class="mui-scroll">
+					   <h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+					   <ul class="" id="list_box">
+					   	<li>
+					   		<a class="list_title" href="#">投标文件编号 <span>展开</span></a>
+					   		<div class="list_box_content">
+					   			<div class="task_time project_num">
+					   				<p class="project_number">项目提交后自动生成</p>
+					   			</div>
+					   		</div>
+					   	</li>
+					   	<li>
+					   		<a class="list_title" href="#">人员选择<b>＊</b> <span>展开</span></a>
+					   		<div class="list_box_content">
+					   			<div class="task_time">
+					   				<p class="get_manager manager_list"><a>标书编写负责人<b>＊</b></a><span></span></p>
+					   				<hr>
+					   				<p class="get_manager people_list"><a>标书编写主要人员<b></b></a><span></span></p>
+					   			</div>
+					   		</div>
+					   	</li>
+					   	<li>
+					   		<a class="list_title" href="#">文件上传<b>＊</b> <span>展开</span></a>
+					   		<div class="list_box_content files">
+					   			<div class="plan_time file_upload">
+					   				<span>招标文件<b>＊</b></span>
+					   				<input type="file" name="" id="add_file_tendering" value="" multiple/><label for="add_file_tendering" class="btn_add">添加</label>
+					   			</div>
+									<ul class="file_tendering_list">
+										
+									</ul>
+					   			<hr>
+					   			<div class="plan_time file_upload">
+					   				<span>投标文件<b>＊</b></span>
+					   				<input type="file" name="" id="add_file_bid" value="" multiple/><label for="add_file_bid">添加</label>
+					   			</div>
+									<ul class="enclosure_list">
+										
+									</ul>
+									
+					   		</div>
+					   	</li>
+					   	<li>
+					   		<a class="list_title" href="#">盖章申请 <span>展开</span></a>
+					   		<div class="list_box_content list_content_seal">
+					   			<div class="task_time">
+					   				<p class="get_manager electron_seal"><a>电子章</a><span></span></p>
+					   				<hr>
+					   				<p class="get_manager physics_seal"><a>物理章</a><span></span></p>
+					   				<hr>
+					   				<p><input type="number" name="" id="" placeholder="盖章文件份数" class="seal_number" /></p>
+					   				<hr>
+					   				<p class="seal_title">盖章位置及要求</p>
+					   				<textarea rows="" cols="" class="seal_require" placeholder="请填写"></textarea>
+					   			</div>
+					   		</div>
+					   	</li>
+					   	<li>
+					   		<a class="list_title" href="#">原件申请 <span>展开</span></a>
+					   		<div class="list_box_content">
+					   			<div class="task_time">
+					   				<p class="checktime start_time"><a class="file_start_time">选择开始时间</a><span></span></p>
+					   				<hr>
+					   				<p class="checktime end_time"><a class="file_end_time">选择结束时间</a><span></span></p>
+					   				<hr>
+					   				<p class="get_manager company_intelligence"><a>公司资质</a><span></span></p>
+					   				<hr>
+					   				<p class="get_manager staff_intelligence"><a>人员资质</a><span></span></p>
+					   				<hr>
+					   				<p class="get_manager achievement_intelligence"><a>业绩</a><span></span></p>
+					   			</div>
+					   			<!-- <div class="plan_time file_upload">
+					   				<span>原件申请</span>
+					   				<input type="file" name="" id="add_file_original" value=""/><label for="add_file_original">添加</label>
+					   			</div> -->
+					   		</div>
+					   	</li>
+					   	<li>
+					   		<a class="list_title" href="#">财务申请<b>＊</b> <span>展开</span></a>
+					   		<div class="list_box_content">
+					   			<div class="task_time">
+					   				<p class="get_manager bond"><a>保证金要求<b>＊</b></a><span></span></p>
+					   				<hr>
+					   				<div class="bond_box" style="display: none;">
+					   					<p><input type="text" name="" id="" placeholder="保证金金额" class="bond_amount" /></p>
+					   					<hr>
+					   					<p class="checktime"><a class="bond_end_time">递交截止时间</a><span></span></p>
+					   					<hr>
+					   					<p class="seal_title">收款单位（全称）</p>
+					   					<textarea rows="" cols="" class="bond_company" placeholder="请填写"></textarea>
+					   					<hr>
+					   					<p class="seal_title">收款单位开户行</p>
+					   					<textarea rows="" cols="" class="bond_bank" placeholder="请填写"></textarea>
+					   					<hr>
+					   					<p class="seal_title">收款银行账号</p>
+					   					<textarea rows="" cols="" class="bond_bank_account" placeholder="请填写"></textarea>
+					   					<hr>
+					   					<p class="get_manager office_h"><a class="head_office">总公司转出形式</a><span></span></p>
+					   					<hr>
+					   					<p class="get_manager office_b"><a class="branch_office">分公司转总公司形式</a><span></span></p>
+					   					<hr>
+					   					<p class="seal_title">备注</p>
+					   					<textarea rows="" cols="" class="bond_remark" placeholder="请填写"></textarea>
+					   				</div>
+					   				<div class="guarantee_box">
+					   					<p><input type="text" name="" id="" placeholder="保函金额" class="guarantee_amount" /></p>
+					   					<hr>
+					   					<p class="checktime"><a class="guarantee_end_time">递交截止时间</a><span></span></p>
+					   					<hr>
+					   					<p class="seal_title">开具机构</p>
+					   					<textarea rows="" cols="" class="guarantee_company" placeholder="请填写"></textarea>
+					   					<hr>
+					   					<p class="seal_title">接收人</p>
+					   					<p><input type="text" name="" id="" placeholder="请填写" class="guarantee_receive" /></p>
+					   					<hr>
+					   					<p class="seal_title">接收人联系方式</p>
+					   					<p><input type="text" name="" id="" placeholder="请填写" class="guarantee_tel" /></p>
+					   					<hr>
+					   					<p class="seal_title">接收人地址</p>
+					   					<textarea rows="" cols="" class="guarantee_address" placeholder="请填写"></textarea>
+					   					<hr>
+					   					<p class="seal_title">保函有效期</p>
+					   					<p class="checktime"><a class="guarantee_period_brgin_time">开始时间</a><span></span></p>
+					   					<p class="checktime"><a class="guarantee_period_end_time">结束时间</a><span></span></p>
+					   					<hr>
+					   					<p class="seal_title">备注</p>
+					   					<textarea rows="" cols="" class="guarantee_remark" placeholder="请填写"></textarea>
+					   				</div>
+					   				
+					   			</div>
+					   		</div>
+					   	</li>
+					   	<li>
+					   		<a class="list_title" href="#">审批流程 <span>展开</span></a>
+					   		<div class="list_box_content">
+					   			<div class="task_time">
+					   				<p class="get_manager approval_process"><a>选择流程</a><span></span></p>
+					   				<hr>
+					   			</div>
+					   			<ul class="list_content_procedure">
+					   				
+					   			</ul>
+					   		</div>
+					   	</li>
+					   </ul>
+					</div>
+					
+					
+				</div>
+				<div class="footer_submit_three">
+					<span class="btn_cancel">取消</span><span class="btn_save">保存</span><span class="btn_submit">提交</span>
+				</div>
+				<div class="mui-off-canvas-backdrop"></div>
+			</div>
+		</div>
+		
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	var getId = common.getQueryUrl('id');
+	var projectName = common.getQueryUrl('name');
+	var isDetail = common.getQueryUrl('detail');
+	var processId; //流程ID
+	var managerList = []; //负责人
+	var managerIds = [];
+	var managerName = [];
+	var peopleList = []; //主要人员
+	var peopleIds = [];
+	var peopleName = [];
+	var sealData = []; //章列表
+	var electronSealList = []; //电子章列表
+	var physicsSealList = []; //物理章列表
+	var electronSealId = []; //电子章
+	var electName = [];//电子章选中
+	var physicsSealId = []; //物理章
+	var physicName = [];//物理章选中
+	var bondId; //保证金
+	var office = []; //转出形式
+	var officeTrans; //总公司转出选择
+	var branchOfficeTrans; //分公司转出选择
+	var processList = []; //流程列表	
+	var companyIntelligence = []; //公司资质
+	var companyIntelligenceId = [];//选中公司资质ID
+	var companyName = [];
+	var staffIntelligence = []; //人员资质
+	var staffIntelligenceId = [];//选中人员资质ID
+	var staffName = [];
+	var achievementList = []; //业绩
+	var achievementListId = [];//选中业绩ID
+	var achievementName = []; 
+	var fileList = [];
+	var isDisabled = false;
+	var startTime,endTime;
+	var bondList = [{
+			value: 0,
+			text: '不要求'
+		},
+		{
+			value: 1,
+			text: '投标保证金'
+		},
+		{
+			value: 2,
+			text: '投标保函（银行资信证明）'
+		}
+	];
+	$('.point_title').html(projectName);
+	
+	var input = $('input');
+	var textarea = $('textarea');
+	input.blur();
+	textarea.blur();
+	
+	window.onload = function(){
+		mui('.mui-scroll-wrapper').scroll({
+		deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+		});
+	}
+
+	document.getElementsByClassName('mui-inner-wrap')[0].addEventListener('drag', function(event) {
+	    event.stopPropagation();
+	});
+
+	common.promise()
+		.then(getManager)
+		.then(getPeople)
+		.then(getSeal)
+		.then(approvalProcess)
+		.then(getCompany)
+		.then(getCompanyIntelligence)
+		.then(getStaffIntelligence)
+		.then(getAchievement)
+		.then(function() {
+			//是否需要获取投标详情
+			if (isDetail) {
+				getBidDetail();
+			}
+		})
+
+
+	//获取详情
+	function getBidDetail() {
+		var url = '/api/BusinessManage/XMTBDetail';
+		request.post(url, {
+			ProjectId: getId
+		}).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				var data = res.data;
+				if(data.Honor_1.length > 0) {
+					for(var i=0;i<data.Honor_1.length;i++) {
+						var id = data.Honor_1[i].Id;
+						var name = data.Honor_1[i].Text;
+						companyIntelligenceId.push(id+'');
+						companyName.push(name);
+					}
+					$('.company_intelligence').find('a').html(companyName.join(','));
+				}
+				if(data.Honor_2.length > 0) {
+					for(var i=0;i<data.Honor_2.length;i++) {
+						var id = data.Honor_2[i].Id;
+						var name = data.Honor_2[i].Text.split('_')[0];
+						staffIntelligenceId.push(id + '');
+						staffName.push(name);
+					}
+					$('.staff_intelligence').find('a').html(staffName.join(','));
+				}
+				if(data.Honor_3.length > 0) {
+					for(var i=0;i<data.Honor_3.length;i++) {
+						var id = data.Honor_3[i].Id;
+						var name = data.Honor_3[i].Text;
+						achievementListId.push(id);
+						achievementName.push(name);
+					}
+					$('.achievement_intelligence').find('a').html(achievementName.join(','));
+				}
+				if (data.Number) {
+					$('.project_number').html(data.Number);
+				}
+				if(data.FZR.length > 0) {
+					managerIds = data.FZR;
+					$('.manager_list').find('a').html(data.FZR_Str);
+				}
+				if (data.ZYRY.length>0) {
+					peopleIds = data.ZYRY;
+					$('.people_list').find('a').html(data.ZYRY_Str);
+					peopleName = peopleName.concat(data.ZYRY_Str.split(','))
+				}
+					
+				if (data.lstFile.length > 0) {
+					fileList = data.lstFile;
+				}
+				for (var i = 0; i < data.BidStamp.length; i++) {
+					var item = data.BidStamp[i];
+					if (item < 200) {
+						electronSealId.push(item+'');
+						electName.push(common.getObjValue(sealData[0].Sub, item).SUB_NM);
+					} else {
+						physicsSealId.push(item+'');
+						physicName.push(common.getObjValue(sealData[1].Sub, item).SUB_NM);
+					}
+				}
+				$('.electron_seal').find('a').html(electName.join(',') || '电子章');
+				$('.physics_seal').find('a').html(physicName.join(',') || '物理章');
+				if (data.Bid_StampCount) {
+					$('.seal_number').val(data.Bid_StampCount);
+				}
+				if (data.Bid_StampRequirement) {
+					$('.seal_require').val(data.Bid_StampRequirement);
+				}
+				if (data.Bid_OriginalBegin) {
+					$('.file_start_time').html(data.Bid_OriginalBegin);
+				}
+				if (data.Bid_OriginalEnd) {
+					$('.file_end_time').html(data.Bid_OriginalEnd);
+				}
+				$('.bond').find('a').html(common.getKeyValue(bondList, data.CallBid_Requirement));
+				bondId = data.CallBid_Requirement;
+				if (bondId == 2) {
+					$('.bond_box').css('display', 'none');
+					$('.guarantee_box').css('display', 'block');
+				} else {
+					$('.guarantee_box').css('display', 'none');
+					$('.bond_box').css('display', 'block');
+				}
+				if (data.CallBid_Requirement == 1) {
+					if (data.Cash_Price) {
+						$('.bond_amount').val(data.Cash_Price);
+					}
+					if (data.Cash_SubmitTime) {
+						$('.bond_end_time').html(data.Cash_SubmitTime);
+					}
+					if (data.Cash_Unit) {
+						$('.bond_company').val(data.Cash_Unit);
+					}
+					if (data.Cash_BankName) {
+						$('.bond_bank').val(data.Cash_BankName);
+					}
+					if (data.Cash_BankAccount) {
+						$('.bond_bank_account').val(data.Cash_BankAccount);
+					}
+					if (data.Cash_CompanyTrans) {
+						officeTrans = data.Cash_CompanyTrans;
+						$('.head_office').html(common.getKeyValue(office, data.Cash_CompanyTrans));
+					}
+					if (data.Cash_ChildCompanyTrans) {
+						branchOfficeTrans = data.Cash_ChildCompanyTrans;
+						$('.branch_office').html(common.getKeyValue(office, data.Cash_ChildCompanyTrans));
+					}
+					if (data.Cash_Remark) {
+						$('.bond_remark').val(data.Cash_Remark);
+					}
+				} else if (data.CallBid_Requirement == 2) {
+					//保函
+					if (data.Guarantee_Price) {
+						$('.guarantee_amount').val(data.Guarantee_Price);
+					}
+					if (data.Guarantee_SubmitTime) {
+						$('.guarantee_end_time').html(data.Guarantee_SubmitTime);
+					}
+					if (data.Guarantee_Unit) {
+						$('.guarantee_company').val(data.Guarantee_Unit);
+					}
+					if (data.Guarantee_Receiver) {
+						$('.guarantee_company').val(data.Guarantee_Receiver);
+					}
+					if (data.Guarantee_Tel) {
+						$('.guarantee_tel').val(data.Guarantee_Tel);
+					}
+					if (data.Guarantee_ReceiverAddress) {
+						$('.guarantee_address').val(data.Guarantee_ReceiverAddress);
+					}
+					if (data.Guarantee_Remark) {
+						$('.guarantee_remark').val(data.Guarantee_Remark);
+					}
+					if (data.Guarantee_PeriodBegin) {
+						$('.guarantee_period_brgin_time').val(data.Guarantee_PeriodBegin);
+					}
+					if (data.Guarantee_PeriodEnd) {
+						$('.guarantee_period_end_time').val(data.Guarantee_PeriodEnd);
+					}
+				}
+
+				if (data.Template > 0) {
+					processId = data.Template;
+					processDetail(processId);
+					if(data.State != -1) {
+						isDisabled = true;
+						$('#list_box').find('input').attr('disabled', 'disabled');
+						$('#list_box').find('textarea').attr('disabled', 'disabled');
+						$('.footer_submit_three').css('display','none');
+					}
+				}
+
+			}
+			
+			var html1= '';
+			var html2 = '';
+			for (var i = 0; i < data.lstFile.length; i++) {
+				var lists = data.lstFile[i];
+				var deStr = '删除';
+				if(isDisabled) {
+					deStr = '';
+				}
+				if (lists.Type == '投标申请_投标文件') {
+					html1 += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + lists.Extension +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+					
+				} else {
+					html2 += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.FileName + lists.Extension +
+						'</span><span class="file_list_delete hide_span">'+ deStr +'</span></li>';
+				}
+			}
+			if(html1 != '') {
+				$('.file_tendering_list').html(html2); 
+			}
+			if(html2 != '') {
+				$('.enclosure_list').html(html1); 
+			}
+		})
+	}
+
+	function getData(res, flag) {
+		var data = [];
+		for (var i = 0; i < res.data.length; i++) {
+			var tem = {};
+			tem.value = res.data[i].Id;
+			tem.text = res.data[i].RealName;
+			data.push(tem);
+		}
+		if (flag) {
+			managerList = data;
+		} else {
+			peopleList = data;
+		}
+
+		return data;
+	}
+
+	//获取项目负责人列表
+	function getManager() {
+		var url = '/api/BusinessManage/XMTBFZRList';
+		return request.post(url, {
+			ProjectId: getId
+		}).then(function(res) {
+			if (res.code == 200) {
+				return getData(res, true);
+			}
+		})
+	}
+
+	//获取主要人员列表
+	function getPeople() {
+		var url = '/api/BusinessManage/XMTBZYRYList';
+		return request.post(url, {
+			ProjectId: getId
+		}).then(function(res) {
+			if (res.code == 200) {
+				return getData(res);
+			}
+		})
+	}
+
+	//获取盖章列表
+	function getSeal() {
+		return request.post('/api/BusinessManage/GZList').then(function(res) {
+			if (res.code == 200) {
+				sealData = res.data;
+				getSealData(sealData, 0)
+				getSealData(sealData, 1)
+				return res.data;
+			}
+		})
+	}
+
+	function getSealData(res, index) {
+		var data = [];
+		for (var i = 0; i < res[index].Sub.length; i++) {
+			var item = res[index].Sub[i];
+			var obj = {};
+			obj.value = item.SUB_ID;
+			obj.text = item.SUB_NM;
+			data.push(obj);
+		}
+		if (index == 0) {
+			electronSealList = data;
+		} else {
+			physicsSealList = data;
+		}
+		return data;
+	}
+
+	//获取审批流程
+	function approvalProcess() {
+		return request.post('/api/SystemManage/ApplyTemplate', {
+			"ModuleName": "经营管理"
+		}).then(function(res) {
+			if (res.code == 200) {
+				var data = [];
+				for (var i = 0; i < res.data.length; i++) {
+					var item = {};
+					item.value = res.data[i].Id;
+					item.text = res.data[i].Title;
+					data.push(item);
+				}
+				processList = data;
+				return data;
+			}
+		})
+	}
+	//获取审批流程详情图
+	// function getProcessDetail() {
+	// 	var url = '/api/SystemManage/ApplyTemplateView';
+	// 	console.log(processId)
+	// 	return request.post(url, {
+	// 		Id: processId
+	// 	}).then(function(res) {
+	// 		console.log(res);
+	// 		if (res.code == 200) {
+	// 			var html = ''
+	// 			for (var i = 0; i < res.data.list.length; i++) {
+	// 				var item = res.data.list[i];
+	// 				html += '<li><div class="procedure_left"><span>' + item.Title.substring(item.Title.length - 2) +
+	// 					'</span><i></i></div>' +
+	// 					'<div class="procedure_right"><p>' + item.Title + '：<span>' + item.Detail + '</span></p></div></li>'
+	// 			}
+	// 			$('.list_content_procedure').html(html);
+	// 		}
+	// 	})
+	// }
+	//获取公司转出形式
+	function getCompany() {
+		var url = '/api/BusinessManage/GSZCXSList';
+		return request.post(url).then(function(res) {
+			if (res.code == 200) {
+				var arr = [];
+				for (var i = 0; i < res.data.length; i++) {
+					var obj = {};
+					obj.value = res.data[i].SUB_ID;
+					obj.text = res.data[i].SUB_NM;
+					arr.push(obj);
+				}
+				office = arr;
+				return arr;
+			}
+		})
+	}
+
+	//获取公司资质
+	function getCompanyIntelligence() {
+		var url = '/api/BusinessManage/CompanyHonorList';
+		return request.post(url).then(function(res) {
+			if (res.code == 200) {
+				companyIntelligence = res.data;
+				return;
+			}
+		})
+	}
+	//获取人员资质
+	function getStaffIntelligence() {
+		var url = '/api/BusinessManage/UserHonorList';
+		return request.post(url).then(function(res) {
+			if (res.code == 200) {
+				staffIntelligence = res.data;
+				return;
+			}
+		})
+	}
+	//获取业绩
+	function getAchievement() {
+		var url = '/api/BusinessManage/ProjectHonorList';
+		return request.post(url).then(function(res) {
+			if (res.code == 200) {
+				achievementList = res.data;
+				console.log(achievementList)
+				return;
+			}
+		})
+	}
+
+	(function(mui, doc) {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				input.blur();
+				textarea.blur();
+				if (isDisabled) return;
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}else {
+							endTime = rs.text;
+						}
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					if($(_self).hasClass('end_time')) {
+						var yearMonth = startTime.split('-');
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}
+					options.type = 'date';
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+						}else {
+							endTime = rs.text;
+						}
+						console.log(startTime)
+						$(_self).find('a').html(rs.text);
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					input.blur();
+					textarea.blur();
+					if (isDisabled) return;
+					var _this = this;
+					if ($(this).hasClass('approval_process')) {
+						common.promise().then(function(res) {
+							userPicker.setData(processList);
+							return userPicker;
+						}).then(function() {
+							return new Promise(function(resolve, reject) {
+								userPicker.show(function(items) {
+									$(_this).find('a').html(items[0].text);
+									processId = items[0].value;
+									return resolve()
+								});
+							})
+
+						}).then(function() {
+							getProcessDetail(processId)
+						})
+					} else if ($(this).hasClass('bond')) {
+						userPicker.setData(bondList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							bondId = items[0].value;
+							if (bondId == 2) {
+								$('.bond_box').hide();
+								$('.guarantee_box').show();
+							} else if(bondId == 1){
+								$('.guarantee_box').hide();
+								$('.bond_box').show();
+							} else {
+								$('.guarantee_box').hide();
+								$('.bond_box').hide();
+							}
+						});
+					} else if ($(this).hasClass('office_h')) {
+						userPicker.setData(office);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							officeTrans = items[0].value;
+						});
+					} else if ($(this).hasClass('office_b')) {
+						userPicker.setData(office);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							branchOfficeTrans = items[0].value;
+						});
+					} else if ($(this).hasClass('manager_list')) {
+						userPicker.setData(managerList);
+						userPicker.show(function(items) {
+							$(_this).find('a').html(items[0].text);
+							var data = [];
+							data.push(items[0].value)
+							managerIds = data;
+						});
+					}
+
+				}, false);
+			});
+
+
+		});
+	})(mui, document);
+
+	mui('#list_box').on('tap', '.list_title', function() {
+		input.blur();
+		textarea.blur();
+		var display = $(this).next().css('display') === 'none' ? false : true;
+		$(this).next().slideToggle();
+		if (display) {
+			$(this).find('span').html('展开');
+		} else {
+			$(this).find('span').html('收起');
+		}
+		var this_length = $('.list_content_procedure').find('li').length;
+		for(var i=0;i<this_length;i++) {
+			var li = $('.list_content_procedure').find('li').eq(i);
+			$(li).find('.procedure_left').css('height',$(li).css('height'))
+		}
+	})
+
+	//点击文件上传按钮 、招标文件
+	$("#add_file_tendering").on('change', function(e) {
+		input.blur();
+		textarea.blur();
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,false,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	})
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		console.log($(this))
+		var id = $(this).parent('li').attr('id');
+		var item = $(this).parent('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parent('li').remove();
+	})
+	//投标文件
+	$("#add_file_bid").on('change', function(e) {
+		input.blur();
+		textarea.blur();
+		var files = $(this)[0].files;
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,true,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.enclosure_list').append(names)
+		}
+	})
+	mui('.enclosure_list').on('tap','.file_list_delete',function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		var id = $(this).parent('li').attr('id');
+		var item = $(this).parent('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parent('li').remove();
+	})
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		input.blur();
+		textarea.blur();
+		preview(this,fileList)
+	})
+	mui('.enclosure_list').on('tap','.file_list_name',function() {
+		input.blur();
+		textarea.blur();
+		preview(this,fileList)
+	})
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+
+	function upload(formData, flag, index) {
+		var url = '/api/BusinessManage/UploadFile?Type=CallBid';
+		if (flag) {
+			url = '/api/BusinessManage/UploadFile?Type=Bid';
+		}
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": flag ? "投标申请_投标文件" : "投标申请_招标文件",
+					"tid": index
+				}
+				if (fileList.length > 0) {
+					console.log(fileList, data)
+					for (var i = 0; i < fileList.length; i++) {
+						if(fileList[i].FileName == data.FileName && 
+						fileList[i].Extension == data.Extension &&
+						fileList[i].Type == data.Type){
+							fileList.splice(i,1); 
+						}
+					}
+				}
+				fileList.push(data)
+				return;
+			}
+		})
+	}
+
+	//提交数据
+	function submit(flag) {
+		var postData = {};
+		if (flag) {
+			postData.IsSubmit = true;
+		} else {
+			postData.IsSubmit = false;
+		}
+		postData.lstFile = [];
+		postData.BidStamp = [];
+		if (electronSealId.length > 0) {
+			postData.BidStamp = postData.BidStamp.concat(electronSealId)
+		}
+		if (physicsSealId.length > 0) {
+			postData.BidStamp = postData.BidStamp.concat(physicsSealId)
+		}
+
+		if (managerIds.length == 0) {
+			mui.toast('请选择项目负责人！！！');
+			return;
+		}
+		// if (fileList.length == 0) {
+		// 	if (!$("#add_file_tendering")[0].files[0]) {
+		// 		mui.toast('请上传招标文件！');
+		// 		return;
+		// 	}
+		// 	if (!$("#add_file_bid")[0].files[0]) {
+		// 		mui.toast('请上传投标文件！');
+		// 		return;
+		// 	}
+		// }
+		var isHasTBList = false;
+		var isHasZBList = false;
+		for(var i=0;i<fileList.length;i++) {
+			if(fileList[i].Type == '投标申请_投标文件') {
+				isHasTBList = true;
+			}
+			if(fileList[i].Type == '投标申请_招标文件') {
+				isHasZBList = true
+			}
+		}
+		if(!isHasTBList) {
+			if (!$("#add_file_bid")[0].files[0]) {
+				mui.toast('请上传投标文件！');
+				return;
+			}
+		}
+		if(!isHasZBList) {
+			if (!$("#add_file_tendering")[0].files[0]) {
+				mui.toast('请上传招标文件！');
+				return;
+			}
+		}
+		
+
+		if ($('.bond').find('a').find('b').length > 0) {
+			mui.toast('请选择财务申请-保证金要求！！！');
+			return;
+		}
+
+		
+		var managerListInput = $('.manager_list').find('a').html().split(',');
+		var peopleList = [];
+		if ($('.people_list').find('a').find('b').length == 0) {
+			peopleList = $('.people_list').find('a').html().split(',');
+		}
+		postData.ProjectId = getId;
+		postData.XMFZR_C = managerIds;
+		postData.ZYRY_C = peopleIds;
+		postData.Bid_StampCount = $('.seal_number').val();
+		postData.Bid_StampRequirement = $('.seal_require').val();
+		postData.Bid_OriginalBegin = $('.file_start_time').html();
+		postData.Bid_OriginalEnd = $('.file_end_time').html();
+		postData.CallBid_Requirement = bondId;
+		if (bondId == 1) {
+			postData.Cash_SubmitTime = $('.bond_end_time').html();
+			postData.Cash_Price = $('.bond_amount').val();
+			postData.Cash_Unit = $('.bond_company').val();
+			postData.Cash_BankName = $('.bond_bank').val();
+			postData.Cash_BankAccount = $('.bond_bank_account').val();
+			postData.Cash_CompanyTrans = officeTrans;
+			postData.Cash_ChildCompanyTrans = branchOfficeTrans;
+			postData.Cash_Remark = $('.bond_remark').val();
+		} else if (bondId == 2) {
+			postData.Guarantee_SubmitTime = $('.guarantee_end_time').html();
+			postData.Guarantee_Price = $('.guarantee_amount').val();
+			postData.Guarantee_Unit = $('.guarantee_company').val();
+			postData.Guarantee_Receiver = $('.guarantee_receive').val();
+			postData.Guarantee_Tel = $('.guarantee_tel').val();
+			postData.Guarantee_ReceiverAddress = $('.guarantee_address').val();
+			postData.Guarantee_Remark = $('.guarantee_remark').val();
+			postData.Guarantee_PeriodBegin = $('.guarantee_period_brgin_time').html();
+			postData.Guarantee_PeriodEnd = $('.guarantee_period_end_time').html();
+		}
+
+		postData.Template = processId;
+		postData.array_honor_1 = companyIntelligenceId;
+		postData.array_honor_2 = staffIntelligenceId;
+		postData.array_honor_3 = achievementListId;
+
+		common.promise()
+		// .then(function() {
+		// 	if ($("#add_file_tendering")[0].files.length>0) {
+		// 		var files = $("#add_file_tendering")[0].files;
+		// 		var arr = []
+		// 		for(var i=0;i<files.length;i++) {
+		// 			var formData = new FormData();
+		// 			formData.append("file",files[i]);
+		// 			arr.push(upload(formData))
+		// 		}
+		// 		return Promise.all(arr);
+		// 	} else {
+		// 		return;
+		// 	}
+		// }).then(function() {
+		// 	if ($("#add_file_bid")[0].files.length>0) {
+		// 		var files = $("#add_file_bid")[0].files;
+		// 		var arr = []
+		// 		for(var i=0;i<files.length;i++) {
+		// 			var formData = new FormData();
+		// 			formData.append("file",files[i]);
+		// 			arr.push(upload(formData,true))
+		// 		}
+		// 		return Promise.all(arr);
+		// 	} else {
+		// 		return;
+		// 	}
+		// })
+		.then(function() {
+			postData.lstFile = fileList;
+			console.log(postData)
+			var url = '/api/BusinessManage/SaveXMTB';
+			request.post(url, postData).then(function(res) {
+				console.log(res);
+				if (res.code == 200) {
+					mui.back();
+				}else {
+					mui.toast('失败！'+ res.msg);
+				}
+			})
+		})
+	}
+	mui('.footer_submit_three').on('tap', '.btn_save', function() {
+		input.blur();
+		textarea.blur();
+		submit();
+	})
+	mui('.footer_submit_three').on('tap', '.btn_submit', function() {
+		input.blur();
+		textarea.blur();
+		submit(true);
+	})
+	
+	function slideData(type,dataArr) {
+		var html = ''
+		for(var i=0;i<dataArr.length;i++) {
+			if(type == 'company_intelligence') {
+				html += '<li Id='+ dataArr[i].Id +' type='+ type +'>'+ dataArr[i].HName +'</li>';
+			}else if(type == 'staff_intelligence') {
+				html += '<li Id='+ dataArr[i].Id +' type='+ type +'>'+ dataArr[i].RealName +'</li>';
+			}else if(type == 'achievement_intelligence'){
+				html += '<li Id='+ dataArr[i].CId +' type='+ type +'>'+ dataArr[i].CName +'</li>';
+			}else if(type == 'electron_seal' || type == 'physics_seal'){
+				html += '<li Id='+ dataArr[i].value +' type='+ type +'>'+ dataArr[i].text +'</li>';
+			}else if(type == 'people_list'){
+				html += '<li Id='+ dataArr[i].value +' type='+ type +'>'+ dataArr[i].text +'</li>';
+			}else if(type == 'manager_list'){
+				html += '<li Id='+ dataArr[i].value +' type='+ type +'>'+ dataArr[i].text +'</li>';
+			}
+		}
+		$('#slide_list').attr('type',type);
+		$('#slide_list').html(html);
+	}
+	
+	function slideDetail(idArr) {
+		var list = $('#slide_list li');
+		for(var i=0;i<idArr.length;i++) {
+			for(var j=0;j<list.length;j++) {
+				if(idArr[i] == $(list[j]).attr('Id')) {
+					$(list[j]).addClass('active');
+				}
+			}
+		}
+	}
+	
+	//打开侧滑
+	//公司资质
+	mui('#list_box').on('tap', '.company_intelligence', function() {
+		input.blur();
+		textarea.blur();
+		if(isDisabled) return;
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+		$('.silder_title').html('公司资质');
+		slideData('company_intelligence',companyIntelligence);
+		if(companyIntelligenceId.length > 0) {
+			slideDetail(companyIntelligenceId);
+		}
+	})
+	//人员资质
+	mui('#list_box').on('tap', '.staff_intelligence', function() {
+		input.blur();textarea.blur();
+		if(isDisabled) return;
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+		$('.silder_title').html('人员资质');
+		slideData('staff_intelligence',staffIntelligence);
+		if(staffIntelligenceId.length > 0) {
+			slideDetail(staffIntelligenceId);
+		}
+	})
+	//业绩
+	mui('#list_box').on('tap', '.achievement_intelligence', function() {
+		input.blur();textarea.blur();
+		if(isDisabled) return;
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+		$('.silder_title').html('业绩');
+		slideData('achievement_intelligence',achievementList);
+		if(achievementListId.length > 0) {
+			slideDetail(achievementListId);
+		}
+	})
+	//电子章
+	mui('#list_box').on('tap', '.electron_seal', function() {
+		input.blur();textarea.blur();
+		if(isDisabled) return;
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+		$('.silder_title').html('电子章');
+		slideData('electron_seal',electronSealList);
+		if(electronSealId.length > 0) {
+			slideDetail(electronSealId);
+		}
+	})
+	//物理章
+	mui('#list_box').on('tap', '.physics_seal', function() {
+		input.blur();textarea.blur();
+		if(isDisabled) return;
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+		$('.silder_title').html('物理章');
+		slideData('physics_seal',physicsSealList);
+		if(physicsSealId.length > 0) {
+			slideDetail(physicsSealId);
+		}
+	})
+	//主要人员选择
+	mui('#list_box').on('tap', '.people_list', function() {
+		input.blur();textarea.blur();
+		if(isDisabled) return;
+		mui('.mui-off-canvas-wrap').offCanvas().show();
+		$('.silder_title').html('主要人员选择');
+		slideData('people_list',peopleList);
+		if(peopleIds.length > 0) {
+			slideDetail(peopleIds);
+		}
+	})
+	//负责人选择
+	// mui('#list_box').on('tap', '.manager_list', function() {
+	// 	if(isDisabled) return;
+	// 	mui('.mui-off-canvas-wrap').offCanvas().show();
+	// 		$('.silder_title').html('负责人选择');
+	// 	slideData('manager_list',managerList);
+	// 	if(managerIds.length > 0) {
+	// 		slideDetail(managerIds);
+	// 	}
+	// })
+	//侧滑点击列表
+	mui('#slide_list').on('tap', 'li', function() {
+		input.blur();textarea.blur();
+		var type = $(this).attr('type');
+		var Id = $(this).attr('Id');
+		var Hname = $(this).html();
+		if($(this).hasClass('active')) {
+			$(this).removeClass('active');
+			if(type == 'company_intelligence') {
+				var index = companyIntelligenceId.indexOf(Id);
+				companyIntelligenceId.splice(index,1);
+				var nameIndex = companyName.indexOf(Hname);
+				companyName.splice(nameIndex,1);
+				console.log(companyIntelligenceId)
+				console.log(companyName)
+			}else if(type == 'staff_intelligence') {
+				var index = staffIntelligenceId.indexOf(Id);
+				staffIntelligenceId.splice(index,1);
+				var nameIndex = staffName.indexOf(Hname);
+				staffName.splice(nameIndex,1);
+			}else if(type == 'achievement_intelligence'){
+				var index = achievementListId.indexOf(Id);
+				achievementListId.splice(index,1);
+				var nameIndex = achievementName.indexOf(Hname);
+				achievementName.splice(nameIndex,1);
+			}else if(type == 'electron_seal'){
+				var index = electronSealId.indexOf(Id);
+				electronSealId.splice(index,1);
+				var nameIndex = electName.indexOf(Hname);
+				electName.splice(nameIndex,1);
+			}else if(type == 'physics_seal'){
+				console.log(physicsSealId)
+				var index = physicsSealId.indexOf(Id);
+				physicsSealId.splice(index,1);
+				var nameIndex = physicName.indexOf(Hname);
+				physicName.splice(nameIndex,1);
+			}else if(type == 'people_list'){
+				var index = peopleIds.indexOf(Id);
+				peopleIds.splice(index,1);
+				var nameIndex = peopleName.indexOf(Hname);
+				peopleName.splice(nameIndex,1);
+			}else if(type == 'manager_list'){
+				var index = managerIds.indexOf(Id);
+				managerIds.splice(index,1);
+				var nameIndex = managerName.indexOf(Hname);
+				managerName.splice(nameIndex,1);
+			}
+		}else {
+			if(type == 'company_intelligence') {
+				companyIntelligenceId.push(Id);
+				companyName.push(Hname)
+			}else if(type == 'staff_intelligence') {
+				staffIntelligenceId.push(Id);
+				staffName.push(Hname)
+			}else if(type == 'achievement_intelligence'){
+				achievementListId.push(Id);
+				achievementName.push(Hname)
+			}else if(type == 'electron_seal'){
+				electronSealId.push(Id);
+				electName.push(Hname)
+			}else if(type == 'physics_seal'){
+				physicsSealId.push(Id);
+				physicName.push(Hname)
+			}else if(type == 'people_list'){
+				peopleIds.push(Id);
+				peopleName.push(Hname)
+			}else if(type == 'manager_list'){
+				managerIds.push(Id);
+				managerName.push(Hname)
+			}
+			$(this).addClass('active');
+		}
+		console.log(companyIntelligenceId)
+		console.log(companyName)
+	})
+	
+	//侧滑确认选择
+	mui('.footer_submit').on('tap', '.btn_submit_slide', function() {
+		input.blur();textarea.blur();
+		var type = $('#slide_list').attr('type');
+		if(type == 'company_intelligence') {
+			$('.company_intelligence').find('a').html(companyName.join(',') || '公司资质');
+		}else if(type == 'staff_intelligence') {
+			$('.staff_intelligence').find('a').html(staffName.join(',') || '人员资质');
+		}else if(type == 'achievement_intelligence'){
+			$('.achievement_intelligence').find('a').html(achievementName.join(',') || '业绩');
+		}else if(type == 'electron_seal'){
+			$('.electron_seal').find('a').html(electName.join(',') || '电子章');
+		}else if(type == 'physics_seal'){
+			$('.physics_seal').find('a').html(physicName.join(',') || '物理章');
+		}else if(type == 'people_list'){
+			$('.people_list').find('a').html(peopleName.join(',') || '标书编写主要人员');
+		}else if(type == 'manager_list'){
+			$('.manager_list').find('a').html(managerName.join(',') || '标书编写负责人');
+		}
+		
+		mui('.mui-off-canvas-wrap').offCanvas().close();
+	})
+	//关闭侧滑
+	mui('.footer_submit').on('tap', '.btn_cancel_slide', function() {
+		input.blur();textarea.blur();
+		mui('.mui-off-canvas-wrap').offCanvas().close();
+	})
+	
+
+</script>

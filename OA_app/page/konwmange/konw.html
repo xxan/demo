@@ -1,0 +1,357 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/konw.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig:{
+				   tap: true, //默认为true
+				   doubletap: true, //默认为false
+				   longtap: true, //默认为false
+				   swipe: true, //默认为true
+				   drag: true, //默认为true
+				   hold:false,//默认为false，不监听
+				   release:false//默认为false，不监听
+				  }
+			})
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">知识管理</h1>
+			<span class="mui-nav-more">
+				<img src="../../img/more_know.png" >
+			</span>
+			
+		</header>
+		<div class="mui-nav-more_nr_t">
+			<div class="mui-nav-more_nr">
+				<p>
+					<img class="add_invoice" src="../../img/fenlei.png"><span>新建分类</span>
+				</p>
+				<p class="add_files">
+					<img class="add_invoice" src="../../img/file_know.png"><span>添加文档</span>
+				</p>
+			</div>
+		</div>
+		
+		<div class="mui-content">
+			<div class="know_title">
+				<span class="active" index="0">共享文档<i></i></span><span index="1">项目档案<i></i></span>
+			</div>
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<p class="up_fress data-loading-icon">
+					<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+				</p>
+				<div class="mui-scroll">
+					<ul class="revene_all">
+						<!-- <li>
+							<div class="list_info">
+								<img src="../../img/file_know.png" >
+								<span>企业文化112</span>
+							</div>
+							<div class="list_btn">
+								<span class="list_btn_edit"><img src="../../img/know_edit.png" ></span><span class="list_btn_del"><img src="../../img/know_del.png" ></span>
+							</div>
+						</li> -->
+					</ul>
+					<div class="detail_info detail_info_no_data bid_no_data">
+						<img src="../../img/no_data.png" >
+						<p>还未有数据！</p>
+					</div>
+				</div>
+			</div>
+			<p class="down_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+			</p>
+		</div>
+		
+		<div class="add_file_modal mui-backdrop">
+			<div class="add_file_box">
+				<p>新建分类</p>
+				<input type="text" class="file_name" value="" onfocus="changeInput(this)" placeholder="请输入新文件夹名字"/>
+				<div class="btn_modal">
+					<span class="modal_cancel">取消</span><span class="modal_sure">确定</span>
+				</div>
+			</div>
+		</div>
+		
+		
+	</body>
+
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	var index = 0;
+	var flagTab = common.getQueryUrl('tabId');
+	var editId;
+	var page = 1;
+	
+	index = Number(localStorage.getItem('knowIndex')) || 0;
+
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios?0.003:0.0009
+	});
+	var isfresh = false;
+	document.querySelector('#pullrefresh').addEventListener('scroll', function(e) {
+		if(isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('paddingTop', '40px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('display', 'block');
+				$('#search_input').val('');
+				page = 1;
+				getDocumentList().then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('display', 'none');
+						$('#pullrefresh').css('paddingTop', '0px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -80) {
+			var liLength = $('.revene_all li').length;
+			if (liLength % 30 != 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt( liLength / 30) + 1;
+			getDocumentList(true).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+	clickInit();
+	
+	common.promise().then(function(){
+		mui.showLoading('加载中...');
+		return;
+	}).then(function() {
+		if(index == 1) {
+			$('.know_title').find('span').eq(index).addClass('active').siblings().removeClass('active');
+			$('.mui-nav-more').hide();
+			return getDocumentList()
+		}else {
+			$('.mui-nav-more').show();
+			return getList();
+		}
+	})
+	.then(function() {
+		mui.hideLoading();
+	})
+	
+	function getList() {
+		var url = '/api/DataManage/GetDocType';
+		return request.post(url).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					html += '<li id='+ item.baseId +'><div class="list_info"><img src="../../img/file_know.png" >';
+					html +=	'<span>'+item.Name+'</span>';
+					html +=	'</div><div class="list_btn"><span class="list_btn_edit"></span><span class="list_btn_del"></span></div></li>';
+				}
+				$('.revene_all').html(html)
+				if($('.revene_all li').length == 0) {
+					$('.bid_no_data').show();
+				}else {
+					$('.bid_no_data').hide();
+				}
+			}else {
+				mui.toast('获取列表失败！');
+			}
+			return res
+		})
+	}
+	
+	function getDocumentList(flag) {
+		var url = '/api/DataManage/ArchiveQuery';
+		var post = {
+			page: page,
+			limit: 30,
+		}
+		return request.post(url,post).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data);
+				var html = '';
+				for(var i=0;i<res.data.length;i++) {
+					var item = res.data[i];
+					html += '<li id='+ item.Id +'><div class="list_info"><img src="../../img/file_know.png" >';
+					html +=	'<span>'+item.Name+'</span>';
+					html +=	'</div><div class="list_btn"><span class="list_btn_edit"></span><span class="list_btn_del"></span></div></li>';
+				}
+				if(flag) {
+					$('.revene_all').ppend(html)
+				}else {
+					$('.revene_all').html(html)
+				}
+				if($('.revene_all li').length == 0) {
+					$('.bid_no_data').show();
+				}else {
+					$('.bid_no_data').hide();
+				}
+			}else {
+				mui.toast('获取列表失败！');
+			}
+			return res
+		})
+	}
+	
+	
+	
+	function clickInit() {
+		//点击头部更多
+		mui('.header_box').on('tap','.mui-nav-more',function() {
+			$('.mui-nav-more_nr_t').show();
+		})
+		
+		mui('.mui-nav-more_nr_t')[0].addEventListener('tap',function() {
+			$('.mui-nav-more_nr_t').hide();
+		})
+		
+		mui('.mui-nav-more_nr').on('tap','p',function() {
+			if($(this).hasClass('add_files')) {
+				window.location.href = 'add_file.html';
+			}else {
+				editId = null;
+				$('.add_file_box p').html('新建分类');
+				$('.add_file_box input').val('');
+				$('.add_file_modal').show();
+			}
+		})
+		
+		//导航切换
+		mui('.know_title').on('tap','span',function() {
+			index = Number($(this).attr('index'));
+			localStorage.setItem('knowIndex',index);
+			if(index == 1) {
+				$('.mui-nav-more').hide();
+				mui.showLoading('加载中...');
+				getDocumentList();
+			}else {
+				$('.mui-nav-more').show();
+				mui.showLoading('加载中...')
+				getList();
+			}
+			$(this).addClass('active').siblings().removeClass('active');
+		})
+		
+		//左滑
+		mui('.revene_all').on('swipeleft', 'li', function() {
+			if(index == 1) return;
+			$(this).find('.list_info').animate({left: '-120px'},500).find('span').css('textAlign','center');
+			$(this).siblings().find('.list_info').animate({left: '0px'},500).find('span').css('textAlign','left');
+		});
+		//右滑
+		mui('.revene_all').on('swiperight', 'li', function() {
+			if(index == 1) return;
+			$(this).find('.list_info').animate({left: '0px'},500).find('span').css('textAlign','left');
+		});
+		
+		//模态框按钮
+		mui('.btn_modal').on('tap','span',function() {
+			if($(this).hasClass('modal_sure')) {
+				var newName = $('.file_name').val();
+				if(!newName) {
+					$('.file_name').css('border','solid 1px red');
+					return;
+				}
+				var url = '/api/DataManage/SaveDocType';
+				var postData = {
+					SUB_NM: newName
+				}
+				if(editId) {
+					postData.SUB_ID = editId;
+				}
+				request.post(url,postData).then(function(res) {
+					if(res.code == 200){
+						getList()
+					}else {
+						mui.toast('失败！'+ res.msg)
+					}
+				})
+			}
+			$('.add_file_modal').hide();
+		})
+		
+		//列表点击修改
+		mui('.revene_all').on('tap','.list_btn_edit',function() {
+			$('.add_file_box p').html('修改分类名');
+			$('.add_file_box input').val($(this).parents('li').find('.list_info').find('span').html());
+			$('.add_file_modal').show();
+			editId = $(this).parents('li').attr('id');
+		})
+		//列表删除
+		mui('.revene_all').on('tap','.list_btn_del',function() {
+			var id = $(this).parents('li').attr('id');
+			var url = '/api/DataManage/DeleteDocType';
+			var _this = this;
+			request.post(url,{ids: [id]}).then(function(res) {
+				console.log(res);
+				if(res.code == 200) {
+					$(_this).parents('li').remove();
+				}else {
+					mui.toast('删除失败！');
+				}
+			})
+		})
+	
+		//列表详情
+		mui('.revene_all').on('tap','li',function(e) {
+			if($(e.target).hasClass('list_btn_edit') || $(e.target).hasClass('list_btn_del')) {
+				return;
+			}
+			var id = $(this).attr('id');
+			var name = $(this).find('.list_info').find('span').html();
+			if(index == 1) {
+				window.location.href = 'document.html?id=' + id + '&name=' + name;
+			}else {
+				window.location.href = 'share_file.html?id=' + id + '&name=' + name;
+			}
+			
+		})
+	
+	}
+	
+	function changeInput(self) {
+		$(self).css('border','none')
+	}
+	
+	
+	
+</script>

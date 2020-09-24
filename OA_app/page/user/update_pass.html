@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<style type="text/css">
+			.footer_submit span {
+				width: 100%;
+			}
+
+			.task_time input {
+				width: 70%;
+			}
+
+			.password_text {
+				width: 70% !important;
+				padding-right: 30px;
+			}
+			.task_time .mui-input-row{
+			    width: 100%;
+			    min-height: 48px;
+			    line-height: 48px;
+			    padding: 0 10% 0 5%;
+			    color: #666666;
+			    font-size: 14px;
+			    position: relative;
+			    border-bottom: solid 1px #E6E6E6;
+			    margin: 0px;
+			}
+		</style>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">修改密码</h1>
+		</header>
+		<div class="mui-content">
+			<div class="task_time">
+				<p>登录账号：<input type="text" name="" id="" placeholder="请填写" class="user_name" disabled /></p>
+				<div class="mui-input-row">
+					原始密码：
+					<input type="password" class="old_pass mui-input-password" placeholder="请输入密码">
+				</div>
+				<div class="mui-input-row">
+					重置密码：
+					<input type="password" class="new_pass mui-input-password" placeholder="请输入密码">
+				</div>
+				<div class="mui-input-row">
+					确认密码：
+					<input type="password" class="sure_pass mui-input-password" placeholder="请输入密码">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="footer_submit">
+			<span class="btn_save">确认</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+	$('.user_name').val(userInfo.UserName);
+	var id = userInfo.Id;
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		var postData = {};
+		if (!$('.old_pass').val()) {
+			mui.toast('请输入原始密码');
+			return;
+		}
+		if (!$('.new_pass').val()) {
+			mui.toast('请输入新密码');
+			return;
+		}
+		if ($('.new_pass').val() != $('.sure_pass').val()) {
+			mui.toast('两次输入密码不一致！');
+			return;
+		}
+		postData.UserPassWord = $('.old_pass').val();
+		postData.NUserPassWord = $('.new_pass').val();
+		postData.Id = id;
+		console.log(postData)
+		var url = '/api/Account/UpdateUserPwd';
+		request.post(url, postData).then(function(res) {
+			console.log(res);
+			if (res.code == 200) {
+				mui.back();
+			} else {
+				mui.toast(res.msg)
+			}
+		})
+		// mui.back();
+	})
+</script>

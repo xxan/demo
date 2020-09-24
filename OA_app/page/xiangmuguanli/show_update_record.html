@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+		
+		</script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style type="text/css">
+			h5 {
+				height: 44px !important;
+				line-height: 44px !important;
+				background: white;
+				color: #333333;
+				font-size: 16px;
+				font-family:"Microsoft YaHei";
+				margin: 0;
+				font-weight: bold;
+			}
+			 #slide_list {
+				width: 100%;
+				padding: 10px 20px;
+				background: white;
+				margin: 0;
+				margin-top: 10px;
+			}
+			
+			.mui-content {
+				margin-bottom: 0px;
+				padding-bottom: 50px;
+			}
+			
+			 #slide_list li {
+				width: 100%;
+				height: auto;
+				
+				background: white;
+				border: none;
+				margin: 0;
+			}
+			
+			 #slide_list li .list_title {
+				margin: 0;
+				padding: 0;
+				height: 14px;
+				line-height: 14px;
+				font-size: 12px;
+				text-align: left;
+			}
+			
+			 #slide_list li .list_title i {
+				display: inline-block;
+				width: 14px;
+				height: 14px;
+				background: #3B9CFF;
+				vertical-align: middle;
+				border-radius: 50%;
+				margin-right: 15px;
+				position: relative;
+				top: -1px;
+			}
+			
+			 #slide_list li .list_title span {
+				color: #3B9CFF;
+				font-size: 14px;
+				margin-right: 10px;
+			}
+			
+			.info_box {
+				border-left: solid 4px #DCDCDC;
+				margin-left: 5px;
+				padding: 10px 20px;
+			}
+			
+			.detail {
+				width: 100%;
+				height: auto;
+				background:rgba(255,255,255,1);
+				box-shadow:0px 2px 7px 0px rgba(157,157,157,0.4);
+				border-radius:4px;
+				padding: 10px;
+			}
+			
+			.detail div {
+				width: 100%;
+				height: auto;
+				overflow: hidden;
+			}
+			.detail div span {
+				display: inline-block;
+				width: 70px;
+				height: 24px;
+				line-height: 24px;
+				float: left;
+				text-align: left;
+				font-size: 14px;
+				font-family: "microsoft yahei";
+			}
+			.detail div p {
+				width: calc(100% - 70px);
+				line-height: 24px;
+				float: left;
+				overflow: hidden;
+				text-align: left;
+				white-space: pre-wrap;
+				margin: 0;
+				font-size: 14px;
+				font-family: "microsoft yahei";
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 主页面标题 -->
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">修改记录</h1>
+		</header>
+		<div class="mui-content mui-scroll-wrapper">
+			
+			<div class="mui-scroll">
+				<h5>项目</h5>
+				<!-- 菜单具体展示内容 -->
+				<ul id="slide_list">
+					<li>
+						<p class="list_title">
+							<i></i> 2020-09-09 12:09
+						</p>
+						<div class="info_box">
+							<div class="detail">
+								<div>
+									<span>修改人员：</span> <p>人物类型</p>
+								</div>
+								<div>
+									<span>修改内容：</span> <p>人物类型</p>
+								</div>
+								<div>
+									<span>修改详情：</span> <p>人物类型阿萨德发卡机水电费卡萨丁哈师大开了房阿萨德联发科时代峰峻</p>
+								</div>
+							</div>
+						</div>
+					</li>
+					
+				</ul>
+			</div>
+			<!-- <div class="footer_submit">
+				<span class="btn_cancel_slide">取消</span><span class="btn_submit_slide">确定</span>
+			</div> -->
+		</div>
+	</body>
+	
+	<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var scroll = mui('.mui-scroll-wrapper').scroll();
+		var id = common.getQueryUrl('id');
+		var name = common.getQueryUrl('name');
+		$('h5').html(name);
+		getList();
+		function getList() {
+			var url = '/api/CostConsult/ModifiedRecordsQuery';
+			var postData = {
+				page: 1,
+				limit: 10000,
+				projectId: id
+			}
+			return request.post(url,postData).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					var html = '';
+					for(var i=0;i<res.data.length;i++) {
+						var item = res.data[i];
+						html += '<li><p class="list_title">'+
+										'<i></i> '+ item.CreateTime +'</p>'+
+										'<div class="info_box"><div class="detail">'+
+										'<div><span>修改人员：</span> <p>'+ item.WriteUser +'</p></div>'+
+										'<div><span>修改内容：</span> <p>'+ item.ModifiedItem +'</p></div>'+
+										'<div><span>修改详情：</span> <p>'+ item.Content +'</p>'+
+										'</div></div></div></li>';
+					}
+					$('#slide_list').html(html);
+					if ($('#slide_list li').length == 0) {
+						var html = '<li class="is_node_data"><div class="detail_info detail_info_no_data bid_no_data">' +
+							'<img src="../../img/no_data.png" ><p>还未有数据！</p></div></li>';
+						$('#slide_list').html(html);
+					}
+				}else {
+					mui.toast('获取失败！' + res.msg);
+				}
+			})
+		}
+		
+	</script>
+</html>

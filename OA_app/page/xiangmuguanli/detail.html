@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/xmgl_detail.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/menu.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/new_xmgl_detail.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<style type="text/css">
+		</style>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+
+		</script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig: {
+					tap: true, //默认为true
+					doubletap: true, //默认为false
+					longtap: true, //默认为false
+					swipe: true, //默认为true
+					drag: true, //默认为true
+					hold: true, //默认为false，不监听
+					release: false //默认为false，不监听
+				},
+			})
+		</script>
+		<style type="text/css">
+			.up_fress {
+				top: 88px;
+			}
+			
+			#middlePopover {
+				width: 100%;
+				height: 100%;
+				background: rgba(0, 0, 0, 0.5);
+				top: 0;
+				left: 0;
+			}
+			
+			#middlePopover button {
+				width: 20%;
+				height: 40px;
+				margin: auto;
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: white;
+				border: solid 1px #3B9CFF;
+			}
+			
+		</style>
+	</head>
+
+	<body style="overflow: hidden;">
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">项目详情</h1>
+			<img src="../../img/add.png" class="mui-nav-more add_project" style="display: none;">
+			<img src="../../img/shaixuan.png" class="mui-nav-more top_search" style="display: none;">
+		</header>
+		<p class="up_fress data-loading-icon">
+			<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+		</p>
+		<div id="slider_title" >
+			<a class="mui-control-item mui-active" href="#item1">项目详情<span></span></a>
+			<a class="mui-control-item" href="#item2">进度计划<span></span></a>
+			<a class="mui-control-item" href="#item3">任务跟踪<span></span></a>
+			<!-- <a class="mui-control-item" href="#item4">项目奖金<span></span></a> -->
+		</div>
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+			
+				<div id="scroll1" >
+					<div id="item1" class="project_detail mui-active">
+						<div class="mui-table-view project_detail_list">
+							<p>
+								<img src="../../img/detail.png" >
+								项目详情
+							</p>
+							<div class="detail_info">
+								
+							</div>
+						</div>
+					</div>
+					<div id="item2" class="project_detail">
+						<div class="plan_select">
+								<select name="" class="select_type">
+									<option value="" selected>全部类型</option>
+									<option value="">产品</option>
+									<option value="">UI</option>
+									<option value="">前端</option>
+									<option value="">开发</option>
+									<option value="">测试</option>
+								</select> | 
+								<select name="" class="select_platform" style="display: none;">
+									<option value="" selected>全部类型</option>
+									<option value="">产品</option>
+								</select> <span class="span_show" style="display: none;">|</span> 
+								<select name="" class="select_state">
+									<option value="" selected>全部状态</option>
+									<option value="">未开始</option>
+									<option value="">进行中</option>
+									<option value="">已完成</option>
+									<option value="">已确认</option>
+								</select> | 
+								<select name="" class="recive_user">
+									<option value="" selected>全部人员</option>
+									<option value="">张三</option>
+								</select>
+						</div>
+						<div class="search_box">
+							<div class="mui-input-row mui-search search_plan">
+								<input type="text" id="input-id" class="mui-input-clears search_name" placeholder="搜索任务名称">
+								<span class="photo_search"></span>
+							</div>
+						</div>
+						<ul class="plan_box">
+							<!-- <li>
+								<h5>海淀区项目</h5>
+								<p class="plan_title"><span></span>计划106.3</p>
+								<div class="progress plan">
+									<p><span></span></p>
+									<span class="start_time">2020</span>
+									<span class="end_time">2020</span>
+								</div>
+								<p class="actual_tilte"><span></span>实际106.3</p>
+								<div class="progress actual">
+									<p><span></span></p>
+									<span class="start_time">2020</span>
+									<span class="end_time">2020</span>
+								</div>
+								<div class="bottom_info">
+									<span>Java</span>
+									<p>战三 <span>已确认</span></p>
+								</div>
+							</li> -->
+						</ul>
+					</div>
+					<div id="item3">
+						<div class="plan_select">
+							<p class="task_people_choose">
+								<span class="active" a-index="0">本人任务</span>
+								<span a-index="1">全部任务</span>
+								<!-- <img src="../../img/constract_shaixuan.png" > -->
+							</p>
+								<!-- <select name="" class="select_my_task">
+									<option value="1" selected>本人任务</option>
+									<option value="0">全部任务</option>
+								</select> | -->
+								<select name="" class="select_type_record">
+									<option value="" selected>全部类型</option>
+									<option value="">产品</option>
+									<option value="">UI</option>
+									<option value="">前端</option>
+									<option value="">开发</option>
+									<option value="">测试</option>
+								</select> | 
+								<select name="" class="select_platform_record" style="display: none;">
+									<option value="" selected>全部类型</option>
+									<option value="">产品</option>
+								</select> <span class="span_show" style="display: none;">|</span> 
+								<select name="" class="select_state_record">
+									<option value="" selected>全部状态</option>
+									<option value="">未开始</option>
+									<option value="">进行中</option>
+									<option value="">已完成</option>
+									<option value="">已确认</option>
+								</select> <span class="span_show_user" style="display: none;">|</span> 
+								<select name="" class="recive_user_record" style="display: none;">
+									<option value="" selected>全部人员</option>
+									<option value="">张三</option>
+								</select>
+								
+						</div>
+						<div class="search_box">
+							<div class="mui-input-row mui-search search_plan">
+								<input type="text" id="input-id" class="mui-input-clears search_name" placeholder="搜索任务名称">
+								<span class="photo_search"></span>
+							</div>
+						</div>
+						<ul class="record_box">
+							<!-- <li>
+								<p class="task_user_info">战三 <span class="open_type">java</span> <span class="task_state">已确认</span></p>
+								<h5>海淀区项目</h5>
+								<div class="progress_box">
+									<div class="canvas_box">
+										<div class="canvas1 canvas">
+											<canvas class="circleRun" data-run="0" id="canvas1" amout="1000" nowData="1000"></canvas>
+											<div class="hours canvas_tip1">
+												50
+											</div>
+											<p>计划工时</p>
+										</div>
+									</div>
+									
+									<div class="canvas_box">
+										<div class="canvas2 canvas">
+											<canvas class="circleRun" data-run="0" id="canvas2" amout="1000" nowData="1000"></canvas>
+											<div class="hours canvas_tip2">
+												22
+											</div>
+											<p>实际工时</p>
+										</div>
+									</div>
+									
+									<div class="canvas_box">
+										<div class="canvas3 canvas">
+											<canvas class="circleRun texts" data-run="0" id="canvas3" amout="1000" nowData="1000"></canvas>
+											<div class="hours canvas_tip3">
+												53%
+											</div>
+											<p>累计进度</p>
+										</div>
+									</div>
+									
+								</div>
+								<p class="task_time">2020-09-03 09:00 - 2020-10-10 09:00</p>
+								<div class="sure_btn">
+									<span>确认</span>
+								</div>
+							</li> -->
+						</ul>
+					</div>
+					<div id="item4">
+						<div class="top_box">
+							<ul class="top_info">
+								<li>
+									<p>￥12314</p>
+									<span>项目奖金</span>
+								</li>
+								<li>
+									<p>12</p>
+									<span>项目人数</span>
+								</li>
+								<li>
+									<p>359</p>
+									<span>任务总数</span>
+								</li>
+								<li>
+									<p>376</p>
+									<span>项目工时</span>
+								</li>
+							</ul>
+						</div>
+						<div class="all_box money_box">
+							<h5>奖金分配比例</h5>
+							<div class="echart_box">
+								<div id="main"></div>
+							</div>
+						</div>
+						<div class="all_box">
+							<h5>任务完成情况</h5>
+							<ul class="people_task">
+								<li>
+									<p>张三 <span>项目负责人</span></p>
+									<ul class="top_info">
+										<li>
+											<p>￥12314</p>
+											<span>任务数量</span>
+										</li>
+										<li>
+											<p>12</p>
+											<span>计划工时</span>
+										</li>
+										<li>
+											<p>359</p>
+											<span>实际工时</span>
+										</li>
+										<li>
+											<p class="wrong">376</p>
+											<span>工时偏差</span>
+										</li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<p class="down_fress data-loading-icon">
+			<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+		</p>
+		<div class="meau_list" id="meau_box">
+			
+			<div class="list_table spans mui-scroll">
+				<div class="show_elec spans">
+					
+				</div>
+				
+				<!-- <p class="btn_box_meau">
+					<button type="button" class="mui-btn meau_cancel spans">取消</button>
+					<button type="button" class="mui-btn mui-btn-blue spans">确定</button>
+				</p> -->
+			</div>
+		</div>
+		
+		<div class="mui-backdrop sure_modal" style="display: none;">
+			<div class="sure_box">
+				<p class="box_title"><img src="../../img/back1.png" class="close_modal">任务确认<img src="../../img/queren.png" class="submit_sure"></p>
+				<div>
+					<span>任务名称：</span>
+					<p class="mo_task_name">erifd</p>
+				</div>
+				<div>
+					<span>是否完成：</span>
+					<p class="sure_btn_list"><span class="is_sure">是</span><span>否</span></p>
+				</div>
+				<div class="show_hide">
+					<div>
+						<span>百分比调整%：</span>
+						<input class="percent_finish" type="number" name="" id="" value="" placeholder="0"/>
+					</div>
+					<div>
+						<span>确认信息:</span>
+						<textarea rows="" cols="" class="work_content"></textarea>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</body>
+	<script src="../../js/mui.pullToRefresh.js"></script>
+	<script src="../../js/mui.pullToRefresh.material.js"></script>
+	<script type="text/javascript" src="../../js/jquery.min.js"></script>
+	<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" src="../../js/request.js"></script>
+	<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/zcircleMove.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../../js/echarts.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		
+		var newPeople = [];
+		var choosePeople = [];
+		var peopleInfo = [];
+		var recivePeople = [];
+		var page = 1;
+		var refushNum = localStorage.getItem('product_num') || 1;
+		var fzrId = [];
+		var resultPage = 1;
+		var projectName;
+		var taskPage = 1; //任务跟踪页
+		var canvasArr1 = [],canvasArr2 = [],canvasArr3 = [];//任务跟踪圆型图
+		
+		var tid ,tname;
+		
+		var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+		var productId;//产品ID
+		console.log(userInfo)
+		
+		localStorage.setItem('product_num',refushNum);
+		console.log(refushNum)
+		var scroll = mui('.mui-scroll-wrapper').scroll();
+		
+		var projectId = common.getQueryUrl('id');
+		$('#slider_title').find('a').eq(refushNum - 1).addClass('mui-active').siblings().removeClass('mui-active');
+		$('#item'+refushNum).addClass('mui-active').siblings().removeClass('mui-active');
+		if(refushNum == 1) {
+			// $('.add_project1').show();
+		}
+		if(refushNum == 2) {
+			$('.add_project').show();
+		}
+		if(refushNum == 3) {
+			getRecordList();
+		}
+		if(refushNum == 4) {
+			echartsInit();
+			getProjectMoney();
+		}
+		
+		
+		//进度计划筛选参数
+		var searchType,searchPlatForm,searchState,searchPeople,searchTaskName;
+		//任务跟踪筛选参数
+		var searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord;
+		
+		var height = $('.project_title_box').outerHeight();
+		$('.mui-bar-nav~.mui-content').css('top', 88 + 'px');
+		clickInit();
+		
+		
+		var isfresh = false;
+		document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+			if (refushNum == 1 || refushNum == 2 || isfresh) {
+				return;
+			}
+			if (scroll.y > 0) {
+				if (scroll.y > 50) {
+					isfresh = true;
+					$('#pullrefresh').css('paddingTop', '44px');
+					mui('.up_fress .loading_btn').button('loading');
+					$('.up_fress').css('zIndex', '3');
+					if(refushNum == 3) {
+						taskPage = 1;
+						canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+						getRecordList().then(function(res) {
+							setTimeout(function() {
+								$('.up_fress').css('zIndex', '2');
+								$('#pullrefresh').css('paddingTop', '0px');
+								mui('.up_fress .loading_btn').button('reset');
+								isfresh = false;
+							}, 1000)
+						})
+					}
+				}
+			}
+		
+			if (scroll.y != 0 && scroll.y < scroll.maxScrollY) {
+				var length = $('.record_box').find('li').length;
+				if (length % 10 != 0) {
+					return;
+				}
+				isfresh = true;
+				//上拉加载逻辑代码
+				$('#pullrefresh').css('bottom', '40px');
+				$('.down_fress').css('zIndex', '2');
+				mui('.down_fress .loading_btn').button('loading');
+				taskPage++;
+				getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord).then(function(res) {
+					setTimeout(function() {
+						$('#pullrefresh').css('bottom', '0px');
+						$('.down_fress').css('zIndex', '0');
+						mui('.down_fress .loading_btn').button('reset');
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		})	
+		
+		function clickInit() {
+			//silder切换
+			mui('#slider_title').on('tap', 'a', function() {
+				$('input').blur();
+				var num = $(this).attr('href').substr(5);
+				console.log(num)
+				if(num == 1) {
+					$('.add_project1').show();
+				}else {
+					$('.add_project1').hide();
+				}
+				if(num == 2) {
+					$('.add_project').show();
+				}else {
+					$('.add_project').hide();
+				}
+				if(num == 3) {
+					getRecordList();
+				}
+				if(num == 4) {
+					echartsInit();
+				}
+				$('#scroll1').find('.mui-active').fadeOut().removeClass('mui-active');
+				$('#item'+num).addClass('mui-active').fadeIn();
+				var width = $(window).width();
+				refushNum = num;
+				localStorage.setItem('product_num',refushNum);
+				$(this).addClass('mui-active').siblings().removeClass('mui-active');
+			})
+			
+			//监听进度计划<select>
+			$('.select_type').on('change',function(e) {
+				$('input').blur();
+				console.log($(this).val(),$(this).find('option:selected').text())
+				searchType = $(this).val();
+				if($(this).find('option:selected').text() == '开发') {
+					$('.plan_select select').css('width','20%');
+					$('.select_platform,.span_show').show();
+				}else {
+					$('.plan_select select').css('width','28%');
+					$('.select_platform,.span_show').hide();
+				}
+				getPlanList(searchType,searchState,searchPeople,searchTaskName,searchPlatForm)
+				
+			})
+			$('.select_platform').on('change',function(e) {
+				$('input').blur();
+				searchPlatForm = $(this).val();
+				getPlanList(searchType,searchState,searchPeople,searchTaskName,searchPlatForm)
+			})
+			$('.select_state').on('change',function(e) {
+				$('input').blur();
+				searchState = $(this).val();
+				getPlanList(searchType,searchState,searchPeople,searchTaskName,searchPlatForm)
+			})
+			$('.recive_user').on('change',function(e) {
+				$('input').blur();
+				searchPeople = $(this).val();
+				getPlanList(searchType,searchState,searchPeople,searchTaskName,searchPlatForm)
+			})
+			
+			$('.search_name').on('change',function(e) {
+				if(refushNum == 2) {
+					searchTaskName = $(this).val();
+				}else if(refushNum == 3) {
+					searchTaskNameRecord = $(this).val();
+				}
+			})
+			
+			//任务跟踪切换
+			mui('.task_people_choose').on('tap','span',function() {
+				$(this).addClass('active').siblings('span').removeClass('active');
+				var index = $(this).attr('a-index');
+				searchMyTask = index;
+				canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+				if(index == 1) {
+					$('.span_show_user').show();
+					$('.recive_user_record').show();
+					getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+				}else {
+					$('.span_show_user').hide();
+					$('.recive_user_record').hide();
+					getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+				}
+			})
+			
+			//监听任务跟踪select 
+			$('.select_type_record').on('change',function(e) {
+				$('input').blur();
+				console.log($('.select_type_record').val())
+				searchTypeRecord = $(this).val();
+				console.log(searchTypeRecord)
+				if($(this).find('option:selected').text() == '开发') {
+					$('.plan_select select').css('width','20%');
+					$('.select_platform_record,.span_show').show();
+				}else {
+					$('.plan_select select').css('width','28%');
+					$('.select_platform_record,.span_show').hide();
+				}
+				canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+				getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+			})
+			
+			$('.select_platform_record').on('change',function(e) {
+				$('input').blur();
+				searchPlatFormRecord = $(this).val();
+				canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+				getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+			})
+			
+			$('.select_state_record').on('change',function(e) {
+				$('input').blur();
+				searchStateRecord = $(this).val();
+				canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+				getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+			})
+			$('.recive_user_record').on('change',function(e) {
+				$('input').blur();
+				searchUserRecord = $(this).val();
+				canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+				getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+			})
+
+			mui('.search_plan').on('tap','.photo_search',function() {
+				$('input').blur();
+				if(refushNum == 2) {
+					searchTaskName = $('.search_name').val();
+					getPlanList(searchType,searchState,searchPeople,searchTaskName,searchPlatForm)
+				}else if(refushNum == 3) {
+					searchTaskNameRecord = $('.search_name').val();
+					canvasArr1 = [];canvasArr2 = [];canvasArr3 = [];
+					getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+				}
+				
+			})
+		
+			mui('.plan_box').on('tap','li',function(e) {
+				var taskId = $(this).attr('id')
+				if ($(e.target).hasClass('mui-popover')) {
+					$('#middlePopover').hide();
+					return;
+				}
+				if ($(e.target).hasClass('mui-btn')) {
+					deletePlanList(taskId, this);
+					$('#middlePopover').hide();
+					return;
+				}
+				window.location.href = './add_task_point.html?id=' + projectId+'&name='+projectName + '&taskid='+taskId;
+			})
+			
+			//任务跟踪详情
+			mui('.record_box').on('tap','li',function(e) {
+				var taskId = $(this).attr('id')
+				if($(e.target).parent().hasClass('sure_btn')) {
+					tid = $(e.target).attr('tid');
+					tname = $(e.target).attr('tname');
+					$('.mo_task_name').html(tname)
+					$('.sure_modal').show();
+					return;
+				}
+				window.location.href = './plan.html?id=' + projectId+'&name='+projectName + '&taskid='+taskId;
+			})
+			
+			
+			mui('.header_box').on('tap','.add_project',function() {
+				window.location.href = './add_task_point.html?id=' + projectId+'&name='+projectName;
+			})
+			
+			//修改项目信息
+			mui('#item1').on('tap','span',function() {
+				if($(this).hasClass('goto_record')) {
+					var id = $(this).attr('id');
+					window.location.href = 'new_project.html?projectid=' + id;
+				}else {
+					var id = $(this).attr('this_id');
+					window.location.href = 'show_update_record.html?id=' + id + '&name='+ projectName;
+				}
+			})
+			
+			//任务确认点击事件
+			mui('.sure_btn_list').on('tap','span',function() {
+				$(this).addClass('active').siblings().removeClass('active');
+				if(!$(this).hasClass('is_sure')) {
+					$('.show_hide').show()
+				}else {
+					$('.show_hide').hide()
+				}
+			})
+			
+			mui('.box_title').on('tap','.close_modal',function() {
+				var input = $('input');
+				var textarea = $('textarea');
+				textarea.blur();
+				input.blur();
+				$('.sure_modal').hide();
+			})
+			
+			mui('.box_title').on('tap','.submit_sure',function() {
+				var input = $('input');
+				var textarea = $('textarea');
+				textarea.blur();
+				input.blur();
+				var thisflag = $('.sure_btn_list').find('.active').hasClass('is_sure') ? 4 : 3;
+				var data = {
+					projectId: projectId,
+					isFinish: thisflag,
+					id: tid
+				}
+				if(thisflag == 3) {
+					data.cxProp = $('.percent_finish').val(),
+					data.WorkContent = $('.work_content').val()
+				}
+				console.log(data)
+				sureTask(data).then(function(res) {
+					if(res) {
+						getRecordList(searchMyTask,searchTypeRecord,searchPlatFormRecord,searchStateRecord,searchTaskNameRecord,searchUserRecord)
+						$('.sure_modal').hide();
+					}
+				})
+			})
+		
+			//长按删除
+			mui('.plan_box').on('longtap', 'li', function(e) {
+				$('#index4').find('#middlePopover').remove();
+				$(this).append(
+					'<div id="middlePopover" class="mui-popover"><button type="button" class="mui-btn mui-btn-blue mui-btn-outlined">删除</button></div>'
+				);
+				$('#middlePopover').show()
+			})
+		
+		}
+	
+		function canvasImage() {
+			for(var i = 0;i< canvasArr1.length;i++) {
+				runCircle({
+					obj: canvasArr1[i],
+					percent: 1,
+					circleBottomColor: "#f2f2f2", //圆环底色
+					outerColorStart: '#ebf7ff', //外部圆环 渐变色
+					outerColorMid: '#d8eefc',
+					outerColorEnd: '#a7cee7',
+					innerColorStart: '#0096FF', //内部圆环 渐变色
+					innerColorEnd: '#3D6BDD',
+				});
+			}
+			for(var i = 0;i< canvasArr2.length;i++) {
+				runCircle({
+					obj: canvasArr2[i],
+					percent: 1,
+					circleBottomColor: "#f2f2f2", //圆环底色
+					outerColorStart: '#ebf7ff', //外部圆环 渐变色
+					outerColorMid: '#d8eefc',
+					outerColorEnd: '#a7cee7',
+					innerColorStart: '#DC3BC2', //内部圆环 渐变色
+					innerColorEnd: '#FB179D',
+				});
+			}
+			for(var i = 0;i< canvasArr3.length;i++) {
+				runCircle({
+					obj: canvasArr3[i].value,
+					percent: (canvasArr3[i].time / 100),
+					circleBottomColor: "#f2f2f2", //圆环底色
+					outerColorStart: '#ebf7ff', //外部圆环 渐变色
+					outerColorMid: '#d8eefc',
+					outerColorEnd: '#a7cee7',
+					innerColorStart: '#19D8FB', //内部圆环 渐变色
+					innerColorEnd: '#17FBDD',
+				});
+			}
+		}
+		
+
+		
+		common.promise()
+		.then(function() {
+			mui.showLoading('加载中...');
+		})
+		.then(function() {
+			return getPeopelInfo();
+		})
+		.then(function() {
+			return getProjectDetail();
+		})
+		.then(function() {
+			return getTaskType();
+		})
+		.then(function() {
+			return getTaskPlatform();
+		})
+		.then(function() {
+			return getTaskState();
+		})
+		.then(function() {
+			return getRecivePeopelInfo();
+		})
+		.then(function() {
+			return getPlanList();
+		})
+		.then(function() {
+			mui.hideLoading()
+		})
+		
+		//人员信息
+		function getPeopelInfo() {
+			var url = '/api/CostConsult/UsersSelect';
+			return request.post(url).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					peopleInfo = res.data;
+				}
+			})
+		}
+		
+		//获取任务类型
+		function getTaskType() {
+			var url ='/api/CostConsult/TaskTypeSelect';
+			return request.post(url).then(function(res) {
+				// console.log(res)
+				if(res.code == 200) {
+					var html = '<option value="0" selected>全部类型</option>';
+					for(var i=0;i<res.data.length;i++) {
+						html+= '<option value='+ res.data[i].SUB_ID +'>'+ res.data[i].SUB_NM +'</option>'
+					}
+					$('.select_type').html(html);
+					$('.select_type_record').html(html);
+				}
+			})
+		}
+		
+		//获取项目类型
+		function getTaskPlatform() {
+			var url ='/api/CostConsult/ProjectTypeSelect';
+			return request.post(url).then(function(res) {
+				// console.log(res)
+				if(res.code == 200) {
+					var html = '<option value="0" selected>全部类型</option>';
+					for(var i=0;i<res.data.length;i++) {
+						html+= '<option value='+ res.data[i].SUB_ID +'>'+ res.data[i].SUB_NM +'</option>'
+					}
+					$('.select_platform').html(html);
+					$('.select_platform_record').html(html);
+				}
+			})
+		}
+		
+		//获取任务状态
+		function getTaskState() {
+			var url ='/api/CostConsult/TaskStateSelect';
+			return request.post(url).then(function(res) {
+				// console.log(res)
+				if(res.code == 200) {
+					var html = '<option value="" selected>全部状态</option>';
+					for(var i=0;i<res.data.length;i++) {
+						html+= '<option value='+ res.data[i].SUB_ID +'>'+ res.data[i].SUB_NM +'</option>'
+					}
+					$('.select_state').html(html);
+					$('.select_state_record').html(html);
+				}
+			})
+		}
+		
+		//接收人信息
+		function getRecivePeopelInfo() {
+			var url = '/api/CostConsult/ReceiverSelect';
+			return request.post(url,{projectId: projectId}).then(function(res) {
+				// console.log(res)
+				if(res.code == 200) {
+					recivePeople = res.data;
+					var html = '<option value="" selected>全部人员</option>';
+					for(var i=0;i<res.data.length;i++) {
+						html+= '<option value='+ res.data[i].Id +'>'+ res.data[i].RealName +'</option>'
+					}
+					$('.recive_user').html(html);
+					$('.recive_user_record').html(html);
+				}
+			})
+		}
+		getReciveInfo();
+		//接收人信息获取产品人
+		function getReciveInfo() {
+			var url = '/api/CostConsult/TrackingRecordInfo';
+			return request.post(url,{projectId: projectId}).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					productId = res.data.Cpfzr;
+				}
+			})
+		}
+		
+		function getNameString(arr) {
+			var name = '';
+			for(var j=0;j<arr.length;j++) {
+				for(var i=0;i<peopleInfo.length;i++) {
+					if(arr[j] == peopleInfo[i].Id) {
+						
+						if(name == '') {
+							name += peopleInfo[i].RealName;
+						}else {
+							name += '、' + peopleInfo[i].RealName;
+						}
+					}
+				}
+			}
+			return name;
+		}
+		
+		//获取项目详情
+		function getProjectDetail() {
+			var url = '/api/CostConsult/DetailNew';
+			return request.post(url,{ProjectId: projectId}).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					common.arrObjTrimAndNull(res.data);
+					projectName = res.data.Name;
+					var html = '<p>项目工期：<span>'+ res.data.BeginTime + '至' + res.data.EndTime +'</span></p>'+
+										'<p>项目详情：<span>'+ res.data.CustomerRequirement +'</span></p>'+
+										'<p>客户名称：<span>'+ res.data.ConstructionUnit +'</span></p>'+
+										'<p>联系人员：<span>'+ res.data.ConstructionUnitLinkMan +'</span></p>'+
+										'<p>联系电话：<span>'+ res.data.ConstructionUnitTel +'</span></p>'+
+										'<p>项目经理：<span>'+ getNameString(res.data.XMFZR_C) +'</span></p>'+
+										'<p>产品经理：<span>'+ getNameString(res.data.CPFZR_C) +'</span></p>'+
+										'<p>主要人员：<span>'+ getNameString(res.data.ZYRY_C) +'</span></p>'+ 
+										'<div class="btn_list"><span class="goto_record" id='+ res.data.Id +'>修改项目信息</span><span this_id='+ res.data.Id +'>查看修改记录</span></div>';
+					$('#item1').find('.detail_info').html(html);
+				}
+				return res;
+			})
+		}
+		
+		//获取进度计划列表
+		function getPlanList(ScheduleCategory,status,userId,schedu,DevCategory) {
+			var url = '/api/CostConsult/NewScheduleListQuery';
+			var postData = {
+				projectId: projectId,
+			}
+			if(ScheduleCategory) {
+				postData.ScheduleCategory = ScheduleCategory
+			}
+			if(status) {
+				postData.status = status
+			}
+			if(userId) {
+				postData.userId = userId
+			}
+			if(schedu) {
+				postData.schedu = schedu
+			}
+			if(DevCategory) {
+				postData.DevCategory = DevCategory
+			}
+			
+			return request.post(url,postData).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					common.arrObjTrimAndNull(res.data);
+					var html = ''
+					for(var i=0;i<res.data.length;i++) {
+						var item = res.data[i];
+						var plan = changeProgress(item.mctual_start_dateStr,item.mctual_end_dateStr,item.mctual_start_date,item.mctual_end_date)
+						html+= '<li id='+ item.baseId +'>'+
+							'<h5>'+ item.text +'</h5>'+
+							'<p class="plan_title"><span></span>计划'+ item.duration1 +'</p>'+
+							'<div class="progress plan">'+
+							// '<p><span style="left:'+ plan.left +'px;width: '+ plan.width +'%"></span></p>'+
+							'<span class="start_time">'+ item.mctual_start_dateStr +'</span>'+
+							'<span class="end_time">'+ item.mctual_end_dateStr +'</span>'+
+							'</div>'+
+							'<p class="actual_tilte"><span></span>实际'+ item.duration2 +'</p>'+
+							'<div class="progress actual">'+
+							// '<p><span style="left:'+ plan.left +';width: '+ plan.width +'%"></span></p>'+
+							'<span class="start_time">'+ item.actual_start_dateStr +'</span>'+
+							'<span class="end_time">'+ item.actual_end_dateStr +'</span>'+
+							'</div><div class="bottom_info">'+
+							(item.DevelopCategory ? ('<span>'+ item.DevelopCategory +'</span>') : '')+
+							'<p>'+ item.username +' <span>'+ item.statusStr +'</span></p>'+
+							'</div></li>';
+					}
+					
+					$('.plan_box').html(html);
+					if ($('.plan_box li').length == 0) {
+						var html = '<li class="is_node_data"><div class="detail_info detail_info_no_data bid_no_data">' +
+							'<img src="../../img/no_data.png" ><p>还未有数据！</p></div></li>';
+						$('.plan_box').html(html);
+					}
+				}
+			})
+			
+		}
+		
+		function changeProgress(sTime,eTime,ssTime,seTime) {
+			var allTime = new Date(eTime).getTime() - new Date(sTime).getTime(); //总时间
+			var startProTime = new Date(ssTime).getTime() - new Date(sTime).getTime();//开始时间差
+			var endProTime = Math.abs(new Date(seTime).getTime() - new Date(sTime).getTime());//结束时间差
+			var left = Number((startProTime / allTime).toFixed(2)) * 100;
+			var width = Number((endProTime / allTime).toFixed(2)) * 100;
+			return {left: left,width: width}
+		}
+		
+		//删除进度计划
+		function deletePlanList(ids,self) {
+			var url = '/api/CostConsult/DeleteSchedule';
+			return request.post(url,{ids: [ids]}).then(function(res) {
+				console.log(res)
+				if (res.code == 200) {
+					$(self).remove();
+					mui.toast('删除成功');
+				} else {
+					mui.toast('删除失败');
+				}
+			})
+		}
+		
+		//获取进度计划（人员信息）
+		function getSchedulePlan() {
+			var url = '/api/CostConsult/Schedule';
+			return request.post(url,{projectId: projectId}).then(function(res) {
+				return res
+			})
+		}
+		
+		
+		//获取任务跟踪列表
+		function getRecordList(Type,TaskType,PtojectType,TaskState,name,ReceivedBy) {
+			mui.showLoading('加载中...');
+			var url = '/api/CostConsult/TaskListQuery';
+			var postData = {
+				limit: 10,
+				page: taskPage,
+				projectId: projectId,
+				Type: Type ? Type : 0,
+				TaskType: TaskType ? TaskType : null,
+				TaskState: TaskState ? TaskState : null,
+				PtojectType: PtojectType ? PtojectType : null,
+				Name: name ? name : null,
+				ReceivedBy: ReceivedBy ? ReceivedBy : null
+			}
+			
+			return request.post(url,postData).then(function(res) {
+				console.log('任务跟踪：',res)
+				
+				if(res.code == 200) {
+					common.arrObjTrimAndNull(res.data)
+					var html = '';
+					for(var i=0;i<res.data.length;i++) {
+						var item = res.data[i];
+						html += '<li id='+ item.Id +'>'+
+								'<p class="task_user_info">'+ item.UserName +' <span class="open_type">'+ item.ScheduleCategory +'</span> <span class="task_state">'+ item.Status +'</span></p>'+
+								'<h5>'+ item.Name +'</h5>'+
+								'<div class="progress_box"><div class="canvas_box">'+
+								'<div class="canvas1 canvas"><canvas class="circleRun canvas'+taskPage+i+1 +'" data-run="0" id="canvas1" amout="1000" nowData="1000"></canvas>'+
+								'<div class="hours canvas_tip1">'+ item.UsingDays +'</div><p>计划工时</p></div></div>'+
+								'<div class="canvas_box"><div class="canvas2 canvas">'+
+								'<canvas class="circleRun canvas'+taskPage+i+2 +'" data-run="0" id="canvas2" amout="1000" nowData="1000"></canvas>'+
+								'<div class="hours canvas_tip2">'+ item.HisoryUsingDays +'</div><p>实际工时</p></div></div>'+
+								'<div class="canvas_box"><div class="canvas3 canvas">'+
+								'<canvas class="circleRun texts canvas'+taskPage+i+3 +'" data-run="0" id="canvas3" amout="1000" nowData="1000"></canvas>'+
+								'<div class="hours canvas_tip3">'+ (item.AddProp ? item.AddProp : 0) +'%</div><p>累计进度</p></div></div></div>'+
+								'<p class="task_time">'+ item.StartTime +' - '+ item.EndTime +'</p>'+
+								(item.Status == '已完成' && productId == userInfo.Id ? ('<div class="sure_btn"><span tid='+ item.Id +' tname='+ item.Name +'>确认</span></div>') : '') +
+								'</li>';
+						canvasArr1.push('canvas'+taskPage+i+1);
+						canvasArr2.push('canvas'+taskPage+i+2);
+						canvasArr3.push({value:'canvas'+taskPage+i+3 ,time: (item.AddProp ? item.AddProp : 0)});
+					
+					}
+					if(taskPage > 1) {
+						$('.record_box').append(html);
+					}else {
+						$('.record_box').html(html);
+					}
+					
+					if($('.record_box li').length == 0) {
+						var html = '<li class="is_node_data"><div class="detail_info detail_info_no_data bid_no_data">' +
+							'<img src="../../img/no_data.png" ><p>还未有数据！</p></div></li>';
+						$('.record_box').html(html);
+					}
+					canvasImage();
+					mui.hideLoading();
+				}else {
+					mui.toast('获取任务跟踪列表失败！！' + res.msg);
+				}
+			})
+		}
+		
+		//获取项目奖金
+		function getProjectMoney() {
+			var url = '/api/CostConsult/ProjectBonusListQuery';
+			console.log(projectId)
+			return request.post(url,{Id: projectId}).then(function(res) {
+				console.log(res)
+			})
+		}
+		
+		//任务确认
+		function sureTask(data) {
+			var url = '/api/CostConsult/IsFinishTask';
+			return request.post(url,data).then(function(res) {
+				console.log(res)
+				if(res.code == 200) {
+					mui.toast('操作成功！');
+					return true;
+				}else {
+					mui.toast('操作失败!!!'+ res.msg);
+					return false;
+				}
+			})
+		}
+		
+		(function(mui) {
+			//联系人选择
+			mui.ready(function() {
+				var _getParam = function(obj, param) {
+					return obj[param] || '';
+				};
+				var userPicker = new mui.PopPicker();
+
+				var showUserPickerButton = mui('.member_add');
+				showUserPickerButton.each(function(i, btn) {
+					btn.addEventListener('tap', function(event) {
+						var isCreate = true;
+						if(getModuleName('CostConsultSchedule')) {
+							if(operationArr.length > 0) {
+								for(var i=0;i<operationArr.length;i++) {
+									if(operationArr[i].KeyCode == 'Update') {
+										if(!operationArr[i].IsValid) {
+											isCreate = false;
+										}
+									}
+								}
+							}
+						}
+					}, false);
+				});
+			});	
+		})(mui);
+		
+		
+		function echartsInit() {
+			console.log(echarts)
+			var myChart = echarts.init(document.getElementById('main'));
+			document.getElementById('main').style.width = document.documentElement.clientWidth+"px";
+			document.getElementById('main').style.height = "153px";
+			 myChart.clear();
+			option = {
+			    legend: {
+			        orient: 'vertical',
+			        right: 10,
+							type:'scroll',
+			        data: ['直接访问  $123123 25%', '邮件营销', '联盟广告', '视频广告', '搜索引擎', '搜索引擎2', '搜索引擎3']
+			    },
+			    series: [
+			        {
+			            name: '访问来源',
+			            type: 'pie',
+									center: ['25%', '50%'],
+			            radius: ['50%', '70%'],
+			            avoidLabelOverlap: false,
+			            label: {
+			                show: false,
+			                position: 'center'
+			            },
+			            emphasis: {
+			                label: {
+			                    show: true,
+			                    fontSize: '30',
+			                    fontWeight: 'bold'
+			                }
+			            },
+			            labelLine: {
+			                show: false
+			            },
+			            data: [
+			                {value: 335, name: '直接访问  $123123 25%'},
+			                {value: 310, name: '邮件营销'},
+			                {value: 234, name: '联盟广告'},
+			                {value: 135, name: '视频广告'},
+			                {value: 1548, name: '搜索引擎'},
+											{value: 1548, name: '搜索引擎2'},
+											{value: 1548, name: '搜索引擎3'}
+			            ]
+			        }
+			    ]
+			};
+			myChart.setOption(option,true);
+			myChart.resize();
+		}
+		
+	</script>
+
+</html>

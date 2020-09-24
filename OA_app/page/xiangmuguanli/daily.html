@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add_daily.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.point_detail p span {
+				font-size: 12px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">进度计划</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<div class="point_detail">
+				<p>任务名称：<span>系统开发</span></p>
+				<p>执行时间：<span>2019-09-05 09:00 至 2019-09-06 09:00</span></p>
+				<p>计划用时：<span>10工时</span></p>
+			</div>
+			<!-- <h5>任务完成情况</h5> -->
+			<h5>选择日期<b>*</b></h5>
+			<div class="task_time">
+				<p class="checktime choose_date"><a>请选择</a><span class="choose_img"></span></p>
+			</div>
+			<h5>选择时间<b>*</b></h5>
+			<div class="task_time new_daily">
+				<p class="checktime start_time"><a>请选择开始时间</a><span class="choose_img"></span></p>--<p class="checktime end_time"><a>请选择结束时间</a><span class="choose_img"></span></p>
+			</div>
+			<h5>本日工时<b>*</b></h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="请填写" class="work_time" value=""/></p>
+			</div>
+			<h5>工作内容<b>*</b></h5>
+			<div class="description">
+				<textarea class="introduce" rows="" cols="" placeholder="请输入"></textarea>
+			</div>
+			<h5>本日完成比例（%）<b>*</b></h5>
+			<div class="task_time">
+				<p><input type="number" min="0" max="100" name="" id="" placeholder="请填写" class="work_percent" value="0"/></p>
+			</div>
+			<h5>累计完成比例（%）</h5>
+			<div class="task_time">
+				<p><input type="text" name="" id="" placeholder="自动生成" disabled class="work_all" value=""/></p>
+			</div>
+			<h5>工作附件</h5>
+			<div class="task_time">
+				<p class="get_manager"><a>请选择成果文件类型</a><span class="choose_img"></span></p>
+			</div>
+			<div class="task_name upload_file">
+				<p>上传附件<input type="file" id="add_file" multiple/> <label for="add_file">添加</label></p>
+			</div>
+			<ul class="file_tendering_list">
+				
+			</ul>
+		</div>
+		<div class="footer_submit">
+			<span class="btn_cancel">取消</span><span class="btn_submit">提交</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init()
+	var projectName = common.getQueryUrl('projectName');
+	var taskId = common.getQueryUrl('id');
+	var projectId = common.getQueryUrl('projectid');
+	$('.point_title').html(projectName);
+	var startTime,endTime,thisDate = getTime('year');
+	$('.choose_date a').html(thisDate)
+	var fileList = [];
+	var fileType = [];
+	var fileTypeId;
+	var allCount;
+	
+	common.promise()
+	.then(getFileType)
+	.then(getTaskDetail)
+	.then(function(res) {
+		console.log('详情',res)
+		detailCollation(res)
+	})
+	
+	//获取详情
+	function getTaskDetail() {
+		var url = '/api/CostConsult/AddOrUpdateTrackingRecord';
+		return request.post(url,{ID: taskId}).then(function(res) {
+			return res;
+		})
+	}
+	function detailCollation(res) {
+		if(res.code == 200) {
+			var data = res.data;
+			taskName = data.Name;
+			allCount = data.AddPropMax || 0;
+			var html = '<p>任务名称：<span>'+ data.Name +'</span></p>'+
+								 '<p>任务类型：<span>'+ data.TaskType +'</span></p>' + 
+								 '<p>接收人员：<span>'+ data.ParticipantName +'</span></p>'+
+								 '<p>执行时间：<span>'+ data.StartTime +' 至 '+ data.EndTime +'</span></p>'+
+								 '<p>计划用时：<span>'+ data.UsingDays +'工时</span></p>';
+			$('.point_detail').html(html);
+		}
+	}
+	
+	//监听比例变化
+	$('.work_percent').bind('input propertychange',function() {
+		if(Number($(this).val()) > (100 - allCount)) {
+			mui.alert('当前数值不能大于'+ (100 - allCount));
+			$(this).val(0);
+			return;
+		} 
+		$('.work_all').val(Number($(this).val()) + allCount);
+	})
+	
+	function submit() {
+		var postData = {};
+		if(!startTime) {
+			mui.toast('请选择开始时间');
+			return;
+		}
+		if(!endTime) {
+			mui.toast('请选择结束时间');
+			return;
+		}
+		if(!$('.work_time').val()) {
+			mui.toast('请输入本次工时');
+			return;
+		}
+		if(!$('.introduce').val()) {
+			mui.toast('请输入工作内容');
+			return;
+		}
+		if(!$('.work_percent').val()) {
+			mui.toast('请输入本日完成比例');
+			return;
+		}
+		
+		postData.StartTime = thisDate+ ' ' +startTime;
+		postData.EndTime = thisDate+ ' '+endTime;
+		postData.ParentId = taskId;
+		postData.UseDays = $('.work_time').val();
+		postData.Prop = $('.work_percent').val();
+		postData.WorkContent = $('.introduce').val();
+		postData.ProjectId = projectId;
+		postData.tbrqData = thisDate;
+		postData.tbrqTime = startTime + '-' + endTime;
+		postData.lstFile = fileList;
+		postData.AddProp = $('.work_all').val();
+		postData.CreateTime = getTime('minute');
+		
+		console.log(postData);
+		var url = '/api/CostConsult/SaveTrackingRecord';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('提交失败');
+			}
+		})
+		
+	}
+	
+	function uploads(formData,flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=OutcomeFile';
+		return request.upload(url, formData).then(function(res) {
+			if (res && res.code == 200) {
+					var data = {
+					  "FileName": res.data.FileName,
+			      "Extension": res.data.Extension,
+			      "FilePath": res.data.FilePath,
+			      "Type": "任务跟踪_成果文件",
+						"tid": flag
+					}
+	
+					fileList.push(data)
+					console.log(fileList)
+					return;
+				}
+		})
+	}
+	//点击文件上传按钮
+	$("#add_file").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(uploads(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	});
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		preview(this,fileList)
+	})
+	
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		console.log(newFile)
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					console.log(fileList[i].Id,id)
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parents('li').remove();
+	});
+	
+	//获取文件类型
+	function getFileType() {
+		var url = '/api/CostConsult/FileTypeSelect';
+		return request.post(url).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					fileType.push({
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					})
+				}
+				console.log(fileType)
+			}
+		})
+	}
+	
+	(function(mui,doc) {
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						if(flagTime) {
+							$(_self).find('a').html(flagTime + ' ' + rs.text);
+						}else {
+							$(_self).find('a').html(rs.text);
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					var flagTime = 0;
+					if($(_self).hasClass('choose_date')) {
+						options.type = 'date';
+						var yearMonth = thisDate.split('-');
+						console.log(yearMonth)
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}else {
+						options.type = 'time';
+						var yearMonth = thisDate.split('-');
+						if($(_self).hasClass('start_time')) {
+							if(endTime) {
+								options.endDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],endTime.split(':')[0],endTime.split(':')[1])
+							}
+						}
+						if($(_self).hasClass('end_time')) {
+							if(startTime) {
+								options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2],startTime.split(':')[0],startTime.split(':')[1])
+							}
+						}
+						
+					}
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						
+						$(_self).find('a').html(rs.text);
+						if($(_self).hasClass('choose_date')) {
+							thisDate = rs.text;
+						}
+						if($(_self).hasClass('start_time')) {
+							startTime = rs.text;
+							if(endTime) {
+								subData = getSubtime(startTime,endTime);
+								$('.work_time').val(subData);
+							}
+						}
+						if($(_self).hasClass('end_time')) {
+							endTime = rs.text;
+							if(startTime) {
+								subData = getSubtime(startTime,endTime);
+								$('.work_time').val(subData);
+							}
+						}
+						
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			console.log(fileType)
+			
+			// userPicker.setData([{
+			// 	value: '0',
+			// 	text: '10'
+			// }, {
+			// 	value: '1',
+			// 	text: '20'
+			// }, {
+			// 	value: '2',
+			// 	text: '30'
+			// }, {
+			// 	value: '3',
+			// 	text: '40'
+			// }, {
+			// 	value: '4',
+			// 	text: '50'
+			// }, {
+			// 	value: '5',
+			// 	text: '60'
+			// }, {
+			// 	value: '6',
+			// 	text: '70'
+			// }, {
+			// 	value: '7',
+			// 	text: '80'
+			// }, {
+			// 	value: '8',
+			// 	text: '90'
+			// }, {
+			// 	value: '9', 
+			// 	text: '100'
+			// }]);
+			var showUserPickerButton = mui('.get_manager');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					var _this = this;
+					userPicker.setData(fileType)
+					userPicker.show(function(items) {
+						console.log(items[0].text)
+						fileTypeId = items[0].value;
+						$(_this).find('a').html(items[0].text)
+					});
+				}, false);
+			});
+		});
+	})(mui,document);
+	
+	mui('.footer_submit').on('tap','.btn_submit',function() {
+		submit()
+	})
+	
+	function getSubtime(start,end) {
+		var end = endTime.split(':')[0]*60 + parseInt(endTime.split(':')[1]); 
+		var start = startTime.split(':')[0] * 60 +  parseInt(startTime.split(':')[1]); 
+		var all = end - start;
+		var hours = parseInt(all / 60);
+		var minutes =  parseInt(all % 60)
+		return hours + Number((minutes/60).toFixed(1));
+	}
+	
+
+	
+</script>
+

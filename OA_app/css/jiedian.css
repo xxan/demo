@@ -1,0 +1,212 @@
+.point_title {
+	width: 100%;
+	height: 44px;
+	line-height: 44px;
+	font-size: 16px;
+	font-family: 'MicrosoftYaHei-Bold';
+	padding-left: 5%;
+	background: white;
+	margin: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.point_detail {
+	width: 100%;
+	padding: 5%;
+}
+
+.point_detail p {
+	margin: 0;
+	color: #333333;
+}
+
+.point_detail p span {
+	color: #666666;
+}
+
+.project_daily {
+	width: 100%;
+	background: white;
+}
+
+.project_daily>p {
+	height: 33px;
+	line-height: 33px;
+	margin: 0;
+	padding-left: 5%;
+	font-size: 18px;
+	color: #000000;
+	border-bottom: solid 1px #E6E6E6;
+	position: relative;
+	margin-bottom: 5px;
+}
+
+.project_daily>p img{
+	width: 18px ;
+	vertical-align: middle;
+	margin-right: 10px;
+	position: relative;
+	top: -2px;
+}
+
+.project_daily>p .add_point {
+	display: inline-block;
+	width: 40px;
+	line-height: 20px;
+	color: #3B9CFF;
+	border: solid 1px #3B9CFF;
+	border-radius: 10px;
+	position: absolute;
+	right: 5%;
+	top: 7px;
+	font-size: 12px;
+	text-align: center;
+} 
+
+.project_daily >ul {
+	width: 100%;
+	margin: 0;
+	
+}
+
+.project_daily >ul>li {
+	width: 100%;
+	overflow: hidden;
+	border-bottom: solid 1px #E6E6E6;
+	padding: 5%;
+	position: relative;
+}
+
+.daily_date {
+	width: 20%;
+	float: left;
+}
+.daily_date > div {
+	width: 90%;
+	height: 44px;
+	border: solid 2px #3B9CFF;
+	border-radius: 5px;
+}
+
+.daily_date > div >p {
+	text-align: center;
+	margin: 0;
+	height: 20px;
+	font-size: 12px;
+	color: #3B9CFF;
+}
+
+.daily_date > div >p:first-child {
+	color: white;
+	background: #3B9CFF;
+}
+
+.my_daily_date > div{
+	border: solid 2px #46CC8E;
+}
+
+.my_daily_date > div >p{
+	color: #46CC8E;
+}
+.my_daily_date > div >p:first-child {
+	background: #46CC8E;
+}
+
+.daily_info {
+	width: 80%;
+	float: left;
+	padding-left: 5%;
+}
+
+.daily_info p {
+	margin-bottom: 5px;
+	color: #333333;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.daily_info p.content_info_work {
+	white-space: normal;
+}
+
+.daily_info p span {
+	display: inline-block;
+	vertical-align: top;
+	width: calc(100% - 80px);
+	color: #666666;
+}
+
+
+/* 日报 */
+.my_daily .daily_info p:first-child {
+	font-size: 12px;
+	color: #999999;
+	position: relative;
+}
+
+.my_daily .daily_info p:first-child span {
+	position: absolute;
+	right: 0;
+	color: #999999;
+}
+
+.my_daily .daily_info p:first-child span.is_submit {
+	color: #3B9CFF;
+}
+
+.active_btn {
+	margin-top: 10px;
+	padding-left: 5%;
+}
+
+.active_btn span {
+	width: 80px;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: white;
+	font-size: 14px;
+	display: inline-block;
+	border-radius: 5px;
+}
+.active_btn span.delete_daliy {
+	background: #FF6060;
+	margin-right: 10px;
+}
+
+.active_btn span.submit_daliy {
+	background: #3B9CFF;
+}
+
+.btn_title {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+
+.btn_title span {
+	display: inline-block;
+	width: 30%;
+	height: 30px;
+	line-height: 30px;
+	color: #3B9CFF;
+	border: solid 1px #3B9CFF;
+	font-size: 14px;
+}
+.btn_title span:first-child {
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+}
+
+.btn_title span:last-child {
+	border-bottom-right-radius: 10px;
+	border-top-right-radius: 10px;
+}
+
+.btn_title span.active {
+	color: white;
+	background: #3B9CFF;
+}

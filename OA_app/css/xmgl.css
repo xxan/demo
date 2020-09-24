@@ -1,0 +1,365 @@
+body {
+	background: #F2F2F2;
+}
+
+.header_box img {
+	width: 20px;
+	top: 13px;
+}
+
+#offCanvasSide h5{
+	padding-left: 20px;
+	height: 44px;
+	line-height: 44px;
+	margin: 0;
+	border-bottom: solid 1px #CCCCCC;
+	color: #222222;
+}
+
+.search_content {
+	padding: 0px 20px;
+}
+
+.search_content P {
+	color: #222222;
+	margin: 0;
+	font-size: 12px;
+	margin-top: 10px;
+}
+
+.search_content P.choose_project {
+	width: 100%;
+	color:#999999;
+	border: solid 1px #CCCCCC;
+	margin-top: 10px;
+	height: 28px;
+	line-height: 26px;
+	padding-left: 10px;
+	background: #F2F2F2;
+}
+.search_content P.choose_project a {
+	color:#999999;
+}
+.search_content P.choose_project span {
+	width: 28px;
+	height: 28px;
+	display: inline-block;
+	float: right;
+	background: url(../img/xiala.png) no-repeat center;
+	background-size: 50% 30%;
+}
+.choose_task_status,.choose_task_class {
+	padding: 0px;
+	margin-top: 5px;
+	overflow: hidden;
+}
+.choose_task_status span,.choose_task_class span {
+	width: 30%;
+	height: 24px;
+	line-height: 22px;
+	text-align: center;
+	display: inline-block;
+	font-size: 12px;
+	float: left;
+	border: solid 1px #CCCCCC;
+	margin-bottom: 10px;
+}
+
+.choose_task_status span:last-child,.choose_task_class span:last-child {
+	margin-bottom: 0px;
+}
+
+.middle_status {
+	margin: 0 4%;
+}
+
+.choose_task_status span.active,.choose_task_class span.active{
+	background: #3B9CFF;
+	color: white;
+}
+
+.plan_time {
+	margin-top: 10px;
+	height: 24px;
+	line-height: 24px;
+}
+
+.plan_time span {
+	font-size: 12px;
+	display: inline-block;
+	width: 40%;
+	text-align: center;
+	border: solid 1px #CCCCCC;
+	background: #F2F2F2;
+	color: #333333;
+}
+
+.footer_btn {
+	height: 48px;
+	line-height: 48px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	right: 0;
+}
+
+.footer_btn span {
+	width: 50%;
+	display: inline-block;
+	text-align: center;
+	box-shadow: 5px 0px 5px #E6E6E6;
+}
+.footer_btn span:last-child {
+	background: linear-gradient(-90deg, rgba(23, 129, 251, 1), rgba(59, 156, 255, 1));
+	color: white;
+}
+
+.search_box {
+	background: white;
+	width: 100%;
+	/* height: 20vh; */
+	max-height: 200px;
+	padding-bottom: 20px;
+}
+
+.search_box h1 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 60px;
+	line-height: 60px;
+	font-size: 24px;
+	padding-left: 20px;
+}
+
+.search_box div {
+	height: 60px;
+	line-height:  60px;
+	text-align: center;
+	position: relative;
+}
+
+.search_box div.select_box {
+	overflow: hidden;
+	text-align: center;
+	border-top: solid 1px #F2F2F2;
+	border-bottom: solid 2px #F2F2F2;
+}
+
+.search_box div.select_box select {
+	width: 45%;
+	text-align: center !important;
+	text-align-last: center;
+	color: #333333;
+	 appearance:none;
+	 -moz-appearance:none;
+	 -webkit-appearance:none;
+	 background: url("../img/select_img.png") no-repeat scroll right center transparent;
+	 background-size: 14px 8px;
+	 background-position: 80%;
+	padding-right: 11%;
+
+}
+
+.search_box .search_title {
+	text-align: left;
+	padding-left: 20px;
+}
+
+.search_box .search_title span {
+	display: inline-block;
+	height: 60px;
+	margin-right: 20px;
+	position: relative;
+}
+
+.search_box .search_title span.active{
+	color: #3B9CFF;
+	font-weight: 900;
+}
+
+.search_box .search_title span i{
+	display: inline-block;
+	width: 100%;
+	height: 2px;
+	background: #3B9CFF;
+	position: absolute;
+	left: 0px;
+	top: 50px;
+	display: none;
+}
+
+.search_box .search_title span.active i{
+	display: inline-block;
+}
+
+.search_box div input {
+	width: 90%;
+	background: #F2F2F2;
+	border-radius: 30px;
+	font-size: 14px;
+	padding-right: 10%;
+}
+
+.photo_search {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	position: absolute;
+	background: url(../img/search.png) no-repeat center;
+	background-size: cover;
+	right: 8%;
+	top: 35%;
+	z-index: 99;
+}
+
+ .mui-bar-nav~ .mui-content .mui-pull-top-pocket{
+   top:10px !important;
+}
+
+
+.not_start {
+	/* background:#CCCCCC; */
+	color: #999999 !important;
+	padding: 1px 4px;
+	border: solid 1px  #999999;
+	border-radius: 3px;
+}
+.status_sure {
+	color: #005AFF !important;
+	/* background: #3B9CFF; */
+	padding: 1px 4px;
+	border: solid 1px  #005AFF;
+	border-radius: 3px;
+}
+
+.status_end{
+	color: #07A33B !important;
+	/* background: #17DB58; */
+	padding: 1px 4px;
+	border: solid 1px  #07A33B;
+	border-radius: 3px;
+}
+
+.status_ing{
+	color: #FF6000 !important;
+	/* background: #FE9B26; */
+	padding: 1px 4px;
+	border: solid 1px  #FF6000;
+	border-radius: 3px;
+}
+
+.class_color_blue {
+	color: #005AFF !important;
+}
+.class_color_org {
+	color: #FF6000 !important;
+}
+.class_color_red {
+	color: #FF6060 !important;
+}
+.class_color_green {
+	color: #07A33B !important;
+}
+
+.project_list_box ul li span,.project_list_box p,.task_manager_list {
+	font-size: 12px;
+}
+
+.task_manager_list span.reciver {
+	margin-left: 20%;
+}
+
+.task_manager_list i {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	vertical-align: middle;
+	position: relative;
+	top: -2px;
+	margin-right: 5px;
+}
+
+.task_status{
+	height: 30px;
+	line-height: 30px;
+	text-align: right;
+	padding: 0 20px;
+}
+
+.task_status p {
+	margin: 0;
+	font-size: 12px;
+	color: #999999;
+}
+
+.task_status p img {
+	width: 8px;
+	vertical-align: middle;
+	position: relative;
+	top: -2px;
+}
+.task_manager_title {
+	margin-bottom: 10px !important;
+}
+.task_manager_title img{
+	width: 16px;
+	vertical-align: middle;
+	margin-right: 10px;
+	position: relative;
+	top: -2px;
+}
+
+.task_manager_title span {
+	color: #333333 !important;
+	font-size: 14px !important;
+}
+
+.project_list_box ul li h5 {
+	height:24px;
+	line-height: 24px;
+	font-size:16px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+	color:rgba(51,51,51,1);
+	margin: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.project_list_box ul li .new_project_list {
+	width: 100%;
+	height: 24px;
+	line-height: 24px;
+	color: #333333;
+}
+
+.project_list_box ul li .new_project_list span{
+	display: inline-block;
+	height: 12px;
+	width: 2px;
+	background: #3B9CFF;
+	vertical-align: middle;
+	margin-right: 10px;
+	position: relative;
+	top: -1px;
+}
+
+.project_list_box ul li .new_project_list span:last-child {
+	margin-left: 10%;
+}
+
+.project_list_box ul li .list_tag {
+	width: 100%;
+}
+
+.project_list_box ul li .list_tag span {
+	padding: 3px 15px;
+	border-radius: 3px;
+	background: #EC972A;
+	font-family:"Microsoft YaHei";
+	font-weight:400;
+	color:rgba(102,102,102,1);
+	color: white;
+}

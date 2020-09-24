@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">人员评价</h1>
+		</header>
+		<div class="mui-content">
+			<h2 class="point_title">海淀区亮甲店保障房智慧工地项目</h2>
+			<h5>被评价人姓名</h5>
+			<div class="plan_time">
+				<input class="user_name"  type="text" disabled value="" placeholder="请填写"/>
+			</div>
+			<h5>被评价人职务</h5>
+			<div class="plan_time">
+				<input class="user_post"  type="text" name="" id="" value="" placeholder="请填写"/>
+			</div>
+			<h5>评价意见</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="introduce"></textarea>
+			</div>
+			
+			<h5>评价备注</h5>
+			<div class="task_name">
+				<textarea rows="" cols="" placeholder="请填写" class="remarks"></textarea>
+			</div>
+			
+		</div>
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+
+	var projectName = common.getQueryUrl('projectName');
+	var projectId = common.getQueryUrl('projectId');
+	var userId = common.getQueryUrl('id');
+	var userName = common.getQueryUrl('name');
+	var userPost = common.getQueryUrl('post');
+	
+	$('.point_title').html(projectName);
+	$('.user_name').val(userName);
+	$('.user_post').val(userPost);
+	
+	function submit() {
+		var postData = {};
+		postData.dsUserId = userId;
+		postData.dsProjectId = projectId;
+		postData.dsResult = $('.introduce').val() || '';
+		postData.dsRemark = $('.remarks').val() || '';
+		console.log(postData)
+		var url = '/api/CostConsult/SaveDepartmentStaff';
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				// mui.back();
+			}
+		})
+	}
+
+	//点击保存
+	mui('.footer_submit_one').on('tap','.btn_save',function() {
+		submit();
+	})
+	
+</script>
+
+
+

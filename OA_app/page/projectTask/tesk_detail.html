@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/project_css.css"/>
+	</head>
+
+	<body>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">任务详情</h1>
+			<img src="../../img/edit.png" class="mui-nav-more">
+		</header>
+		
+		<div class="mui-content">
+			
+			<div class="project_detail">
+				<p>项目名称：<span class="project_name"></span></p>
+				<p>创建人员：<span class="create_name"></span></p>
+				<p>创建时间：<span class="create_time"</span></p>
+			</div>
+			
+			<div class="task_details">
+				<h5>任务概况</h5>
+				<p><span>任务描述</span> <input type="text" class="task_intro" disabled=""/></p>
+				<!-- <p><span>任务级别</span> <input type="text" class="task_class" disabled=""/></p> -->
+				<p><span>任务状态</span> <input type="text" class="task_status" disabled=""/></p>
+				<p><span>接收人员</span> <input type="text" class="task_recive" disabled=""/></p>
+				<p class="not_bottom"><span>任务备注</span> <input class="task_remark" type="text" disabled=""/></p>
+				<h5 class="hide">附件</h5>
+				<ul class="file_list show_file_list">
+					
+				</ul>
+				<h5>任务用时</h5>
+				<p class="not_bottom"><span>计划开始时间</span> <input type="text" class="plan_start_time" disabled=""/></p>
+				<p class="not_bottom"><span>计划完成时间</span> <input type="text" class="plan_end_time" disabled=""/></p>
+				<p><span>预计工时</span> <input type="text" class="plan_work_time" disabled=""/></p>
+				<p class="not_bottom"><span>实际开始时间</span> <input type="text" class="now_start_time" disabled=""/></p>
+				<p class="not_bottom"><span>实际完成时间</span> <input type="text" class="now_end_time" disabled=""/></p>
+				<p><span>实际工时</span> <input type="text" class="now_work_time" disabled=""/></p>
+			</div>
+			
+		</div>
+	</body>
+
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	
+	var id = common.getQueryUrl('id');
+	var projectId = common.getQueryUrl('projectid');
+	
+	common.promise()
+	.then(function() {
+		mui.showLoading('加载中...');
+		return;
+	}).then(function() {
+		return getDetail();
+	}).then(function(res) {
+		if(res.code == 200) {
+			common.arrObjTrimAndNull(res.data);
+			$('.project_name').html(res.data.ProjectName);
+			$('.create_name').html(res.data.RealName);
+			$('.create_time').html(res.data.CreatedTime);
+			$('.task_intro').val(res.data.Name);
+			// $('.task_class').val(res.data.ScheduleLevelName);
+			$('.task_status').val(res.data.StatusNmae);
+			$('.task_recive').val(res.data.StaffName);
+			$('.task_remark').val(res.data.Remark);
+			var html = '';
+			for(var i=0;i<res.data.lstFile.length;i++) {
+				var item = res.data.lstFile[i];
+				html +='<li id='+ item.Id +' path='+ item.FilePath +
+				'><a class="file_list_name spans_back" >'+ item.Name + item.FileFormat +
+				'</a></li>';
+			}
+			$('.file_list').html(html);
+			if(html== '') {
+				$('.hide').hide();
+			}
+			
+			$('.plan_start_time').val(res.data.StartTime);
+			$('.plan_end_time').val(res.data.EndTime);
+			$('.plan_work_time').val(res.data.UsingDays);
+			
+			$('.now_start_time').val(res.data.HistoryStartTime);
+			$('.now_end_time').val(res.data.HistoryEndTime);
+			$('.now_work_time').val(res.data.HisoryUsingDays);
+		}else {
+			mui.toast('获取失败');
+		}
+		mui.hideLoading()
+	})
+	
+	function getDetail() {
+		var url = '/api/CostConsult/FillScheduleNew';
+		var postData = {
+			Id: id,
+			projectId: projectId,
+			isSee: true
+		}
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			return res;
+		})
+	}
+	
+	mui('.header_box').on('tap','.mui-nav-more',function() {
+		window.location.href = './task_edit.html?id='+ id+'&projectid='+ projectId;
+	})
+	
+	//预览
+	mui('.file_list').on('tap','li',function() {
+		var path = $(this).attr('path');
+		mui.showLoading('加载中...');
+		console.log(baseUrl + path)
+		openFile(baseUrl + path)
+	});
+	
+</script>

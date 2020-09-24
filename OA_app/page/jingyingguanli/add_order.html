@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js">
+		
+		</script>
+		<style type="text/css">
+			b{
+				color: #DD524D;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">客户下单</h1>
+		</header>
+		<div class="mui-content order">
+			<div class="company_info">
+				<p><span class="class_name">企业名称</span><input type="text" disabled placeholder="请填写" class="company_name"/></p>
+				<p><span class="class_name">企业联系人</span><input type="text" disabled placeholder="请填写" class="company_people"/></p>
+				<p><span class="class_name">联系方式</span><input type="text" disabled placeholder="请填写" class="company_phone"/></p>
+				<p><span class="class_name">发票抬头</span><input type="text" name="" id="" placeholder="请填写" class="company_id"/></p>
+				<p><span class="class_name">纳税人识别号</span><input type="text" name="" id="" placeholder="请填写(数字/字母)" class="company_iden_number" oninput="getNumber(this)" onpropertychange="getNumber(this)"/></p>
+				<p><span class="class_name">上传发票信息</span><input type="file" name="" id="add_file" value="" multiple/><label for="add_file" class="add_file_btn">添加</label></p>
+				<ul class="file_tendering_list">
+					
+				</ul>
+				<p><label class="class_name">是否需要快递</label><input type="checkbox" class="order_checkbox" onchange="changeExpress(this)"/></p>
+				<p class="express_info"><span class="class_name">快递信息</span><input type="text" placeholder="请填写" class="express_text"/></p>
+				<p><span class="class_name">备注</span><input type="text" name="" id="" placeholder="请填写" class="company_remark"/></p>
+				<div class="order_list">
+					<div class="list_item">
+						<h5>产品订单</h5>
+						<p class="choose"><span class="class_name">产品名称<b>*</b></span><input type="text" name="" id="" placeholder="请选择" class="product_name"/><span class="up_btn"></span></p>
+						<p class="not_operation"><span class="class_name">产品类型</span><input type="text" disabled value="自动生成" class="product_type"/></p>
+						<p class=""><span class="class_name">价格</span><input type="text" disabled name="" id="" value="自动生成" class="product_price" oninput="changePrice(this)" onpropertychange="changePrice(this)"/></p>
+						<p><span class="class_name">订单数量</span><input type="number" name="" id="" placeholder="0" class="product_nub" oninput="changeNym(this)" onpropertychange="changeNym(this)"/></p>
+						<p class="not_operation"><span class="class_name">总价</span><input type="text" disabled name="" id="" value="自动计算" class="all_count"/></p>
+						<p class="choose"><span class="class_name">订单性质</span><input type="text" name="" id="" placeholder="请选择" class="order_type"/><span class="up_btn"></span></p>
+						<p class="choose_other"><span class="class_name">其他</span><input type="text" name="" id="" placeholder="请填写" class="order_type_text"/></p>
+						<p class="choose"><span class="class_name">赠品名称</span><input type="text" name="" id="" placeholder="请选择" class="give_name"/><span class="up_btn"></span></p>
+						<p class=""><span class="class_name">赠品数量</span><input type="number" name="" id="" placeholder="0" class="give_number"/></p>
+						<p><span class="class_name">备注</span><input type="text" name="" id="" placeholder="请填写" class="order_remark"/></p>
+						<div class="btn_box">
+							<span class="delete_order">删除订单</span>
+						</div>
+					</div>
+				</div>
+				<div class="btn_box back_class">
+					<span class="add_order">添加订单</span>
+				</div>
+			</div>
+			<div class="footer_submit">
+				<span class="btn_cancel">取消</span><span class="btn_save">保存</span>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	var htmlgh = '<div class="list_item"><h5>产品订单</h5>'+
+	'<p class="choose"><span class="class_name">产品名称<b>*</b></span><input type="text" name="" id="" placeholder="请选择" class="product_name"/><span class="up_btn"></span></p>'+
+	'<p class="not_operation"><span class="class_name">产品类型</span><input type="text" disabled value="自动生成" class="product_type"/></p>'+
+	'<p class=""><span class="class_name" oninput="changePrice(this)" onpropertychange="changePrice(this)">价格</span><input type="text" disabled name="" id="" value="自动生成" class="product_price"/></p>'+
+	'<p><span class="class_name">订单数量</span><input type="number" name="" id="" placeholder="0" class="product_nub" oninput="changeNym(this)" onpropertychange="changeNym(this)"/></p>'+
+	'<p class="not_operation"><span class="class_name">总价</span><input type="text" disabled name="" id="" value="自动计算" class="all_count"/></p>'+
+	'<p class="choose"><span class="class_name">订单性质</span><input type="text" name="" id="" placeholder="请选择" class="order_type"/><span class="up_btn"></span></p>'+
+	'<p class="choose_other"><span class="class_name">其他</span><input type="text" name="" id="" placeholder="请填写" class="order_type_text"/></p>'+
+	'<p class="choose"><span class="class_name">赠品名称</span><input type="text" name="" id="" placeholder="请选择" class="give_name"/><span class="up_btn"></span></p>'+
+	'<p class=""><span class="class_name">赠品数量</span><input type="number" name="" id="" placeholder="0" class="give_number"/></p>' + 
+	'<p><span class="class_name">备注</span><input type="text" name="" id="" placeholder="请填写" class="order_remark"/></p>'+
+	'<div class="btn_box"><span class="delete_order">删除订单</span></div></div>'
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	var userId;
+	var types = [];
+	var typeId;
+	var typeObj = {};
+	var orderNature = [];
+	var natureId;
+	var allPrice = 0;
+	var userPicker;
+	var isNeedExpress = false;
+	var fileList = [];
+	var giveId;//赠品
+	
+	
+	var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+	console.log(userInfo)
+	$('.company_id').val(userInfo.CompanyName);
+	
+		common.promise().then(function() {
+			return getUserInfo()
+		}).then(function() {
+			return getProductNemeList();
+		}).then(function() {
+			return getOrderNature();
+		})
+		
+		mui('.company_info').on('tap','.add_order',function() {
+			// var newhtml = $('.order_list').find('.list_item').eq(0).clone(true);
+			
+			// console.log(newhtml)
+			$('.order_list').append(htmlgh);
+			// choose(userPicker)
+		});
+		
+		mui('.company_info').on('tap','.delete_order',function() {
+			var liLength = $('.order_list').find('.list_item').length;
+			if(liLength == 1) {
+				mui.toast('不能再删除了哦！');
+				return;
+			}
+			$(this).parents('.list_item').remove();
+		});
+		
+		//点击保存
+		mui('.footer_submit').on('tap','.btn_save', function() {
+			saveOrder(true);
+		});
+		
+		function choose(userPicker) {
+			var showUserPickerButton = mui('.choose');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					var _this = this;
+					if($(_this).find('.product_name').length > 0) {
+						userPicker.setData(types);
+						userPicker.show(function(items) {
+							$(_this).find('.product_name').val(items[0].text);
+							// typeId = items[0].value;
+							$(_this).parents('.list_item').attr('type_id',items[0].value)
+							var this_obj = typeObj[items[0].value];
+							$(_this).parents('.list_item').find('.product_type').val(this_obj.productType);
+							$(_this).parents('.list_item').find('.product_price').val(this_obj.ProductPrice);
+							$(_this).parents('.list_item').find('.product_price').removeAttr('disabled');
+							allPrice = parseInt($(_this).parents('.list_item').find('.product_nub').val()) * parseInt($(_this).parents('.list_item').find('.product_price').val()) ;
+							if(!allPrice) {
+								allPrice = 0;
+							}
+							$(_this).parents('.list_item').find('.all_count').val(allPrice);
+						});
+					}
+					if($(this).find('.order_type').length > 0) {
+						userPicker.setData(orderNature);
+						userPicker.show(function(items) {
+							$(_this).find('.order_type').val(items[0].text);
+							$(_this).parents('.list_item').attr('natureId',items[0].value);
+							if(items[0].text == '其他') {
+								$(_this).parents('.list_item').find('.choose_other').show();
+							}else {
+								$(_this).parents('.list_item').find('.choose_other').hide();
+							}
+						});
+					}
+					
+					if($(_this).find('.give_name').length > 0) {
+						userPicker.setData(types);
+						userPicker.show(function(items) {
+							$(_this).find('.give_name').val(items[0].text);
+							giveId = items[0].value;
+							console.log(giveId);
+						});
+					}
+				}, false);
+			});
+		}
+		
+		chooseInit();
+		function chooseInit() {
+			mui('.company_info').on('tap','.product_name',function() {
+				var _this = this;
+				userPicker = new mui.PopPicker();
+				userPicker.setData(types);
+				userPicker.show(function(items) {
+					$(_this).val(items[0].text);
+					// typeId = items[0].value;
+					$(_this).parents('.list_item').attr('type_id',items[0].value)
+					var this_obj = typeObj[items[0].value];
+					$(_this).parents('.list_item').find('.product_type').val(this_obj.productType);
+					$(_this).parents('.list_item').find('.product_price').val(this_obj.ProductPrice);
+					$(_this).parents('.list_item').find('.product_price').removeAttr('disabled');
+					allPrice = parseInt($(_this).parents('.list_item').find('.product_nub').val()) * parseInt($(_this).parents('.list_item').find('.product_price').val()) ;
+					if(!allPrice) {
+						allPrice = 0;
+					}
+					$(_this).parents('.list_item').find('.all_count').val(allPrice);
+					userPicker.dispose()
+				});
+			});
+			
+			mui('.company_info').on('tap','.order_type',function() {
+				var _this = this;
+				userPicker = new mui.PopPicker();
+				userPicker.setData(orderNature);
+				userPicker.show(function(items) {
+					$(_this).val(items[0].text);
+					$(_this).parents('.list_item').attr('natureId',items[0].value);
+					if(items[0].text == '其他') {
+						$(_this).parents('.list_item').find('.choose_other').show();
+					}else {
+						$(_this).parents('.list_item').find('.choose_other').hide();
+					}
+					userPicker.dispose();
+				});
+			});
+			
+			mui('.company_info').on('tap','.give_name',function() {
+				var _this = this;
+				userPicker = new mui.PopPicker();
+				userPicker.setData(types);
+				userPicker.show(function(items) {
+					$(_this).val(items[0].text);
+					giveId = items[0].value;
+					console.log(giveId);
+					userPicker.dispose();
+				});
+			})
+		}
+		
+		(function(mui) {
+		
+			//时间选择
+			var btns = mui('.checktime');
+			btns.each(function(i, btn) {
+				btn.addEventListener('tap', function() {
+					if(disabledCheck) {
+						return;
+					}
+					var _self = this;
+					if(_self.picker) {
+						_self.picker.show(function (rs) {
+							$(_self).html(rs.text + '<span></span>');
+							_self.picker.dispose();
+							_self.picker = null;
+						});
+					} else {
+						var optionsJson = this.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+						var id = this.getAttribute('id');
+						_self.picker = new mui.DtPicker(options);
+						_self.picker.show(function(rs) {
+							$(_self).html(rs.text + '<span></span>');
+							_self.picker.dispose();
+							_self.picker = null;
+						});
+					}
+				}, false);
+			});
+			//联系人选择
+			mui.ready(function() {
+				var _getParam = function(obj, param) {
+					return obj[param] || '';
+				};
+				
+				userPicker = new mui.PopPicker();
+				// choose(userPicker)
+			});	
+		})(mui);
+		
+	
+	//监听CheckBox
+	function changeExpress(self) {
+		if ($(self).prop('checked')) {
+		   isNeedExpress = true;
+			 $('.express_info').show()
+		}else {
+			isNeedExpress = false;
+			$('.express_info').hide()
+		}
+	}
+	
+	//获取客户信息
+	function getUserInfo() {
+		var url = '/api/BusinessManage/FillPlaceAnOrder';
+		return request.post(url,{contacterID: id}).then(function(res) {
+			console.log('客户',res);
+			if(res.code == 200) {
+				$('.company_name').val(res.data.CompanyName);
+				var info = res.data.mdoel;
+				$('.company_people').val(info.Name);
+				$('.company_phone').val(info.Phone);
+				userId = info.ID;
+			}
+			return;
+		})
+	}
+	
+	//获取产品列表显示
+	function getProductNemeList() {
+		var url = '/api/BusinessManage/ProductInfoShow';
+		return request.post(url).then(function(res) {
+			console.log('类型',res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {
+						value: res.data[i].ID,
+						text: res.data[i].Name
+					}
+					types.push(obj);
+					typeObj[res.data[i].ID] = res.data[i];
+				}
+			}
+		})
+	}
+	
+	//获取订单性质
+	function getOrderNature() {
+		var url = '/api/BusinessManage/RemarkTypeConfigSelect';
+		return request.post(url).then(function(res) {
+			console.log('订单性质',res);
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					var obj = {
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					}
+					orderNature.push(obj);
+				}
+			}
+			return;
+		})
+	}
+	
+	//保存订单信息
+	function saveOrder() {
+		
+		if(!$('.company_id').val()) {
+			mui.toast('请输入发票抬头！');
+			return;
+		}
+		if(!$('.company_iden_number').val()) {
+			mui.toast('请输入纳税人识别号！');
+			return;
+		}
+		var postData = {};
+		postData.ContacterID = userId;
+		postData.InvoiceTitle = $('.company_id').val();
+		postData.TINumber = $('.company_iden_number').val();
+		postData.Remark = $('.company_remark').val();
+		postData.ASingleTime = getTime('year');
+		postData.isExpressage = isNeedExpress;
+		if(isNeedExpress) {
+			postData.ExpressInboxMessages = $('.express_text').val() || '';
+		}
+		postData.LstFile = fileList;
+		console.log(postData)
+		var length = $('.order_list').find('.list_item').length;
+		if(length == 0) {
+			mui.toast('请添加最少一个产品信息！');
+			return;
+		}
+		var lists = [];
+		for(var i=0;i<length;i++) {
+			var list = $('.order_list').find('.list_item').eq(i);
+			var obj = {};
+			var typeId = $(list).attr('type_id');
+			if(!typeId) {
+				mui.toast('请选择产品！');
+				return;
+			}
+			if(!$(list).find('.product_nub').val()) {
+				mui.toast('请输入订单数量！');
+				return;
+			}
+			// if(!natureId) {
+			// 	mui.toast('请选择产品性质！');
+			// 	return;
+			// }
+			
+			var natureId = $(list).attr('natureId');
+			
+			obj.Remark = $(list).find('.order_remark').val() || '';
+			obj.Quantity = $(list).find('.product_nub').val();
+			obj.ProductID = typeId;
+			obj.TotalPrices = $(list).find('.all_count').val();
+			obj.ProductState = natureId;
+			if(common.getKeyValue(orderNature,natureId) == '其他') {
+				obj.ProductStateText = $('.order_type_text').val() || '';
+			}
+			if(giveId) {
+				obj.ComplimentaryID = giveId;
+			}
+			obj.ComplimentarySum = $('.give_number').val();
+			console.log(obj)
+			lists.push(obj);
+		}
+		postData.listProduct = lists;
+		console.log(postData);
+		var url = '/api/BusinessManage/SavePlaceAnOrder';
+		return request.post(url,postData).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				window.history.back()
+			}else {
+				mui.toast(res.msg);
+			}
+		})
+	}
+	
+	function changePrice(self) {
+		allPrice = parseInt($(self).parents('.list_item').find('.product_nub').val()) * parseInt($(self).val()) ;
+		if(!allPrice) {
+					 allPrice = 0;
+		}
+		$(self).parents('.list_item').find('.all_count').val(allPrice);
+	}
+	
+	function changeNym(self) {
+		allPrice = parseInt($(self).parents('.list_item').find('.product_nub').val()) * parseInt($(self).parents('.list_item').find('.product_price').val()) ;
+		if(!allPrice) {
+					 allPrice = 0;
+		}
+		$(self).parents('.list_item').find('.all_count').val(allPrice);
+	}
+	
+	
+	//点击文件上传按钮
+	$("#add_file").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(uploads(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='
+			+ files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+			$('.file_tendering_list').append(names)
+		}
+	});
+	
+	//预览
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		preview(this,fileList)
+	})
+	function preview(self,newFile) {
+		var path = $(self).attr('path');
+		var item = $(self).attr('item');
+		console.log(newFile)
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<newFile.length;i++) {
+				if(item == newFile[i].tid) {
+					openFile(baseUrl + newFile[i].FilePath)
+				}
+			}
+		}
+	}
+	
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		console.log(fileList)
+		$(this).parents('li').remove();
+	})
+	
+	function uploads(formData,flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=Outcome';
+		return request.upload(url, formData).then(function(res) {
+			if (res && res.code == 200) {
+					var data = {
+					  "FileName": res.data.FileName,
+			      "Extension": res.data.Extension,
+			      "FilePath": res.data.FilePath,
+			      "Type": "资格预审--资格预审文件审批",
+						"tid": flag
+					}
+					if(fileList.length > 0) {
+						console.log(fileList,data)
+						for(var i=0;i<fileList.length;i++) {
+							if(fileList[i].FileName == data.FileName && fileList[i].Extension == data.Extension){
+								fileList.splice(i,1); 
+							}
+						}
+					}
+					fileList.push(data)
+					return;
+				}
+		})
+	}
+	
+</script>
+
+
+

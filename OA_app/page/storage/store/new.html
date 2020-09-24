@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add.css" />
+		<link rel="stylesheet" type="text/css" href="../../../css/add_task_point.css" />
+		<script src="../../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../../js/jquery.min.js">
+
+		</script>
+		<!-- <script type="text/javascript">
+			mui.init()
+		</script> -->
+		<style type="text/css">
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 70%;
+			}
+			.company_info {
+				margin-bottom: 70px;
+			}
+			.edit {
+				display: none;
+			}
+			.spans_back {
+				color: #3B9CFF;
+			}
+			.hide_span{
+				display: none;
+			}
+			.this_company b{
+				color: #FE7171;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加（编辑）仓库信息</h1>
+			<img style="display: none;" src="../../../img/edit.png" class="edit">
+		</header>
+		<div class="mui-content">
+			<div class="company_info this_company">
+				<p><span class="class_name">仓库名称<b>*</b></span><input type="text" placeholder="请填写" class="name" /></p>
+			<!-- 	<p class="choose company_types"><span class="class_name">资产类型<b>*</b></span><input type="text" placeholder="请选择"
+					 class="asset_type" /><span class="up_btn choose_img"></span></p>
+ -->
+				<p><span class="class_name">负责人员<b>*</b></span><input type="text" placeholder="请填写" class="asset_no" /></p>
+				<!-- <p><span class="class_name">资产规格</span><input type="text" placeholder="请填写" class="asset_spec" /></p>
+				<p class="choose get_source"><span class="class_name">资产来源</span><input type="text" placeholder="请选择" class="asset_resource" /> <span class="up_btn choose_img"></span></p>
+				<p><span class="class_name">价格（元）<b>*</b></span><input type="number" placeholder="请填写" class="price" /></p>
+				<p><span class="class_name">生产商</span><input type="text" placeholder="请填写" class="company" /></p>
+				<p class="checktime"><span class="class_name">生产日期</span><input type="text" placeholder="请选择" class="production_date" /><span class="up_btn choose_img"></span></p>
+				<p><span class="class_name">供应商</span><input type="text" placeholder="请填写" class="supply_name" /></p>
+				<p class="checktime"><span class="class_name">采购日期</span><input type="text" placeholder="请选择" class="buy_date" /><span class="up_btn choose_img"></span></p>
+				<p><span class="class_name">存放区域</span><input type="text" placeholder="请填写" class="save_addr" /></p>
+				<p class="checktime"><span class="class_name">保修期</span><input type="text" placeholder="请选择" class="peroid_date" /><span class="up_btn choose_img"></span></p>
+				<p class="choose get_use_user"><span class="class_name">领用人</span><input type="text" placeholder="请选择" class="use_user" /><span class="up_btn choose_img"></span></p>
+				<p class="choose get_manager"><span class="class_name">管理人</span><input type="text"  placeholder="请选择" class="manager" /><span class="up_btn choose_img"></span></p>
+				<p class="choose get_status"><span class="class_name">资产状态<b>*</b></span><input type="text" placeholder="请选择" class="status" /><span class="up_btn choose_img"></span></p>
+				<h5>附件上传</h5>
+				<div class="plan_time file_upload">
+					<span>附件上传</span>
+					<input type="file" name="" id="add_file_title" value="" multiple/><label for="add_file_title" class="btn_add_title choose_img">添加</label>
+				</div>
+				<ul class="file_tendering_list">
+					
+				</ul> -->
+				<h5>备注</h5>
+				<div class="task_name">
+					<textarea rows="" cols="" class="remarks" placeholder="请填写"></textarea>
+				</div>
+			</div>
+			
+		</div>
+		<div class="footer_submit">
+			<!-- <span class="btn_cancel">取消</span> -->
+			<span class="btn_save" style="width: 100%;">保存</span>
+		</div>
+	</body>
+</html>
+<script src="../../../js/mui.js"></script>
+<script src="../../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+
+	var typeArr = [];
+	var asset_type;
+	var sourceArr = [];
+	var asset_resource;
+	var statusArr = [];
+	var asset_status;
+	var userArr = [];
+	var use_user;
+	var manager;
+	var isDisabled = false;
+	var fileList = [];
+	var principalId  = ''; //负责人id
+	var name = common.getQueryUrl('name');
+	var id = common.getQueryUrl('id');
+	 
+	var isCheck = common.getQueryUrl('check');
+	var onlysee = common.getQueryUrl('onlysee');
+	if(isCheck) {
+		$('.mui-title').html('添加（编辑）仓库信息');
+		// common.disbledForm();
+		// isDisabled = true;  
+		// $('.edit').hide()
+		$('.file_upload').hide();
+	}
+	if(onlysee) {
+		$('.mui-title').html('添加（编辑）仓库信息');
+		// common.disbledForm();
+		// isDisabled = true;  
+		$('.file_upload').hide()
+	}
+
+	common.promise().then(function() {
+		return getType();
+	}).then(function() {
+		return getSource();
+	}).then(function() {
+		return getStatus();
+	}).then(function() {
+		return getUsers();
+	}).then(function() {
+		if (id) {
+			getDetail()
+		}
+	})
+
+	function getDetail() {
+		var url = '/api/Resource/FillStorage';
+		return request.post(url, {
+			id: id
+		}).then(function(res) {
+			// console.log('返填');
+			console.log(res);
+			// return;
+			if (res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				principalId = res.data.PrincipalId;
+				$('.name').val(res.data.StorageName || '');
+				 
+				$('.asset_no').val(name  || '');
+				$('remarks').val(res.data.Remark  || '');
+		
+		
+				// var names = '';
+				// for(var i=0;i<res.data.LstFile.length;i++) {
+				// 	var lists = res.data.LstFile[i];
+				// 	if(isCheck || onlysee) {
+				// 		names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+				// 		+ lists.FilePath +'>'+ lists.FileName + lists.FileFormat + 
+				// 		'</span><span class="file_list_delete hide_span">删除</span></li>';
+				// 	}
+				// 	var data = {
+				// 		"FileName": lists.FileName,
+				// 		"Extension": lists.FileFormat,
+				// 		"FilePath": lists.FilePath,
+				// 		"Type": "行政管理--固定资产管理",
+				// 		"Id": lists.Id
+				// 	}
+				// 	fileList.push(data);
+				// }
+				// // fileList = res.data.LstFile;
+				$('.file_tendering_list').html(names);
+			}
+		})
+	}
+
+	function setData(data) {
+		var arr = [];
+		for (var i = 0; i < data.length; i++) {
+			var obj = {};
+			obj.value = data[i].Value;
+			obj.text = data[i].Text;
+			arr.push(obj)
+		}
+		return arr
+	}
+
+	//获取资产类别
+	function getType() {
+		var url = '/api/Resource/CategorySelect';
+		return request.post(url).then(function(res) {
+			console.log('类别:',res);
+			if(res.code == 200) {
+				typeArr = setData(res.data);
+			}
+		})
+	}
+	//获取资产来源
+	function getSource() {
+		var url = '/api/Resource/SourceSelect';
+		return request.post(url).then(function(res) {
+			console.log('来源:',res);
+			if(res.code == 200) {
+				sourceArr = setData(res.data)
+			}
+		})
+	}
+	
+	//获取资产状态
+	function getStatus() {
+		var url = '/api/Resource/StatusSelect';
+		return request.post(url).then(function(res) {
+			console.log('状态:',res);
+			if(res.code == 200) {
+				if(res.code == 200) {
+					statusArr = setData(res.data)
+				}
+			}
+		})
+	}
+	
+	//领用人管理人
+	function getUsers() {
+		var url = '/api/Resource/UsersSelect';
+		return request.post(url).then(function(res) {
+			console.log('领用人:',res);
+			if(res.code == 200) {
+				if(res.code == 200) {
+					var data = res.data;
+					for (var i = 0; i < data.length; i++) {
+						var obj = {};
+						obj.value = data[i].Id;
+						obj.text = data[i].RealName;
+						userArr.push(obj)
+					}
+				}
+			}
+		})
+	}
+	
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=AssetsVir';
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": "行政管理--固定资产管理",
+					"tid": flag
+				}
+				if (fileList.length > 0) {
+					console.log(fileList, data)
+					for (var i = 0; i < fileList.length; i++) {
+						if (fileList[i].FileName == data.FileName && fileList[i].Extension == data.Extension) {
+							fileList.splice(i, 1);
+						}
+					}
+				}
+				fileList.push(data)
+				return;
+			}
+		})
+	}
+	//
+	function submit() {
+		var postData = {};
+		if(id) {
+			postData.ID = id;
+		}
+		if(!$('.name').val()) {
+			mui.toast('请输入仓库名称！');
+			return;
+		}
+		postData.StorageName = $('.name').val() || '';
+		if(!$('.asset_no').val()) {
+			mui.toast('请输入负责人员！');
+			return;
+		}
+	 postData.PrincipalId = principalId;
+		if(!$('.remarks').val()) {
+			mui.toast('请填写备注！');
+			return;
+		}
+		
+	 postData.Remark = $('.remarks').val() || '';
+	 
+	 
+		common.promise()
+		// .then(function() {
+		// 	if ($("#add_file_title")[0].files.length>0) {
+		// 		var files = $("#add_file_title")[0].files;
+		// 		var arr = []
+		// 		for(var i=0;i<files.length;i++) {
+		// 			if(files[i].deletetrue) {
+		// 				continue;
+		// 			}
+		// 			var formData = new FormData();
+		// 			formData.append("file",files[i]);
+		// 			arr.push(upload(formData))
+		// 		}
+		// 		return Promise.all(arr);
+		// 	} else {
+		// 		return;
+		// 	}
+		// })
+		.then(function() {
+			var url = '/api/Resource/SaveStorageManage';
+			console.log(postData)
+			return request.post(url, postData).then(function(res) {
+				// console.log(res)
+				if (res.code == 200) {
+					mui.back();
+				} else {
+					mui.toast(res.msg);
+				}
+			})
+		})
+	}
+
+	mui('.file_tendering_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	mui('.header_box').on('tap','.edit',function() {
+		$('.mui-title').html('编辑固定资产信息');
+		common.unDisbledForm();
+		isDisabled = false;
+		$('.up_btn').show();
+		$('.footer_submit').show();
+		$('.edit').hide();
+		$('.file_upload').show();
+		$('.file_tendering_list .file_list_delete').removeClass('hide_span');
+	})
+	
+	//点击文件上传按钮
+	$("#add_file_title").on('change', function(e) {
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,files[i].lastModified))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='+ 
+			files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+				$('.file_tendering_list').append(names);
+		}
+	});
+	
+	mui('.file_tendering_list').on('tap','.file_list_name',function() {
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(item == fileList[i].tid) {
+					openFile(baseUrl + fileList[i].FilePath)
+				}
+			}
+		}
+	})
+
+	//点击保存
+	mui('.footer_submit').on('tap', '.btn_save', function() {
+		submit(true);
+	});
+
+	(function(mui) {
+		//时间选择
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				if(isDisabled) return;
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						if($(_self).find('.buy_date').length > 0) {
+							$('.buy_date').val(rs.text);
+						}
+						 if($(_self).find('.peroid_date').length > 0) {
+						 	$('.peroid_date').val(rs.text);
+						 } 
+						 if($(_self).find('.production_date').length > 0) {
+						 	$('.production_date').val(rs.text);
+						 }
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					_self.picker = new mui.DtPicker(options);
+					
+					_self.picker.show(function(rs) {
+						if($(_self).find('.buy_date').length > 0) {
+							$('.buy_date').val(rs.text);
+						} 
+						if($(_self).find('.peroid_date').length > 0) {
+							$('.peroid_date').val(rs.text);
+						} 
+						if($(_self).find('.production_date').length > 0) {
+							$('.production_date').val(rs.text);
+						}
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.choose');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					if(isDisabled) return;
+					var _this = this;
+					if ($(this).hasClass('company_types')) {
+						userPicker.setData(typeArr);
+						userPicker.show(function(items) {
+							$('.asset_type').val(items[0].text);
+							asset_type = items[0].value;
+						});
+					}
+					if ($(this).hasClass('get_source')) {
+						userPicker.setData(sourceArr);
+						userPicker.show(function(items) {
+							$('.asset_resource').val(items[0].text);
+							asset_resource = items[0].value;
+						});
+					}
+					if ($(this).hasClass('get_status')) {
+						userPicker.setData(statusArr);
+						userPicker.show(function(items) {
+							$('.status').val(items[0].text);
+							asset_status = items[0].value;
+						});
+					}
+					
+					if ($(this).hasClass('get_use_user')) {
+						userPicker.setData(userArr);
+						userPicker.show(function(items) {
+							$('.use_user').val(items[0].text);
+							use_user = items[0].value;
+						});
+					}
+					if ($(this).hasClass('get_manager')) {
+						userPicker.setData(userArr);
+						userPicker.show(function(items) {
+							$('.manager').val(items[0].text);
+							manager = items[0].value;
+						});
+					}
+				}, false);
+			});
+		});
+	})(mui);
+</script>

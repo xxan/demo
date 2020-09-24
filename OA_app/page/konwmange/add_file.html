@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/konw.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css"/>
+		<script src="../../js/mui.js"></script>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init({
+				gestureConfig:{
+				   tap: true, //默认为true
+				   doubletap: true, //默认为false
+				   longtap: true, //默认为false
+				   swipe: true, //默认为true
+				   drag: true, //默认为true
+				   hold:false,//默认为false，不监听
+				   release:false//默认为false，不监听
+				  }
+			})
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">添加文档</h1>
+			
+		</header>
+		
+		<div class="mui-content">
+			<div class="task_details">
+				<p><span>文档名称<i>*</i></span> <input type="text" class="share_name" placeholder="请填写"/></p>
+				<p class="choose"><span>文档类别<i>*</i></span> <input type="text" class="task_class" placeholder="请选择"/></p>
+				<p class="inpt_button">
+					<span>文档上传<i>*</i></span>
+					<input type="file" name="" id="add_file" multiple /><label for="add_file" class="btn_add_title">添加</label>
+				</p>
+				<ul class="file_list">
+					
+				</ul>
+			</div>
+			
+		</div>
+		
+		<div class="footer_submit">
+			<span class="btn_cancel">取消</span><span class="btn_submit">确定</span>
+		</div>
+	</body>
+
+</html>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+
+<script type="text/javascript">
+	var id = common.getQueryUrl('id');
+	var isEdit = common.getQueryUrl('edit');
+	var typeArr = [];
+	var typeId;
+	var fileList = [];
+	if(isEdit) {
+		$('.mui-title').html('文档修改');
+	}
+	clickInit();
+	
+	function clickInit() {
+		mui('.footer_submit').on('tap','.btn_submit', function() {
+			submit()
+		})
+		
+		//点击文件上传按钮
+		$("#add_file").on('change', function(e) {
+			var files = $(this)[0].files;
+			console.log(files)
+			var names = '';
+			var arr = [];
+			for(var i=0;i<files.length;i++) {
+				var formData = new FormData();
+				formData.append("file",files[i]);
+				arr.push(upload(formData,files[i].lastModified))
+				names += '<li item='+ files[i].lastModified +'><a class="file_list_name spans_back" item='
+				+ files[i].lastModified +'>'+ files[i].name +
+				'</a><span class="file_list_delete">删除</span></li>';
+			}
+			var _this = this;
+			Promise.all(arr).then(function() {
+				$(_this).val('');
+			})
+			if(files.length > 0) {
+					$('.file_list').append(names);
+			}
+		});
+		
+		//删除文件
+		mui('.file_list').on('tap','.file_list_delete',function() {
+			var id = $(this).parents('li').attr('id');
+			var item = $(this).parents('li').attr('item');
+			if(id) {
+				for(var i=0;i<fileList.length;i++) {
+					if(fileList[i].Id == id) {
+						fileList.splice(i,1);
+					}
+				}
+			}
+			if(item) {
+				for(var i=0;i<fileList.length;i++) {
+					if(fileList[i].tid == item) {
+						fileList.splice(i,1);
+					}
+				}
+			}
+			$(this).parents('li').remove();
+		})
+		
+		//预览
+		mui('.file_list').on('tap','.file_list_name',function() {
+			var path = $(this).attr('path');
+			var item = $(this).attr('item');
+			mui.showLoading('加载中...');
+			if(path) {
+				openFile(baseUrl + path)
+			}
+			if(item) {
+				for(var i=0;i<fileList.length;i++) {
+					if(item == fileList[i].tid) {
+						openFile(baseUrl + fileList[i].FilePath)
+					}
+				}
+			}
+		})
+	}
+	
+	common.promise()
+	.then(() => {
+		mui.showLoading('加载中...');
+		return;
+	})
+	.then(() => {
+		return getType();
+	}).then(()=> {
+		if(id) {
+			return getDetail();
+		}
+	}).then(() => {
+		mui.hideLoading()
+	})
+	
+	//保存
+	function submit() {
+		var postData = {};
+		if(!$('.share_name').val()) {
+			mui.toast('请输入文档名称');
+			return;
+		}
+		if(!typeId) {
+			mui.toast('请选择文档类别');
+			return;
+		}
+		if(fileList.length == 0) {
+			mui.toast('请上传文档');
+			return;
+		}
+		postData.Name = $('.share_name').val();
+		postData.Type = typeId;
+		postData.lstFile = fileList;
+		if(id) {
+			postData.Id = id;
+		}
+		
+		var url = '/api/DataManage/SaveDocument';
+		console.log(postData)
+		return request.post(url,postData).then(res => {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('保存失败！' + res.msg)
+			}
+		})
+	}
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/DataManage/FillDocument';
+		return request.post(url,{id: id}).then(res => {
+			console.log(res)
+			common.arrObjTrimAndNull(res)
+			if(res.code == 200) {
+				$('.share_name').val(res.data.Name);
+				$('.task_class').val(common.getKeyValue(typeArr,res.data.Type));
+				typeId = res.data.Type;
+				var html = '';
+				for(var i=0;i<res.lstFile.length;i++) {
+					var lists = res.lstFile[i];
+					html += '<li id='+ lists.Id +'><a class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.Name + lists.FileFormat +
+						'</a><span class="file_list_delete hide_span">删除</span></li>';
+						
+					var obj = {
+						FileName: lists.Name,
+						Extension: lists.FileFormat,
+						FilePath: lists.FilePath,
+						Id: lists.Id
+					}
+					fileList.push(obj)
+				}
+				$('.file_list').html(html)
+			}else {
+				mui.toast('获取详情失败！' + res.msg);
+			}
+		})
+	}
+	
+	//获取文档类别
+	function getType() {
+		var url = '/api/DataManage/DocTypeSelect';
+		return request.post(url).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				for(var i=0;i<res.data.length;i++) {
+					typeArr.push({
+						value: res.data[i].SUB_ID,
+						text: res.data[i].SUB_NM
+					})
+				}
+			}
+			return;
+		})
+	}
+	
+	function upload(formData, flag) {
+		var url = '/api/BusinessManage/UploadFile?Type=Daily';
+		return request.upload(url, formData).then(function(res) {
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"tid": flag
+				}
+				fileList.push(data)
+				return;
+			}
+		})
+	}
+	
+	//选择器
+	(function(mui) {
+		//联系人选择
+		mui.ready(function() {
+			var _getParam = function(obj, param) {
+				return obj[param] || '';
+			};
+			var userPicker = new mui.PopPicker();
+			var showUserPickerButton = mui('.choose');
+			showUserPickerButton.each(function(i, btn) {
+				btn.addEventListener('tap', function(event) {
+					var _this = this;
+					userPicker.setData(typeArr);
+					userPicker.show(function(items) {
+						$(_this).find('.task_class').val(items[0].text);
+						typeId = items[0].value;
+					});
+				}, false);
+			});
+		});
+	})(mui);
+	
+	
+</script>

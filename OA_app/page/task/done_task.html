@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/icons-extra.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/index.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/mui.js"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+		</script>
+		<style type="text/css">
+			#pullrefresh {
+				top: 44px;
+			}
+
+			.todo_list {
+				margin-top: -20px;
+			}
+
+			.class_back {
+				background: linear-gradient(150deg, rgba(38, 181, 255, 1), rgba(107, 131, 255, 1)) !important;
+			}
+
+			.class_back img {
+				margin-top: 21% !important;
+				margin-left: 2px !important;
+			}
+
+			.up_fress {
+				top: 44px;
+				background: #F2F2F2;
+				opacity: 1;
+			}
+
+			.down_fress {
+				background: #F2F2F2;
+			}
+
+			.mui-nav-more {
+				top: 5px;
+			}
+			.search_title {
+				text-align: center;
+				margin: 0;
+				height: 30px;
+				line-height: 30px;
+				color: #666666;
+				font-size: 14px;
+			}
+			
+			#topPopover {
+				width: 120px;
+				padding: 10px 0px 20px;
+			}
+			
+			.choose_list {
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				margin: 0;
+			}
+			
+			.choose_list span {
+				padding: 3px 10px;
+				background: #3B9CFF;
+				color: white;
+				border-radius: 10px;
+			}
+			
+			.start_box {
+				margin: 0;
+				padding: 0 10px;
+				text-align: center;
+			}
+			
+			.start_box input {
+				height: 30px;
+				line-height: 30px;
+				font-size: 12px;
+				margin: 0;
+				text-align: center;
+			}
+			
+			.search_btn{
+				margin-top: 10px;
+				display: none;
+			}
+			
+			.search_button {
+				display: inline-block;
+				height: 30px;
+				line-height: 30px;
+				background: #3B9CFF;
+				color: white;
+				padding: 0 10px;
+				border-radius: 5px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">已办任务</h1>
+			<!-- <i class="mui-nav-more mui-icon-extra mui-icon-extra-filter" href="#topPopover"></i> -->
+			<a id="menu" class="mui-nav-more mui-icon-extra mui-icon-extra-filter mui-pull-right" href="#topPopover"></a>
+		</header>
+		<div class="mui-content">
+			<p class="up_fress data-loading-icon">
+				<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="刷新中" class="loading_btn"></button>
+			</p>
+			<div id="pullrefresh" class="mui-scroll-wrapper projuct_manager">
+				<div class="mui-scroll">
+					<div class="todo_list">
+						<ul class="ul_list">
+
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<p class="down_fress data-loading-icon">
+			<button type="button" data-loading-icon="mui-spinner mui-spinner-custom" data-loading-text="加载中" class="loading_btn"></button>
+		</p>
+		<div id="topPopover" class="mui-popover">
+			<div class="mui-popover-arrow"></div>
+			<p class="search_title">查询条件</p>
+			<p class="choose_list" type="week"><span>最近一周</span></p>
+			<p class="choose_list" type="month"><span>最近一月</span></p>
+			<p class="choose_list" type="year"><span>最近一年</span></p>
+			<div class="custom_search">
+				<p class="search_title">自定义查询</p>
+				<p class="start_box checktime">
+					<input type="text" placeholder="开始时间"  class="start_time"/>
+				</p>
+				<p class="start_box">
+					--
+				</p>
+				<p class="start_box checktime">
+					<input type="text" placeholder="结束时间" class="end_time"/>
+				</p>
+				<p class="start_box search_btn">
+					<span class="search_button">查询</span>
+				</p>
+			</div>
+		</div>
+	</body>
+</html>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	var page = 1;
+	var inners = '<div class="detail_info detail_info_no_data bid_no_data">' +
+		'<img src="../../img/no_data.png" ><p>还未有数据！</p></div>';
+	$('.ul_list').html(inners);
+	var scroll = mui('.mui-scroll-wrapper').scroll({
+		bounce: true,
+		indicators: false, //是否显示滚动条
+		deceleration: mui.os.ios ? 0.003 : 0.0009
+	});
+	var isfresh = false;
+	var startTime,endTime;
+	var type = 'month';
+	document.querySelector('.mui-scroll-wrapper').addEventListener('scroll', function(e) {
+		if (isfresh) {
+			return;
+		}
+		if (scroll.y > 0) {
+			if (scroll.y > 50) {
+				isfresh = true;
+				$('#pullrefresh').css('top', '88px');
+				mui('.loading_btn').button('loading');
+				$('.up_fress').css('opacity', '1');
+				$('#search_input').val('');
+				page = 1;
+				getTodoList(true).then(function() {
+					setTimeout(function() {
+						$('.up_fress').css('opacity', '0');
+						$('#pullrefresh').css('top', '44px');
+						mui('.loading_btn').button('reset');
+						mui('.mui-scroll-wrapper').scroll().scrollTo(0, 0, 100);
+						isfresh = false;
+					}, 1000)
+				})
+			}
+		}
+		if (scroll.y != 0 && Math.abs(scroll.maxScrollY) - Math.abs(scroll.y) < -50) {
+			var liLength = $('.ul_list li').length;
+			if (liLength % 20 != 0 || liLength == 0) {
+				return;
+			}
+			isfresh = true;
+			//上拉加载逻辑代码
+			$('#pullrefresh').css('bottom', '40px');
+			$('.down_fress').css('zIndex', '2');
+			mui('.loading_btn').button('loading');
+			page = parseInt(liLength / 20) + 1;
+			getTodoList(false).then(function(res) {
+				setTimeout(function() {
+					$('#pullrefresh').css('bottom', '0px');
+					$('.down_fress').css('zIndex', '0');
+					mui('.loading_btn').button('reset');
+					isfresh = false;
+				}, 1000)
+			})
+		}
+	})
+
+	common.promise(function() {
+			mui.showLoading('正在加载中...');
+		}).then(getTodoList(true))
+		.then(function() {
+			// mui.hideLoading();
+		})
+
+
+	//获取已办任务显示总条数以及数据
+	function getTodoList(flag) {
+		var url = '/api/Home/ToDoTasks';
+		var postData = {
+			type: 1,
+			page: page,
+			Stype: type,
+			limit: 20
+		}
+		if(type == 'other') {
+			postData.SBegin = startTime;
+			postData.Send = endTime;
+		}
+		return request.post(url, postData).then(function(res) {
+			console.log(res);
+			if (res.code == 200) {
+				todoNumber = res.count;
+				// todoNumber = 200;
+				$('.to_task_number').html(todoNumber);
+				$('.task_message_number').html(todoNumber);
+				var inner = '';
+				for (var i = 0; i < res.data.length; i++) {
+					var item = res.data[i];
+					var checkClass = 'pass';
+					if (item.State == -1) {
+						checkClass = 'refuse';
+					}
+					inner += '<li data-fid="' + item.FId + '"  data-ftype="' + item.Ftype + '">';
+					inner += '	<div class="img_avatar">';
+					inner += '		<div class="img_box' + (item.Name == '任务接收' ? ' class_back' : '') + '">';
+					inner += '			<img src=' + (item.Name != '任务接收' ? "../../img/shenpi.png" : "../../img/to_task.png") + ' >';
+					inner += '		</div>';
+					inner += '	</div>';
+					inner += '	<div class="text_intro">';
+					inner += '		<p><span class="data_time">' + item.FQSJ + '</span> <span class="' + checkClass + '">' + item.FStatus +
+						'</span></p>';
+					inner += '		<p class="todo_tips">' + item.FQR + item.Name + '</p>';
+					inner += '	</div>';
+					inner += '</li>';
+				}
+
+				if (flag) {
+					if(res.data.length == 0 && page == 1) {
+						inner = '<li style="height: 20vh"><div class="detail_info detail_info_no_data bid_no_data">'+
+				'<img src="../../img/no_data.png" ><p>未有数据</p></div></li>';
+					}
+					$('.ul_list').html(inner);
+				} else {
+					$('.ul_list').append(inner);
+				}
+				mui.hideLoading();
+			}
+			return;
+		})
+	}
+
+	//任务详情
+	mui('.ul_list').on('tap', 'li', function() {
+		var fid = $(this).data("fid");
+		var ftype = parseInt($(this).data("ftype"));
+		if (ftype < 900) {
+			window.location.href = '../day/details.html?fid=' + fid + '&' + 'ftype=' + ftype;
+		} else {
+			window.location.href = '../day/task.html?fid=' + fid + '&' + 'ftype=' + ftype;
+		}
+	})
+	
+	
+	mui('body').on('shown', '.mui-popover', function(e) {
+		//console.log('shown', e.detail.id);//detail为当前popover元素
+	});
+	mui('body').on('hidden', '.mui-popover', function(e) {
+		//console.log('hidden', e.detail.id);//detail为当前popover元素
+	});
+	
+	//自定义查询
+	mui('.search_btn').on('tap', '.search_button', function(e) {
+		type = 'other';
+		page = 1;
+		mui('.mui-popover').popover('hide');
+		mui.showLoading('正在加载中...');
+		getTodoList(true).then(function() {
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+		})
+	});
+	mui('.mui-popover').on('tap', '.choose_list', function(e) {
+		type = $(this).attr('type');
+		page = 1;
+		mui('.mui-popover').popover('hide');
+		mui.showLoading('正在加载中...');
+		getTodoList(true).then(function() {
+			mui('.mui-scroll-wrapper').scroll().scrollTo(0,0,100);
+		})
+	});
+	
+	
+	(function(mui,doc) {
+		
+		var btns = mui('.checktime');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				var _self = this;
+				if(_self.picker) {
+					_self.picker.show(function (rs) {
+						$(_self).find('input').val(rs.text);
+						if($(_self).find('input').hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if($(_self).find('input').hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						$('.search_btn').show();
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+						options.type = 'date';
+					if(startTime && $(_self).find('input').hasClass('end_time')) {
+						var yearMonth = startTime.split(' ')[0].split('-');
+						options.beginDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}
+					if(endTime && $(_self).find('input').hasClass('start_time')) {
+						var yearMonth = endTime.split(' ')[0].split('-');
+						options.endDate = new Date(yearMonth[0], yearMonth[1]-1, yearMonth[2])
+					}
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).find('input').val(rs.text);
+						if($(_self).find('input').hasClass('start_time')) {
+							startTime = rs.text;
+						}
+						if($(_self).find('input').hasClass('end_time')) {
+							endTime = rs.text;
+						}
+						$('.search_btn').show();
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+				
+			}, false);
+		});
+	})(mui,document);
+	
+	
+</script>

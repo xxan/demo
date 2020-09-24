@@ -1,0 +1,226 @@
+.mui-content {
+				height: 85%;
+			}
+			.mui-scroll {
+				height: 85%;
+				padding-bottom: 30px;
+			}
+			.company_info {
+				background: white;
+			}
+			
+			.company_info>p {
+				min-height: 50px;
+				padding: 0px 20px;
+				border-bottom: solid 1px #F2F2F2;
+				position: relative;
+					margin: 0;
+			}
+			
+			.company_info>p .class_name {
+				display: inline-block;
+				height: 50px;
+				line-height: 50px;
+				color: #666666;
+			}
+			
+			.company_info>p input, .company_info>p textarea {
+				width: 55%;
+				/* float: right; */
+				border: none;
+				text-align: right;
+				font-size: 14px;
+				color: #333333;
+				position: absolute;
+				right: 30px;
+				margin: 0px;
+				min-height: 48px;
+				line-height: 48px;
+				padding: 0;
+				padding-right: 15px;
+			}
+			.company_info>p textarea {
+				line-height: 48px;
+				min-height: 48px;
+				overflow-x:hidden;
+				overflow-y:hidden
+			}
+			
+			/* .textarea_box {
+				min-height: 100px !important;
+			} */
+			::-webkit-input-placeholder { 
+			    color: #999;
+			}
+			
+			/* .whitespace {
+				white-space: ;
+			} */
+			
+			.company_info>p .up_btn {
+				display: inline-block;
+				width: 18px;
+				height: 9px;
+				background: url(../img/edit_down.png) no-repeat center;
+				background-size: cover;
+				position: absolute;
+				right: 20px;
+				top: 20px;
+			}
+			
+			h5 {
+				height: 30px;
+				line-height: 30px;
+				padding: 0 20px;
+				margin: 0;
+				background: #F2F2F2;
+				color: #999;
+				font-size: 14px;
+			}
+			
+			
+			.mui-off-canvas-wrap {
+				background: #F2F2F2;
+			}
+			.company_info p .up_btn {
+				background: url(../img/xiala.png) no-repeat center;
+				background-size: cover;
+			}
+			
+			.contract_work .cont_time{
+				display: inline-block;
+				width: 30%;
+				height: 30px;
+				line-height: 30px;
+				border: solid 1px #F2F2F2;
+				position: relative;
+				/* top: 10px; */
+				text-align: center;
+				font-size: 12px;
+				color: #999999;
+			}
+			
+			.contract_work .start_time {
+				margin-left: 10%;
+				margin-right: 10px;
+			}
+			.contract_work .end_time {
+				margin-left: 10px;
+			}
+			.file_upload {
+				position: relative;
+			}
+			.file_upload input {
+				width: 100px;
+				height: 100%;
+				position: absolute;
+				right: 0;
+				top: 0;
+				display: inline-block;
+				opacity: 0;
+			}
+			
+			.file_upload label {
+				float: right;
+				margin-right: 20px;
+			}
+			.file_upload span {
+				width: 70%;
+			}
+			.company_info {
+				margin-bottom: 70px;
+			}
+			.edit {
+				display: none;
+			}
+			.spans_back {
+				color: #3B9CFF;
+			}
+			.hide_span{
+				display: none;
+			}
+			
+			/* .this_company {
+				margin-bottom: 80px;
+			} */
+			
+			.this_company b{
+				color: #FE7171;
+			}
+			
+			.company_info p input {
+				font-size: 12px;
+			}
+			
+			.mui-table-view li {
+				font-size: 12px;
+				color: #333333;
+			}
+			
+			#offCanvasSide h5{
+				padding-left: 20px;
+				height: 44px;
+				line-height: 44px;
+				margin: 0;
+				border-bottom: solid 1px #CCCCCC;
+				color: #222222;
+			}
+			
+			.search_content {
+				padding: 0px 20px;
+				text-align: center;
+			}
+			
+			.write_project,.contract_type_other,.pay_type_other {
+				display: none;
+			}
+			.choose_task_status {
+				padding: 0px;
+				margin-top: 5px;
+				overflow: hidden;
+				text-align: center;
+				padding-top: 20px;
+			}
+			.choose_task_status span{
+				width: 60%;
+				height: 24px;
+				line-height: 22px;
+				text-align: center;
+				display: inline-block;
+				font-size: 12px;
+				border: solid 1px #CCCCCC;
+				margin-bottom: 10px;
+			}
+			
+			.choose_task_status span:last-child{
+				margin-bottom: 0px;
+			}
+			
+			.choose_task_status span.active{
+				background: #3B9CFF;
+				color: white;
+			}
+			
+			.footer_btn {
+				height: 48px;
+				line-height: 48px;
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				right: 0;
+			}
+			
+			.footer_btn span {
+				width: 100%;
+				display: inline-block;
+				text-align: center;
+				box-shadow: 5px 0px 5px #E6E6E6;
+			}
+			.footer_btn span:last-child {
+				background: linear-gradient(-90deg, rgba(23, 129, 251, 1), rgba(59, 156, 255, 1));
+				color: white;
+			}
+			
+			.this_examine {
+				display: none;
+			}

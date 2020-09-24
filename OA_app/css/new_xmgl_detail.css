@@ -1,0 +1,633 @@
+#slider_title {
+	width: 100%;
+	margin-top: 44px;
+	height: 44px;
+	line-height: 44px;
+	background: white;
+	box-sizing: border-box;
+}
+
+#slider_title a {
+	border-bottom: none;
+	line-height: 46px;
+	padding: 0px 10px;
+	font-size: 14px;
+	color: #666666;
+}
+
+#slider_title a.mui-active {
+	font-weight: bold;
+}
+
+#slider_title a.mui-control-item.mui-active span {
+	bottom: 5px;
+}
+
+.mui-bar-nav ~ .mui-content {
+	padding-top: 2px;
+}
+
+.search_box {
+	background: white;
+	width: 100%;
+	/* height: 20vh; */
+	max-height: 80px;
+	padding-bottom: 20px;
+	padding-top: 20px;
+	text-align: center;
+	margin-top: 10px;
+}
+
+.search_box div input {
+	width: 90%;
+	background: #F2F2F2;
+	border-radius: 30px;
+	font-size: 14px;
+	padding-right: 10%;
+}
+
+.photo_search {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	position: absolute;
+	background: url(../img/search.png) no-repeat center;
+	background-size: cover;
+	right: 8%;
+	top: 20%;
+	z-index: 99;
+}
+/* .up_fress {
+	display: none;
+} */
+#pullrefresh {
+	top: 88px;
+}
+
+
+.btn_list {
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 10px;
+	text-align: center;
+}
+
+.btn_list span {
+	font-size: 12px;
+	padding: 3px 5px;
+	margin-right: 5px;
+	color: #3B9CFF;
+	border: solid 1px #3B9CFF;
+}
+
+.plan_select {
+	width: 100%;
+	background: white;
+	padding: 0px 5px;
+	font-size: 16px;
+}
+
+.plan_select select,.show_elec select {
+	width: 28%;
+	margin: 0;
+	padding-left: 5px;
+	appearance:none;
+	-moz-appearance:none;
+	-webkit-appearance:none;
+	background: url("../img/select_img.png") no-repeat scroll right center transparent;
+	background-size: 8px 5px;
+	margin-right: 1%;
+	padding-right: 10px;
+	font-size: 0.55em;
+}
+
+
+.plan_box,.record_box {
+	width: 100%;
+	padding: 20px;
+	margin: 0;
+}
+
+.plan_box li,.record_box li {
+	width: 100%;
+	height: auto;
+	background: white;
+	border-radius: 20px;
+	padding: 20px;
+	margin-bottom: 20px;
+	position: relative;
+}
+
+.plan_box li h5,.record_box li h5 {
+	height:28px;
+	line-height: 28px;
+	font-size:16px;
+	font-family:"Microsoft YaHei";
+	font-weight:bold;
+	color:rgba(51,51,51,1);
+	margin: 0;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.plan_box li > p {
+	width: 100%;
+	height:38px;
+	font-size:14px;
+	font-family:"Microsoft YaHei";
+	font-weight:400;
+	color:rgba(51,51,51,1);
+	line-height:38px;
+	margin: 0;
+}
+
+.plan_box li > p.plan_title span {
+	width: 4px;
+	height: 14px;
+	display: inline-block;
+	background: #3B9CFF;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+.plan_box li > p.actual_tilte span {
+	width: 4px;
+	height: 14px;
+	display: inline-block;
+	background: #EC972A;
+	vertical-align: middle;
+	margin-right: 5px;
+}
+
+.plan_box li .progress {
+	width: 100%;
+}
+
+.plan_box li .progress p {
+	width: 100%;
+	height: 12px;
+	margin: 0;
+	border-radius:6px;
+	position: relative;
+}
+
+.plan_box li .progress p span {
+	width: 50%;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	border-radius:6px;
+}
+
+.plan_box li .progress>span {
+	font-size:12px;
+	font-family:"Microsoft YaHei";
+	font-weight:400;
+	color:rgba(153,153,153,1);
+}
+.plan_box li .progress>span:last-child {
+	float: right;
+}
+
+.plan_box li .plan p {
+	background: #C7EEFF;
+}
+
+.plan_box li .plan p span {
+	background:linear-gradient(90deg,rgba(23,179,251,1),rgba(59,230,255,1));
+}
+
+.plan_box li .actual p {
+	background: #FFE0C7;
+}
+
+.plan_box li .actual p span {
+	background:linear-gradient(90deg,rgba(255,101,59,1),rgba(251,141,23,1));
+}
+
+.plan_box li .bottom_info {
+	width: 100%;
+	margin-top: 10px;
+	height: 25px;
+	line-height: 25px;
+}
+
+.plan_box li .bottom_info > span {
+	width: auto;
+	background:rgba(236,151,42,1);
+	opacity:0.55;
+	border-radius:4px;
+	padding: 3px 5px;
+	color: white;
+	font-size: 12px;
+}
+
+.plan_box li .bottom_info p {
+	float: right;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(153,153,153,1);
+	font-size: 12px;
+}
+.record_box li {
+	overflow: hidden;
+}
+.record_box li .task_user_info{
+	margin: 0;
+	font-size:14px;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(153,153,153,1);
+	margin-bottom: 5px;
+	height: 16px;
+	line-height: 16px;
+}
+
+.record_box li .task_user_info .open_type {
+	padding: 0px 5px;
+	color: white;
+	background:#3B9CFF;
+	opacity:0.55;
+	border-radius:4px;
+	margin-left: 10px;
+	font-size: 12px;
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+}
+
+.record_box li .task_user_info .task_state {
+	padding: 0px 5px;
+	color: white;
+	background:#3B9CFF;
+	opacity:0.55;
+	border-radius:4px;
+	margin-left: 10px;
+	float: right;
+	font-size: 12px;
+	display: inline-block;
+	height: 16px;
+	line-height: 16px;
+}
+
+.progress_box {
+	width: 100%;
+	height: auto;
+	overflow: hidden;
+}
+
+.canvas_box {
+	width: 33%;
+	float: left;
+	height: 110px;
+	position: relative;
+	text-align: center;
+}
+
+.progress_box .canvas {
+	width: 80px !important;
+	height: 110px;
+	overflow: hidden;
+	display: inline-block;
+	position: relative;
+	/* top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0; */
+}
+
+.progress_box .canvas>p {
+	font-size:14px;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(51,51,51,1);
+	text-align: center;
+}
+
+.progress_box .canvas canvas {
+	width: 100%;
+	height: 80px;
+}
+
+.task_time {
+	font-size: 12px;
+	margin: 0;
+}
+
+.progress_box .canvas .hours {
+	width: 80px;
+	height: 80px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	text-align: center;
+	line-height: 80px;
+	font-size: 12px;
+}
+
+.canvas_tip1 {
+	color: #199CE9;
+}
+.canvas_tip2 {
+	color: #FF6838;
+}
+.canvas_tip3 {
+	color: #19D9FA;
+}
+
+.sure_btn {
+	width: 100%;
+	height: auto;
+	padding-bottom: 0px;
+	text-align: center;
+	
+}
+
+.sure_btn span {
+	display: inline-block;
+	width: 140px;
+	height: 25px;
+	line-height: 25px;
+	text-align: center;
+	font-size:14px;
+	background:rgba(59,156,255,1);
+	border-radius:10px;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(255,255,255,1);
+	margin-top: 14px;
+}
+
+.plan_select p.task_people_choose {
+	height: 40px;
+	line-height: 40px;
+	padding: 0px 20px;
+	margin: 0;
+	border-bottom: solid 1px #F2F2F2;
+}
+
+.plan_select p.task_people_choose span {
+	margin-right: 20px;
+}
+
+.plan_select p.task_people_choose span.active {
+	color: #3B9CFF;
+	font-weight: bold;
+}
+
+.plan_select p.task_people_choose img {
+	float: right;
+	position: relative;
+	right: 0px;
+	width: 20px;
+	top: 10px;
+}
+
+.meau_list .list_table {
+	padding-top: 0;
+	width: 60%;
+}
+.show_elec {
+	width: 100%;
+	text-align: center;
+	padding-top:20px;
+}
+.show_elec select {
+	width: 70%;
+	border: solid 1px #F2F2F2 !important;
+	padding: 5px 20px;
+	margin-bottom: 20px;
+}
+
+.top_box {
+	width: 100%;
+	height: 100px;
+	padding: 10px 20px;
+}
+
+.top_info {
+	width: 100%;
+	height: 100%;
+	background: white;
+	border-radius: 10px;
+	padding: 10px;
+	margin: 0;
+}
+
+.top_info li {
+	float: left;
+	width: calc((100% - 3px) / 4);
+	border-right: solid 1px #EDEDED;
+	text-align: center;
+}
+
+.top_info li:last-child {
+	border: none;
+}
+
+.top_info li p {
+	font-size:14px;
+	font-family:Microsoft YaHei;
+	font-weight:bold;
+	color:rgba(59,156,255,1);
+	margin: 0;
+	line-height: 30px;
+}
+.top_info li span {
+	font-size:12px;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(102,102,102,1)
+}
+
+.all_box {
+	width: 100%;
+	background: white;
+	margin-bottom: 10px;
+}
+
+.all_box h5 {
+	height: 34px;
+	line-height: 34px;
+	padding-left: 44px;
+	font-size:14px;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(51,51,51,1);
+	background: url(../img/task_resu.png) no-repeat left;
+	background-position: 20px;
+	background-size: 18px;
+	margin: 0;
+}
+
+.money_box h5 {
+	background: url(../img/bli.png) no-repeat left;
+	background-position: 20px;
+	background-size: 18px;
+}
+
+.echart_box {
+	width: 100%;
+	height: 153px;
+	border: solid 1px #E5E5E5;
+}
+
+#main {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+/* #main>div,#main>div >canvas {
+	width: 100% !important;
+	height: 100% !important;
+} */
+
+
+.people_task {
+	width: 100%;
+	border: solid 1px #E5E5E5;
+	padding: 10px 20px;
+	margin: 0;
+}
+
+.people_task>li {
+	width: 100%;
+	height: 105px;
+	background:rgba(105,179,255,1);
+	box-shadow:1px 2px 10px 0px rgba(0, 0, 0, 0.2);
+	border-radius:20px;
+	padding: 10px 20px;
+}
+.people_task>li > p {
+	height: 20px;
+	line-height: 20px;
+	color: white;
+	font-size: 13px;
+	margin: 0;
+}
+.people_task>li .top_info {
+	padding: 0px;
+	background: none;
+	color: white!important;
+	margin-top: 10px;
+}
+
+.people_task>li .top_info li {
+	border-right-color: #EDEDED;
+}
+
+.people_task>li .top_info li p,.people_task>li .top_info li span {
+	color: white;
+}
+.people_task>li .top_info li p.wrong {
+	color: #FF5353;
+}
+
+.sure_box{
+	width: 100%;
+	height: auto;
+	background: white;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding-bottom: 40px;
+}
+
+.box_title {
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	font-size:16px;
+	font-family:Microsoft YaHei;
+	font-weight:400;
+	color:rgba(51,51,51,1);
+}
+.box_title img {
+	width: 20px;
+	height: 20px;
+	margin-top: 10px;
+	margin-left: 20px;
+}
+.box_title img:nth-of-type(1) {
+	float: left;
+}
+
+.box_title img:nth-of-type(2) {
+	float: right;
+	width: 30px;
+	margin-right: 20px;
+}
+
+.sure_box div {
+	width: 100%;
+	padding: 0px 20px;
+	height: 35px;
+	line-height: 35px;
+}
+
+.sure_box div:last-child {
+	height: auto;
+	margin-top: 10px;
+}
+
+.sure_box div>span {
+	width: 80px;
+	color: #414141;
+	font-size: 14px;
+}
+
+.sure_box div p {
+	width: calc(100% - 80px);
+	color: #666666;
+	font-size: 14px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.sure_box div p span {
+	display: inline-block;
+	padding-left: 20px;
+	background: url(../img/check.png) no-repeat left;
+	background-size: 14px 14px;
+}
+.sure_box div p span:nth-of-type(2) {
+	margin-left: 20px;
+}
+
+.sure_box div p span.active {
+	background: url(../img/checked.png) no-repeat left;
+	background-size: 14px 14px;
+	color: #3B9CFF;
+}
+
+.sure_box div.show_hide {
+	padding: 0;
+	display: none;
+}
+
+.sure_box div input {
+	width: calc(100% - 120px);
+	display: inline-block;
+	margin: 0;
+	height: 30px;
+	line-height: 30px;
+	padding: 0px 10px;
+	font-size: 14px;
+	color: #666666;
+}
+
+.sure_box div textarea {
+	width: calc(100% - 90px);
+	display: inline-block;
+	vertical-align: top;
+	padding: 10px;
+	margin: 0;
+	margin-left: 10px;
+	font-size: 14px;
+	color: #666666;
+}
+
+

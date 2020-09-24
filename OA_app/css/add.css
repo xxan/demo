@@ -1,0 +1,190 @@
+
+.company_info {
+	background: white;
+}
+
+.company_info p {
+	height: 50px;
+	padding: 0px 20px;
+	border-bottom: solid 1px #F2F2F2;
+	position: relative;
+		margin: 0;
+}
+
+.company_info p .class_name {
+	display: inline-block;
+	height: 50px;
+	line-height: 50px;
+	color: #666666;
+}
+
+.company_info p input {
+	width: 55%;
+	/* float: right; */
+	border: none;
+	text-align: right;
+	font-size: 14px;
+	color: #333333;
+	position: absolute;
+	right: 30px;
+	margin: 0px;
+	height: 48px;
+	line-height: 48px;
+}
+::-webkit-input-placeholder { 
+    color: #999;
+}
+
+.company_info p .up_btn {
+	display: inline-block;
+	width: 18px;
+	height: 9px;
+	background: url(../img/edit_down.png) no-repeat center;
+	background-size: cover;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+}
+
+.btn_show {
+	height: 36px;
+	text-align: center;
+	line-height: 36px;
+	color: #3B9CFF;
+	font-size: 14px;
+}
+
+.btn_show span {
+	display: inline-block;
+	width: 18px;
+	height: 9px;
+	background: url(../img/zhankai.png) no-repeat center;
+	background-size: cover;
+	margin-left: 5px;
+}
+
+.btn_show i {
+	display: inline-block;
+	width: 18px;
+	height: 9px;
+	background: url(../img/shouqi.png) no-repeat center;
+	background-size: cover;
+	margin-left: 5px;
+}
+
+.more_list {
+	display: none;
+}
+
+hr {
+	height: 20px;
+	background: #F2F2F2;
+	border: none;
+	margin: 0;
+}
+
+.mui-content {
+	margin-bottom: 60px;
+}
+
+h5 {
+	height: 30px;
+	line-height: 30px;
+	padding: 0 20px;
+	margin: 0;
+	background: #F2F2F2;
+	color: #999;
+	font-size: 14px;
+}
+
+.not_operation {
+	background: #D9D9D9;
+}
+
+.not_operation input {
+	background: #D9D9D9;
+	color: #333333;
+}
+
+.btn_box {
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+}
+
+.btn_box span {
+	width: 140px;
+	height: 25px;
+	line-height: 25px;
+	display: inline-block;
+	color: white;
+	font-size: 14px;
+	border-radius: 5px;
+} 
+.btn_box .delete_order {
+	background: #FF6060;
+}
+.btn_box .add_order {
+	background: #3B9CFF;
+}
+
+.back_class {
+	background: #F2F2F2;
+}
+
+.order {
+	margin-bottom: 60px;
+}
+
+.list_box_content {
+	/* display: none; */
+	background: white;
+}
+
+.list_box_content .project_num p {
+	height: 100%;
+	border:none
+}
+
+.list_content_procedure {
+	margin: 0;
+	padding: 0;
+}
+
+
+.choose_other,.express_info {
+	display: none;
+}
+.company_info .order_checkbox {
+	width: 20px;
+	/* height: 20px; */
+	margin-right: 20px;
+}
+
+#add_file {
+	opacity: 0;
+}
+
+.add_file_btn {
+	float: right;
+	display: inline-block;
+	height: 30px;
+	line-height: 30px;
+	background: #3B9CFF;
+	color: white;
+	width: 60px;
+	text-align: center;
+	margin-right: 20px;
+	margin-top: 10px;
+	border-radius: 15px;
+}
+.company_info .deliver_detail {
+	height: 24px;
+	line-height: 24px;
+	border-bottom: 0;
+}
+.product_detail{
+	display: flex;
+	justify-content: space-between;
+	background: #ddd;
+}

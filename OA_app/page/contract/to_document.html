@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../../css/mui.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../../css/comon.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/Details.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/add_task_point.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/list_content_procedure.css"/>
+		<link rel="stylesheet" type="text/css" href="../../css/contract_apply.css"/>
+		<script src="../../js/polyfill.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" src="../../js/jquery.min.js"></script>
+		<style type="text/css">
+			body{
+				background: #F2F2F2;
+			}
+			.mui-content {
+				height: 90%;
+			}
+			.get_time .start_time {
+				float: right;
+				display: inline-block;
+				height: 100%;
+				line-height: 48px;
+			}
+			input {
+				padding-right: 0 !important;
+			}
+			.company_info>p input {
+				right: 20px;
+			}
+			
+			.first_no {
+				position: absolute;
+				top: 15px;
+				right: calc(55% + 22px);
+			}
+		</style>
+	</head>
+
+	<body>
+		
+		<header class="mui-bar mui-bar-nav header_box">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">合同归档</h1>
+			<img src="../../img/edit.png" class="edit">
+		</header>
+		<div class="mui-content">
+			<div class="company_info this_company">
+				<p><span class="class_name">合同编号<b>*</b></span>
+				<span class="first_no">A</span>
+					<input type="text" placeholder="请填写" class="other_address" />
+				</p>
+				<p class="get_time"><span class="class_name">签订时间<b>*</b></span><span class="start_time">请选择</span></p>
+				<p><span class="class_name">备注</span><input type="text" placeholder="请填写" class="remark" /></p>
+				<h5>扫描件上传</h5>
+				<div class="plan_time file_upload">
+					<span>合同扫描件上传<b>*</b></span>
+					<input type="file" name="" id="add_file" value="" multiple/><label for="add_file" class="btn_add choose_img">添加</label>
+				</div>
+				<ul class="file_tendering_list add_file_list">
+					
+				</ul>
+			</div>
+			
+		</div>
+		
+		<div class="footer_submit_one">
+			<span class="btn_save">保存</span>
+		</div>
+		
+	</body>
+</html>
+<script src="../../js/mui.js"></script>
+<script src="../../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/request.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/common.js" type="text/javascript" charset="utf-8"></script>
+<script src="../../js/loading.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	mui.init();
+	
+	var id = common.getQueryUrl('id');
+	var fileList = [];
+	var time = '';
+	console.log(id);
+	
+	common.promise()
+	.then(() => {
+		mui.showLoading('加载中...');
+		return;
+	})
+	.then(() => {
+		return getDetail();
+	})
+	.then(() => {
+		mui.hideLoading();
+	})
+	
+	//获取详情
+	function getDetail() {
+		var url = '/api/ContractManage/ContractFiling';
+		return request.post(url,{Id: id}).then(function(res) {
+			console.log(res);
+			if(res.code == 200) {
+				common.arrObjTrimAndNull(res.data)
+				$('.other_address').val(res.data.Number);
+				if(res.data.SignTime) {
+					$('.start_time').html(res.data.SignTime);
+				}
+				
+				time = res.data.SignTime;
+				$('.remark').val(res.data.ApprovalRemark);
+				$('.first_no').html(res.data.NumberPrefix);
+				var names = '';
+				for(var i=0;i<res.data.lstFile.length;i++) {
+					var lists = res.data.lstFile[i];
+					// if(isCheck || onlysee) {
+						names += '<li id='+ lists.Id +'><span class="file_list_name spans_back" path='
+						+ lists.FilePath +'>'+ lists.Name + lists.FileFormat +
+						'</span><span class="file_list_delete">删除</span></li>';
+					// }
+					var obj = {
+						"Id": lists.Id,
+						"FileName": lists.Name,
+						"Extension": lists.FileFormat,
+						"FilePath": lists.FilePath,
+						"Type": "合同审批_合同文件",
+					};
+					fileList.push(obj);
+				} 
+				$('.add_file_list').html(names);
+			}
+		})
+	}
+	
+	$("#add_file").on('change', function(e) {
+		console.log(1231123)
+		var files = $(this)[0].files;
+		console.log(files)
+		var names = '';
+		var arr = [];
+		for(var i=0;i<files.length;i++) {
+			var formData = new FormData();
+			formData.append("file",files[i]);
+			arr.push(upload(formData,files[i].lastModified,true))
+			names += '<li item='+ files[i].lastModified +'><span class="file_list_name spans_back" item='+ 
+			files[i].lastModified +'>'+ files[i].name +
+			'</span><span class="file_list_delete">删除</span></li>';
+		}
+		var _this = this;
+		Promise.all(arr).then(function() {
+			$(_this).val('');
+		})
+		if(files.length > 0) {
+				$('.add_file_list').append(names);
+		}
+	});
+	
+	mui('.add_file_list').on('tap','.file_list_delete',function() {
+		var id = $(this).parents('li').attr('id');
+		var item = $(this).parents('li').attr('item');
+		if(id) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].Id == id) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(fileList[i].tid == item) {
+					fileList.splice(i,1);
+				}
+			}
+		}
+		$(this).parents('li').remove();
+	})
+	
+	mui('.add_file_list').on('tap','.file_list_name',function() {
+		var path = $(this).attr('path');
+		var item = $(this).attr('item');
+		mui.showLoading('加载中...');
+		if(path) {
+			openFile(baseUrl + path)
+		}
+		if(item) {
+			for(var i=0;i<fileList.length;i++) {
+				if(item == fileList[i].tid) {
+					openFile(baseUrl + fileList[i].FilePath)
+				}
+			}
+		}
+	})
+	
+	function upload(formData, flag, type) {
+		var url = '/api/BusinessManage/UploadFile?Type=ScanFile';
+		return request.upload(url, formData).then(function(res) {
+			console.log(res)
+			if (res.code == 200) {
+				var data = {
+					"FileName": res.data.FileName,
+					"Extension": res.data.Extension,
+					"FilePath": res.data.FilePath,
+					"Type": "合同审批_扫描件",
+					"tid": flag
+				}
+				fileList.push(data);
+				console.log(fileList)
+				return;
+			}
+		})
+	}
+	
+	function submit() {
+		var postData = {};
+		if(!$('.other_address').val()) {
+			mui.toast('请输入合同编号');
+			return;
+		}
+		if(!time) {
+			mui.toast('请选择签订时间');
+			return;
+		}
+		if(fileList.length == 0) {
+			mui.toast('请上传扫描件');
+			return;
+		}
+		postData.Id = id;
+		postData.Number = $('.other_address').val();
+		postData.SignTime = time;
+		postData.ApprovalRemark = $('.remark').val();
+		postData.lstFile = fileList;
+		console.log(postData);
+		var url = '/api/ContractManage/SaveContractFiling';
+		return request.post(url,postData).then(function(res) {
+			console.log(res)
+			if(res.code == 200) {
+				mui.back();
+			}else {
+				mui.toast('保存失败！' + res.msg);
+			}
+		})
+	}
+	
+	mui('.footer_submit_one').on('tap','span',function() {
+		submit();
+	});
+	
+	(function(mui) {
+		//时间选择
+		var btns = mui('.start_time');
+		btns.each(function(i, btn) {
+			btn.addEventListener('tap', function() {
+				// if(isUpdate) return;
+				var _self = this;
+				if (_self.picker) {
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+						time = rs.text;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				} else {
+					var optionsJson = this.getAttribute('data-options') || '{}';
+					var options = JSON.parse(optionsJson);
+					var id = this.getAttribute('id');
+					options.type = 'date';
+					_self.picker = new mui.DtPicker(options);
+					_self.picker.show(function(rs) {
+						$(_self).html(rs.text);
+						time = rs.text;
+						_self.picker.dispose();
+						_self.picker = null;
+					});
+				}
+			}, false);
+		});
+	})(mui);
+</script>
